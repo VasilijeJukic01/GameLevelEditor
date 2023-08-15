@@ -1,6 +1,9 @@
 package editor.gui.view;
 
+import editor.core.Framework;
 import editor.gui.controller.ActionManager;
+import editor.model.tree.EditorTree;
+import editor.model.tree.Tree;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,7 +13,9 @@ import static editor.constants.FilePaths.EDITOR_ICON;
 
 public class EditorFrame extends JFrame {
 
-    private static EditorFrame instance;
+    private static volatile EditorFrame instance;
+
+    private Tree editorTree;
 
     private JScrollPane scrollPaneTree;
     private JSplitPane splitPane;
@@ -20,17 +25,34 @@ public class EditorFrame extends JFrame {
     private EditorFrame() {}
 
     public static EditorFrame getInstance() {
-        if (instance == null) {
-            instance = new EditorFrame();
-            instance.init();
+        if(instance == null) {
+            synchronized (EditorFrame.class) {
+                if (instance == null) {
+                    instance = new EditorFrame();
+                    instance.init();
+                }
+            }
         }
         return instance;
     }
 
     private void init() {
         this.actionManager = new ActionManager();
+        this.editorTree = new EditorTree();
         initWindow();
         initBars();
+
+        JTree projectExplorer = editorTree.generateTree(Framework.getInstance().getRepository().getProjectExplorer());
+        ProjectView projectView = new ProjectView();
+
+        scrollPaneTree = new JScrollPane(projectExplorer, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        projectExplorer.setBackground(EXPLORER_COLOR);
+
+        splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, scrollPaneTree, projectView);
+        this.add(splitPane);
+
+        scrollPaneTree.setMinimumSize(new Dimension(200,150));
+
     }
 
     private void initWindow() {
