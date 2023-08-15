@@ -3,11 +3,11 @@ package editor.model.repository;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class NodeComposite<T extends Node> extends Node {
+public abstract class Composite<T extends Node> extends Node {
 
     private final List<T> children = new ArrayList<>();
 
-    public NodeComposite(String name, Node parent) {
+    public Composite(String name, Node parent) {
         super(name, parent);
     }
 

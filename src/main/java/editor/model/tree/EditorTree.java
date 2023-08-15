@@ -1,7 +1,7 @@
 package editor.model.tree;
 
 import editor.model.repository.Node;
-import editor.model.repository.NodeComposite;
+import editor.model.repository.Composite;
 import editor.model.repository.components.Component;
 import editor.model.repository.components.Level;
 import editor.model.repository.components.ProjectExplorer;
@@ -9,9 +9,12 @@ import editor.model.repository.factory.Factory;
 import editor.model.repository.factory.NodeFactory;
 import editor.model.tree.mvc.TreeItem;
 import editor.model.tree.mvc.TreeView;
+import editor.model.tree.treeObserver.TreeSubscriber;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultTreeModel;
+import java.util.ArrayList;
+import java.util.List;
 
 @SuppressWarnings("unchecked")
 public class EditorTree implements Tree<TreeItem, TreeView> {
@@ -20,6 +23,8 @@ public class EditorTree implements Tree<TreeItem, TreeView> {
     private DefaultTreeModel treeModel;
 
     private final NodeFactory factory = new Factory();
+
+    private List<TreeSubscriber> subscribers;
 
     @Override
     public TreeView generateTree(ProjectExplorer projectExplorer) {
@@ -31,12 +36,13 @@ public class EditorTree implements Tree<TreeItem, TreeView> {
 
     @Override
     public void addChild(TreeItem parent) {
-        if(parent == null || parent.getNode() instanceof Level || !(parent.getNode() instanceof NodeComposite)) return;
+        if(parent == null || parent.getNode() instanceof Level || !(parent.getNode() instanceof Composite)) return;
         Node child = factory.create(parent.getNode());
         parent.add(new TreeItem(child));
-        ((NodeComposite<Node>) parent.getNode()).addChild(child);
+        ((Composite<Node>) parent.getNode()).addChild(child);
         treeView.expandPath(treeView.getSelectionPath());
         SwingUtilities.updateComponentTreeUI(treeView);
+        notifyAdd(child);
     }
 
     @Override
@@ -51,12 +57,13 @@ public class EditorTree implements Tree<TreeItem, TreeView> {
             return;
 
         ((TreeItem) child.getParent()).remove(child);
-        NodeComposite<Node> parent = (NodeComposite<Node>) child.getNode().getParent();
+        Composite<Node> parent = (Composite<Node>) child.getNode().getParent();
         parent.removeChild(child.getNode());
 
         treeView.expandPath(treeView.getSelectionPath());
         SwingUtilities.updateComponentTreeUI(treeView);
         clearSelection();
+        notifyRemove(child.getNode());
     }
 
     @Override
@@ -74,4 +81,30 @@ public class EditorTree implements Tree<TreeItem, TreeView> {
         treeView.setSelectionRow(0);
     }
 
+    @Override
+    public void addSubscriberTree(TreeSubscriber s) {
+        if(s == null) return;
+        if(this.subscribers == null)
+            this.subscribers = new ArrayList<>();
+        if(this.subscribers.contains(s)) return;
+        this.subscribers.add(s);
+    }
+
+    @Override
+    public void removeSubscriberTree(TreeSubscriber s) {
+        if(s == null ||  this.subscribers == null || !this.subscribers.contains(s)) return;
+        this.subscribers.remove(s);
+    }
+
+    @Override
+    public <T> void notifyRemove(T t) {
+        if(t == null || this.subscribers == null || this.subscribers.isEmpty()) return;
+        this.subscribers.forEach(s -> s.updateRemoved(t));
+    }
+
+    @Override
+    public <T> void notifyAdd(T t) {
+        if (t == null || this.subscribers == null || this.subscribers.isEmpty()) return;
+        this.subscribers.forEach(s -> s.updateAdded(t));
+    }
 }

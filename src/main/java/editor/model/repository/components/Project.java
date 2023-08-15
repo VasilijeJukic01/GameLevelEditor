@@ -1,14 +1,20 @@
 package editor.model.repository.components;
 
 import editor.model.repository.Node;
-import editor.model.repository.NodeComposite;
+import editor.model.repository.Composite;
+import editor.model.repository.nodeObserver.NodePublisher;
+import editor.model.repository.nodeObserver.NodeSubscriber;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
-public class Project extends NodeComposite<Node> {
+public class Project extends Composite<Node> implements NodePublisher {
 
     private String author;
     private String path;
+
+    private transient List<NodeSubscriber> subscribers;
 
     public Project(String name, Node parent, String author, String path) {
         super(name, parent);
@@ -22,10 +28,12 @@ public class Project extends NodeComposite<Node> {
         this.path = "";
     }
 
+    @Override
     public void setName(String text) {
         Optional.ofNullable(text)
                 .filter(str -> !str.isEmpty())
                 .ifPresent(super::setName);
+        notify(this);
     }
 
     // Getters & Setters
@@ -37,6 +45,7 @@ public class Project extends NodeComposite<Node> {
         Optional.ofNullable(author)
                 .filter(str -> !str.isEmpty())
                 .ifPresent(str -> this.author = str);
+        notify(this);
     }
 
     public String getPath() {
@@ -45,5 +54,26 @@ public class Project extends NodeComposite<Node> {
 
     public void setPath(String path) {
         this.path = path;
+    }
+
+    @Override
+    public void addSubscriber(NodeSubscriber s) {
+        if(s == null) return;
+        if(this.subscribers == null)
+            this.subscribers = new ArrayList<>();
+        if(this.subscribers.contains(s)) return;
+        this.subscribers.add(s);
+    }
+
+    @Override
+    public void removeSubscriber(NodeSubscriber s) {
+        if(s == null ||  this.subscribers == null || !this.subscribers.contains(s)) return;
+        this.subscribers.remove(s);
+    }
+
+    @Override
+    public <T> void notify(T t) {
+        if (t == null || this.subscribers == null || this.subscribers.isEmpty()) return;
+        this.subscribers.forEach(s -> s.updateNode(t));
     }
 }
