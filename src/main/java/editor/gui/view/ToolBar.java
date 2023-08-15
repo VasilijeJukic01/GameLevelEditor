@@ -8,12 +8,12 @@ public class ToolBar extends JToolBar {
         super(SwingConstants.HORIZONTAL);
         super.setFloatable(false);
 
-        this.add(EditorFrame.getInstance().getActionManager().getOpenAction());
+        this.add(EditorFrame.getInstance().getActionManager().getOpenAction().createButton());
         this.addSeparator();
-        this.add(EditorFrame.getInstance().getActionManager().getNewAction());
+        this.add(EditorFrame.getInstance().getActionManager().getNewAction().createButton());
         this.addSeparator();
         this.add(Box.createHorizontalGlue());
-        this.add(EditorFrame.getInstance().getActionManager().getExitAction());
+        this.add(EditorFrame.getInstance().getActionManager().getExitAction().createButton());
     }
 
 }

@@ -3,6 +3,8 @@ package editor.model.repository.components;
 import editor.model.repository.Node;
 import editor.model.repository.NodeComposite;
 
+import java.util.Optional;
+
 public class Project extends NodeComposite<Node> {
 
     private String author;
@@ -21,8 +23,9 @@ public class Project extends NodeComposite<Node> {
     }
 
     public void setName(String text) {
-        if(text == null || text.equals("")) return;
-        super.setName(text);
+        Optional.ofNullable(text)
+                .filter(str -> !str.isEmpty())
+                .ifPresent(super::setName);
     }
 
     // Getters & Setters
@@ -31,8 +34,9 @@ public class Project extends NodeComposite<Node> {
     }
 
     public void setAuthor(String author) {
-        if(author == null || author.equals("")) return;
-        this.author = author;
+        Optional.ofNullable(author)
+                .filter(str -> !str.isEmpty())
+                .ifPresent(str -> this.author = str);
     }
 
     public String getPath() {

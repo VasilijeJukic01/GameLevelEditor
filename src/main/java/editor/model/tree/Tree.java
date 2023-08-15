@@ -2,18 +2,21 @@ package editor.model.tree;
 
 import editor.model.repository.Node;
 import editor.model.repository.components.ProjectExplorer;
-import editor.model.tree.mvc.TreeItem;
-import editor.model.tree.mvc.TreeView;
 
-public interface Tree {
+import javax.swing.*;
+import javax.swing.tree.DefaultMutableTreeNode;
 
-    TreeView generateTree(ProjectExplorer projectExplorer);
+public interface Tree<U extends DefaultMutableTreeNode, V extends JTree> {
 
-    void addChild(TreeItem parent);
+    V generateTree(ProjectExplorer projectExplorer);
 
-    void removeChild(TreeItem child);
+    void addChild(U parent);
 
-    TreeItem getSelectedNode();
+    void addChild();
+
+    void removeChild(U child);
+
+    U getSelectedNode();
 
     void setSelectedNode(Node node);
 

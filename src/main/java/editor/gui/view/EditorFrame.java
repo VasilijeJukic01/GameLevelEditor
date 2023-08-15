@@ -11,6 +11,7 @@ import java.awt.*;
 import static editor.constants.Constants.*;
 import static editor.constants.FilePaths.EDITOR_ICON;
 
+@SuppressWarnings("FieldCanBeLocal")
 public class EditorFrame extends JFrame {
 
     private static volatile EditorFrame instance;
@@ -19,6 +20,8 @@ public class EditorFrame extends JFrame {
 
     private JScrollPane scrollPaneTree;
     private JSplitPane splitPane;
+    private ProjectView projectView;
+    private JTree projectExplorer;
 
     private ActionManager actionManager;
 
@@ -36,23 +39,13 @@ public class EditorFrame extends JFrame {
         return instance;
     }
 
+    // Init
     private void init() {
         this.actionManager = new ActionManager();
         this.editorTree = new EditorTree();
         initWindow();
         initBars();
-
-        JTree projectExplorer = editorTree.generateTree(Framework.getInstance().getRepository().getProjectExplorer());
-        ProjectView projectView = new ProjectView();
-
-        scrollPaneTree = new JScrollPane(projectExplorer, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        projectExplorer.setBackground(EXPLORER_COLOR);
-
-        splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, scrollPaneTree, projectView);
-        this.add(splitPane);
-
-        scrollPaneTree.setMinimumSize(new Dimension(200,150));
-
+        initExplorer();
     }
 
     private void initWindow() {
@@ -73,7 +66,23 @@ public class EditorFrame extends JFrame {
         this.add(toolBar, BorderLayout.NORTH);
     }
 
+    private void initExplorer() {
+        this.projectExplorer = editorTree.generateTree(Framework.getInstance().getRepository().getProjectExplorer());
+        projectExplorer.setBackground(EXPLORER_COLOR);
+        this.projectView = new ProjectView();
+        this.scrollPaneTree = new JScrollPane(projectExplorer, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        this.splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, scrollPaneTree, projectView);
+        this.add(splitPane);
+
+        scrollPaneTree.setMinimumSize(new Dimension(EXPLORER_WID, EXPLORER_HEI));
+    }
+
+    // Getters
     public ActionManager getActionManager() {
         return actionManager;
+    }
+
+    public Tree getEditorTree() {
+        return editorTree;
     }
 }

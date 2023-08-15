@@ -14,7 +14,7 @@ import javax.swing.*;
 import javax.swing.tree.DefaultTreeModel;
 
 @SuppressWarnings("unchecked")
-public class EditorTree implements Tree {
+public class EditorTree implements Tree<TreeItem, TreeView> {
 
     private TreeView treeView;
     private DefaultTreeModel treeModel;
@@ -37,6 +37,12 @@ public class EditorTree implements Tree {
         ((NodeComposite<Node>) parent.getNode()).addChild(child);
         treeView.expandPath(treeView.getSelectionPath());
         SwingUtilities.updateComponentTreeUI(treeView);
+    }
+
+    @Override
+    public void addChild() {
+        TreeItem parent = getSelectedNode();
+        addChild(parent);
     }
 
     @Override

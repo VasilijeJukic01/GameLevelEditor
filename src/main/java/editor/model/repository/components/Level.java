@@ -3,6 +3,8 @@ package editor.model.repository.components;
 import editor.model.repository.Node;
 import editor.model.repository.NodeComposite;
 
+import java.util.Optional;
+
 public class Level extends NodeComposite<Node> {
 
     public Level(String name, Node parent) {
@@ -10,8 +12,9 @@ public class Level extends NodeComposite<Node> {
     }
 
     public void setName(String text) {
-        if(text == null || text.equals("")) return;
-        super.setName(text);
+        Optional.ofNullable(text)
+                .filter(str -> !str.isEmpty())
+                .ifPresent(super::setName);
     }
 
 }

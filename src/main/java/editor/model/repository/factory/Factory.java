@@ -6,12 +6,9 @@ import editor.model.repository.components.Level;
 import editor.model.repository.components.Project;
 import editor.model.repository.components.ProjectExplorer;
 
-public class Factory implements NodeFactory {
+import static editor.constants.Constants.*;
 
-    @Override
-    public ProjectExplorer createProjectExplorer(String name, Node parent) {
-        return new ProjectExplorer(name, parent);
-    }
+public class Factory implements NodeFactory {
 
     @Override
     public Project createProject(String name, Node parent) {
@@ -30,9 +27,9 @@ public class Factory implements NodeFactory {
 
     @Override
     public Node create(Node parent) {
-        if (parent instanceof ProjectExplorer) return createProject("", parent);
-        if (parent instanceof Project) return createLevel("", parent);
-        if (parent instanceof Level) return createComponent("", parent);
+        if (parent instanceof ProjectExplorer) return createProject("Project "+(PROJECT_NUM++), parent);
+        if (parent instanceof Project) return createLevel("Level "+(LEVEL_NUM++), parent);
+        if (parent instanceof Level) return createComponent("Component "+(COMPONENT_NUM++), parent);
         return null;
     }
 
