@@ -1,4 +1,4 @@
-package editor.gui.controller.actions;
+package editor.gui.controller.projectActions;
 
 import editor.gui.controller.AbstractEditorAction;
 import editor.gui.view.EditorFrame;
