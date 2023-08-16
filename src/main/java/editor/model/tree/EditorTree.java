@@ -37,11 +37,11 @@ public class EditorTree implements Tree<TreeItem, TreeView> {
     @Override
     public void addChild(TreeItem parent) {
         if(parent == null || parent.getNode() instanceof Level || !(parent.getNode() instanceof Composite)) return;
+
         Node child = factory.create(parent.getNode());
         parent.add(new TreeItem(child));
         ((Composite<Node>) parent.getNode()).addChild(child);
-        treeView.expandPath(treeView.getSelectionPath());
-        SwingUtilities.updateComponentTreeUI(treeView);
+        refreshView();
         notifyAdd(child);
     }
 
@@ -53,17 +53,19 @@ public class EditorTree implements Tree<TreeItem, TreeView> {
 
     @Override
     public void removeChild(TreeItem child) {
-        if(child.getNode() instanceof ProjectExplorer || child.getNode() instanceof Component)
-            return;
+        if(child.getNode() instanceof ProjectExplorer || child.getNode() instanceof Component) return;
 
         ((TreeItem) child.getParent()).remove(child);
         Composite<Node> parent = (Composite<Node>) child.getNode().getParent();
         parent.removeChild(child.getNode());
+        clearSelection();
+        refreshView();
+        notifyRemove(child.getNode());
+    }
 
+    private void refreshView() {
         treeView.expandPath(treeView.getSelectionPath());
         SwingUtilities.updateComponentTreeUI(treeView);
-        clearSelection();
-        notifyRemove(child.getNode());
     }
 
     @Override
@@ -81,6 +83,7 @@ public class EditorTree implements Tree<TreeItem, TreeView> {
         treeView.setSelectionRow(0);
     }
 
+    // Observer
     @Override
     public void addSubscriberTree(TreeSubscriber s) {
         if(s == null) return;

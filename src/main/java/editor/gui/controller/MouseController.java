@@ -6,6 +6,7 @@ import editor.gui.view.tab.TabView;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.util.function.BiConsumer;
 
 public class MouseController implements MouseListener, MouseMotionListener {
 
@@ -13,6 +14,12 @@ public class MouseController implements MouseListener, MouseMotionListener {
 
     public MouseController(TabView tabView) {
         this.tabView = tabView;
+    }
+
+    private void performAction(MouseEvent e, BiConsumer<Integer, Integer> action) {
+        int scaledX = (int) (e.getX() / tabView.getScale() + (tabView.getDx() / tabView.getScale()));
+        int scaledY = (int) (e.getY() / tabView.getScale() + (tabView.getDy() / tabView.getScale()));
+        action.accept(scaledX, scaledY);
     }
 
     @Override
@@ -23,21 +30,18 @@ public class MouseController implements MouseListener, MouseMotionListener {
     @Override
     public void mousePressed(MouseEvent e) {
         if (e.getButton() == MouseEvent.BUTTON1) {
-            EditorFrame.getInstance().getProjectView().clickPerform((int) (e.getX()/ tabView.getScale()+(tabView.getDx()/ tabView.getScale())),
-                    (int) (e.getY()/ tabView.getScale()+(tabView.getDy()/ tabView.getScale())), this.tabView);
+            performAction(e, (x, y) -> EditorFrame.getInstance().getProjectView().clickPerform(x, y, tabView));
         }
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        EditorFrame.getInstance().getProjectView().releasePerform((int) (e.getX()/ tabView.getScale()+(tabView.getDx()/ tabView.getScale())),
-                (int) (e.getY()/ tabView.getScale()+(tabView.getDy()/ tabView.getScale())), this.tabView);
+        performAction(e, (x, y) -> EditorFrame.getInstance().getProjectView().releasePerform(x, y, tabView));
     }
 
     @Override
     public void mouseDragged(MouseEvent e) {
-        EditorFrame.getInstance().getProjectView().dragPerform((int) (e.getX()/ tabView.getScale()+(tabView.getDx()/ tabView.getScale())),
-                (int) (e.getY()/ tabView.getScale()+(tabView.getDy()/ tabView.getScale())), this.tabView);
+        performAction(e, (x, y) -> EditorFrame.getInstance().getProjectView().dragPerform(x, y, tabView));
     }
 
     @Override

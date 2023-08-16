@@ -9,25 +9,30 @@ import java.awt.*;
 
 public class ProjectView extends JPanel {
 
-    private TabToolBar mapToolBar;
+    private TabToolBar tabToolBar;
     private ProjectViewTop projectViewTop;
     private TabbedPane tabbedPane;
 
     public ProjectView() {
         init();
-        JPanel topPanel = new JPanel();
-        topPanel.setLayout(new BorderLayout());
-        topPanel.add(mapToolBar, BorderLayout.NORTH);
-        topPanel.add(projectViewTop);
+        initTopPanel();
+    }
+
+    private void init() {
+        this.tabToolBar = new TabToolBar();
+        this.projectViewTop = new ProjectViewTop();
+        this.tabbedPane = new TabbedPane();
         this.setLayout(new BorderLayout());
-        this.add(topPanel, BorderLayout.NORTH);
+        initTopPanel();
         this.add(tabbedPane);
     }
 
-    public void init() {
-        this.mapToolBar = new TabToolBar();
-        this.projectViewTop = new ProjectViewTop();
-        this.tabbedPane = new TabbedPane();
+    private void initTopPanel() {
+        JPanel topPanel = new JPanel();
+        topPanel.setLayout(new BorderLayout());
+        topPanel.add(tabToolBar, BorderLayout.NORTH);
+        topPanel.add(projectViewTop);
+        this.add(topPanel, BorderLayout.NORTH);
     }
 
     public void clickPerform(int x, int y, TabView tabView) {

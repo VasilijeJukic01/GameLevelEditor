@@ -9,7 +9,7 @@ import java.awt.event.AdjustmentEvent;
 import java.awt.event.AdjustmentListener;
 import java.awt.geom.AffineTransform;
 
-import static editor.constants.Constants.VIEW_COLOR;
+import static editor.constants.Constants.*;
 
 public class TabView extends JPanel implements AdjustmentListener {
 
@@ -17,28 +17,38 @@ public class TabView extends JPanel implements AdjustmentListener {
     private AffineTransform tx;
     private double scale = 1.0, dx = 0.0, dy = 0.0;
 
-    private final JPanel panel;
-    private final JScrollBar hScrollBar;
-    private final JScrollBar vScrollBar;
+    private JPanel panel;
+    private JScrollBar hScrollBar;
+    private JScrollBar vScrollBar;
 
     public TabView(Node level) {
         this.level = level;
+        initBars();
+        initPanel();
+        initLayout();
+    }
 
-        this.hScrollBar = new JScrollBar(JScrollBar.HORIZONTAL, 0, 100, 0, 1000);
-        this.vScrollBar = new JScrollBar(JScrollBar.VERTICAL, 0, 100, 0, 1000);
-        this.setLayout(new BorderLayout());
+    // Init
+    private void initBars() {
+        this.hScrollBar = new JScrollBar(JScrollBar.HORIZONTAL, 0, 100, 0, H_SCROLLBAR_MAX);
+        this.vScrollBar = new JScrollBar(JScrollBar.VERTICAL, 0, 100, 0, V_SCROLLBAR_MAX);
+        hScrollBar.addAdjustmentListener(this);
+        vScrollBar.addAdjustmentListener(this);
+    }
+
+    private void initPanel() {
         this.panel = new Workspace();
         panel.setLayout(new BorderLayout());
         panel.setBackground(VIEW_COLOR);
+        panel.addMouseListener(new MouseController(this));
+        panel.addMouseMotionListener(new MouseController(this));
+    }
+
+    private void initLayout() {
+        this.setLayout(new BorderLayout());
         this.add(hScrollBar, BorderLayout.SOUTH);
         this.add(vScrollBar, BorderLayout.EAST);
         this.add(panel);
-
-        panel.addMouseListener(new MouseController(this));
-        panel.addMouseMotionListener(new MouseController(this));
-
-        hScrollBar.addAdjustmentListener(this);
-        vScrollBar.addAdjustmentListener(this);
     }
 
     @Override
@@ -68,8 +78,8 @@ public class TabView extends JPanel implements AdjustmentListener {
 
     public void setScale(double scale) {
         this.scale = scale;
-        this.vScrollBar.setMaximum((int) (1000 * scale));
-        this.hScrollBar.setMaximum((int) (1000 * scale));
+        this.vScrollBar.setMaximum((int) (H_SCROLLBAR_MAX * scale));
+        this.hScrollBar.setMaximum((int) (V_SCROLLBAR_MAX * scale));
         this.repaint();
     }
 

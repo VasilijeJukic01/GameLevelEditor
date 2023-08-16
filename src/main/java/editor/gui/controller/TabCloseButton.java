@@ -1,4 +1,4 @@
-package editor.gui.controller.actions;
+package editor.gui.controller;
 
 import javax.swing.*;
 import javax.swing.plaf.metal.MetalIconFactory;
@@ -7,6 +7,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 public class TabCloseButton extends JPanel {
+
 
     public TabCloseButton(final Component tab, String title) {
         setOpaque(false);
@@ -24,7 +25,7 @@ public class TabCloseButton extends JPanel {
         private final Component tab;
 
         public CloseListener(Component tab){
-            this.tab=tab;
+            this.tab = tab;
         }
 
         @Override

@@ -1,6 +1,6 @@
 package editor.gui.view.tab;
 
-import editor.gui.controller.actions.TabCloseButton;
+import editor.gui.controller.TabCloseButton;
 import editor.gui.view.EditorFrame;
 import editor.model.repository.Node;
 import editor.model.repository.components.Level;
@@ -12,6 +12,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
 
 public class TabbedPane extends JTabbedPane implements TreeSubscriber, NodeSubscriber {
 
@@ -31,8 +32,7 @@ public class TabbedPane extends JTabbedPane implements TreeSubscriber, NodeSubsc
     public void setProject(Project project) {
         this.project = project;
         List<Node> levels = project.getChildren();
-        for (Node level : levels)
-            ((Level) level).addSubscriber(this);
+        levels.forEach(level -> ((Level) level).addSubscriber(this));
         EditorFrame.getInstance().getEditorTree().addSubscriberTree(this);
     }
 
@@ -49,7 +49,6 @@ public class TabbedPane extends JTabbedPane implements TreeSubscriber, NodeSubsc
         }
         if (!(t instanceof Level)) return;
         for (Component component : this.getComponents()) {
-
             if(component instanceof TabView && t == ((TabView) component).getLevel()) {
                 this.remove(component);
             }
@@ -71,7 +70,6 @@ public class TabbedPane extends JTabbedPane implements TreeSubscriber, NodeSubsc
         Component save = this.getSelectedComponent();
 
         for (Component component : this.getComponents()) {
-
             if(component instanceof TabView) {
                 components.add(component);
                 if(l == ((TabView) component).getLevel())
@@ -80,10 +78,9 @@ public class TabbedPane extends JTabbedPane implements TreeSubscriber, NodeSubsc
                 titles.add(((TabView) component).getLevel().getName());
             }
         }
-        this.removeAll();
-        for (int i = 0; i < components.size(); i++) {
-            this.addTab(titles.get(i), components.get(i));
-        }
+        refresh();
+        IntStream.range(0, components.size())
+                .forEach(i -> this.addTab(titles.get(i), components.get(i)));
         this.setSelectedComponent(save);
     }
 }

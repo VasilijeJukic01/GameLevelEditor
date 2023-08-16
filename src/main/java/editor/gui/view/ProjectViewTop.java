@@ -23,8 +23,13 @@ public class ProjectViewTop extends JPanel implements TreeSubscriber, NodeSubscr
     private final Tree<TreeItem, TreeView> editorTree;
 
     public ProjectViewTop() {
-
         this.setLayout(new BorderLayout());
+        initLabels();
+        this.editorTree = EditorFrame.getInstance().getEditorTree();
+        this.editorTree.addSubscriberTree(this);
+    }
+
+    private void initLabels() {
         JPanel panel = new JPanel();
         this.add(panel);
 
@@ -33,9 +38,6 @@ public class ProjectViewTop extends JPanel implements TreeSubscriber, NodeSubscr
         panel.add(lbSpacing);
         panel.add(lbProject);
         panel.add(lbProjectValue);
-
-        editorTree = EditorFrame.getInstance().getEditorTree();
-        editorTree.addSubscriberTree(this);
     }
 
     public void setProject(Project project) {
