@@ -2,7 +2,7 @@ package editor.gui.view;
 
 import editor.core.Framework;
 import editor.gui.controller.ActionManager;
-import editor.gui.controller.TabbedPaneController;
+import editor.gui.controller.tabController.TabbedPaneController;
 import editor.gui.view.tab.TabView;
 import editor.model.tree.EditorTree;
 import editor.model.tree.Tree;

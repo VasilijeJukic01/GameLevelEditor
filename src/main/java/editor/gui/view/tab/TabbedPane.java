@@ -1,6 +1,6 @@
 package editor.gui.view.tab;
 
-import editor.gui.controller.TabCloseButton;
+import editor.gui.controller.tabController.TabCloseButton;
 import editor.gui.view.EditorFrame;
 import editor.model.repository.Node;
 import editor.model.repository.components.Level;

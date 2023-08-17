@@ -1,9 +1,9 @@
 package editor.gui.view.tab;
 
 import editor.gui.controller.MouseController;
+import editor.gui.controller.tabController.TabMouseListener;
 import editor.gui.view.renderer.LevelRenderer;
 import editor.gui.view.renderer.Renderer;
-import editor.model.repository.Node;
 import editor.model.repository.components.Level;
 import editor.model.repository.nodeObserver.NodeSubscriber;
 
@@ -59,6 +59,8 @@ public class TabView extends JPanel implements AdjustmentListener, NodeSubscribe
                 setBars();
             }
         });
+        TabMouseListener tabMouseListener = new TabMouseListener(vScrollBar);
+        panel.addMouseWheelListener(tabMouseListener);
     }
 
     private void initLayout() {
@@ -133,7 +135,4 @@ public class TabView extends JPanel implements AdjustmentListener, NodeSubscribe
 
     }
 
-    public Renderer getRenderer() {
-        return renderer;
-    }
 }

@@ -4,6 +4,7 @@ import editor.gui.controller.levelActions.AddNodeAction;
 import editor.gui.controller.levelActions.DeleteNodeAction;
 import editor.gui.controller.levelActions.EditNodeAction;
 import editor.gui.controller.levelActions.ImportLevelAction;
+import editor.gui.controller.projectActions.CloseFileAction;
 import editor.gui.controller.projectActions.ExitAction;
 import editor.gui.controller.projectActions.NewFileAction;
 import editor.gui.controller.projectActions.OpenFileAction;
@@ -15,6 +16,7 @@ public class ActionManager {
     private ExitAction exitAction;
     private NewFileAction newAction;
     private OpenFileAction openAction;
+    private CloseFileAction closeAction;
 
     // Editor Actions
     private ImportLevelAction importLevelAction;
@@ -32,6 +34,7 @@ public class ActionManager {
         this.exitAction = new ExitAction();
         this.newAction = new NewFileAction();
         this.openAction = new OpenFileAction();
+        this.closeAction = new CloseFileAction();
     }
 
     private void initEditorActions() {
@@ -42,6 +45,7 @@ public class ActionManager {
         this.showGridAction = new ShowGridAction();
     }
 
+    // Project Actions Getters
     public NewFileAction getNewAction() {
         return newAction;
     }
@@ -54,6 +58,11 @@ public class ActionManager {
         return openAction;
     }
 
+    public CloseFileAction getCloseAction() {
+        return closeAction;
+    }
+
+    // Editor Actions Getters
     public ImportLevelAction getImportLevelAction() {
         return importLevelAction;
     }
