@@ -5,7 +5,7 @@ import java.awt.*;
 public class Constants {
 
     // Size
-    public static final int SCREEN_WID = 1280;
+    public static final int SCREEN_WID = 1500;
     public static final int SCREEN_HEI = 800;
     public static final int EXPLORER_WID = 200;
     public static final int EXPLORER_HEI = 150;

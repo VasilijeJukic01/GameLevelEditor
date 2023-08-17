@@ -1,4 +1,4 @@
-package editor.gui.controller;
+package editor.gui.controller.tabController;
 
 import editor.gui.view.ProjectView;
 import editor.gui.view.tab.TabView;

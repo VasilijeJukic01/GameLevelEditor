@@ -1,4 +1,4 @@
-package editor.gui.controller;
+package editor.gui.controller.tabController;
 
 import javax.swing.*;
 import javax.swing.plaf.metal.MetalIconFactory;
