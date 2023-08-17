@@ -13,9 +13,12 @@ public class MenuBar extends JMenuBar {
         mFile.add(actionManager.getOpenAction());
         mFile.add(actionManager.getNewAction());
         mFile.add(actionManager.getExitAction());
-
         this.add(mFile);
-        this.add(new JMenu("Edit"));
+
+        JMenu mEdit = new JMenu("Edit");
+        mEdit.add(actionManager.getShowGridAction());
+        this.add(mEdit);
+
         this.add(new JMenu("Help"));
     }
 }

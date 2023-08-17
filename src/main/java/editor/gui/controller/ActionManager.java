@@ -3,9 +3,11 @@ package editor.gui.controller;
 import editor.gui.controller.levelActions.AddNodeAction;
 import editor.gui.controller.levelActions.DeleteNodeAction;
 import editor.gui.controller.levelActions.EditNodeAction;
+import editor.gui.controller.levelActions.ImportLevelAction;
 import editor.gui.controller.projectActions.ExitAction;
 import editor.gui.controller.projectActions.NewFileAction;
 import editor.gui.controller.projectActions.OpenFileAction;
+import editor.gui.controller.levelActions.ShowGridAction;
 
 public class ActionManager {
 
@@ -15,9 +17,11 @@ public class ActionManager {
     private OpenFileAction openAction;
 
     // Editor Actions
+    private ImportLevelAction importLevelAction;
     private AddNodeAction addNodeAction;
     private DeleteNodeAction deleteNodeAction;
     private EditNodeAction editNodeAction;
+    private ShowGridAction showGridAction;
 
     public ActionManager() {
         initProjectActions();
@@ -31,9 +35,11 @@ public class ActionManager {
     }
 
     private void initEditorActions() {
+        this.importLevelAction = new ImportLevelAction();
         this.addNodeAction = new AddNodeAction();
         this.deleteNodeAction = new DeleteNodeAction();
         this.editNodeAction = new EditNodeAction();
+        this.showGridAction = new ShowGridAction();
     }
 
     public NewFileAction getNewAction() {
@@ -48,6 +54,10 @@ public class ActionManager {
         return openAction;
     }
 
+    public ImportLevelAction getImportLevelAction() {
+        return importLevelAction;
+    }
+
     public AddNodeAction getAddNodeAction() {
         return addNodeAction;
     }
@@ -58,5 +68,9 @@ public class ActionManager {
 
     public EditNodeAction getEditNodeAction() {
         return editNodeAction;
+    }
+
+    public ShowGridAction getShowGridAction() {
+        return showGridAction;
     }
 }

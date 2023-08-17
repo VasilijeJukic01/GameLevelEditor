@@ -6,7 +6,7 @@ import java.awt.*;
 
 import static editor.constants.Constants.*;
 
-public class RoundedButton extends BasicButtonUI {
+public class CustomButton extends BasicButtonUI {
 
     @Override
     protected void installDefaults(AbstractButton b) {

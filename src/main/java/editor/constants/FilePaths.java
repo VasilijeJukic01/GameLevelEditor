@@ -8,4 +8,7 @@ public class FilePaths {
     public static final String TREE_PROJECT_ICON = "/images/tree/Project.png";
     public static final String TREE_LEVEL_ICON = "/images/tree/Level.png";
 
+    // Sprites
+    public static final String FOREST_SPRITE = "/images/tiles/mossyTiles.png";
+
 }

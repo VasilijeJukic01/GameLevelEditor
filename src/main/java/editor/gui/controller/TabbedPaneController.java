@@ -31,7 +31,7 @@ public class TabbedPaneController {
                         projectView.getProjectViewTop().setProject((Project)treeItem.getNode());
                         projectView.getTabbedPane().setProject((Project)treeItem.getNode());
                         for (Node child : ((Project) treeItem.getNode()).getChildren()) {
-                            TabView mapTab = new TabView(child);
+                            TabView mapTab = new TabView((Level)child);
                             projectView.getTabbedPane().addTab(child.getName(), mapTab);
                         }
                     }

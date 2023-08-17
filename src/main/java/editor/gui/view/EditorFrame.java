@@ -3,6 +3,7 @@ package editor.gui.view;
 import editor.core.Framework;
 import editor.gui.controller.ActionManager;
 import editor.gui.controller.TabbedPaneController;
+import editor.gui.view.tab.TabView;
 import editor.model.tree.EditorTree;
 import editor.model.tree.Tree;
 import editor.model.tree.mvc.TreeItem;
@@ -84,6 +85,10 @@ public class EditorFrame extends JFrame {
     }
 
     // Getters
+    public TabView getCurrentTab() {
+        return (TabView) projectView.getTabbedPane().getSelectedComponent();
+    }
+
     public ActionManager getActionManager() {
         return actionManager;
     }

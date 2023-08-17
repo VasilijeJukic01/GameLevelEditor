@@ -11,10 +11,14 @@ import java.util.Optional;
 
 public class Level extends Composite<Node> implements NodePublisher {
 
+    private int width, height;
+    private boolean showGrid = true;
+
     private transient List<NodeSubscriber> subscribers;
 
     public Level(String name, Node parent) {
         super(name, parent);
+        this.width = this.height = 0;
     }
 
     @Override
@@ -45,4 +49,29 @@ public class Level extends Composite<Node> implements NodePublisher {
         if (t == null || this.subscribers == null || this.subscribers.isEmpty()) return;
         this.subscribers.forEach(s -> s.updateNode(t));
     }
+
+    public void changeGrid() {
+        this.showGrid = !this.showGrid;
+        notify(this);
+    }
+
+    // Getters & Setters
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public boolean isShowGrid() {
+        return showGrid;
+    }
+
+    public void setSize(int width, int height) {
+        this.width = width;
+        this.height = height;
+        notify(this);
+    }
+
 }

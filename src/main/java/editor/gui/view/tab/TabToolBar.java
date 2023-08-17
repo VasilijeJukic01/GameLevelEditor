@@ -13,6 +13,8 @@ public class TabToolBar extends JToolBar {
         super.setFloatable(false);
         this.setBackground(TAB_TOOLBAR_COLOR);
 
+        this.add(EditorFrame.getInstance().getActionManager().getImportLevelAction().createButton());
+        this.addSeparator();
         this.add(EditorFrame.getInstance().getActionManager().getAddNodeAction().createButton());
         this.addSeparator();
         this.add(EditorFrame.getInstance().getActionManager().getDeleteNodeAction().createButton());

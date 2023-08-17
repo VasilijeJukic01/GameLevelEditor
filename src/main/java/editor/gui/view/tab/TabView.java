@@ -1,19 +1,25 @@
 package editor.gui.view.tab;
 
 import editor.gui.controller.MouseController;
+import editor.gui.view.renderer.LevelRenderer;
+import editor.gui.view.renderer.Renderer;
 import editor.model.repository.Node;
+import editor.model.repository.components.Level;
+import editor.model.repository.nodeObserver.NodeSubscriber;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.AdjustmentEvent;
 import java.awt.event.AdjustmentListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.geom.AffineTransform;
 
 import static editor.constants.Constants.*;
 
-public class TabView extends JPanel implements AdjustmentListener {
+public class TabView extends JPanel implements AdjustmentListener, NodeSubscriber {
 
-    private Node level;
+    private Level level;
     private AffineTransform tx;
     private double scale = 1.0, dx = 0.0, dy = 0.0;
 
@@ -21,11 +27,16 @@ public class TabView extends JPanel implements AdjustmentListener {
     private JScrollBar hScrollBar;
     private JScrollBar vScrollBar;
 
-    public TabView(Node level) {
+    private final Renderer renderer;
+
+    public TabView(Level level) {
         this.level = level;
+        this.level.addSubscriber(this);
+        this.renderer = new LevelRenderer(level);
         initBars();
         initPanel();
         initLayout();
+        setBars();
     }
 
     // Init
@@ -42,6 +53,12 @@ public class TabView extends JPanel implements AdjustmentListener {
         panel.setBackground(VIEW_COLOR);
         panel.addMouseListener(new MouseController(this));
         panel.addMouseMotionListener(new MouseController(this));
+        panel.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                setBars();
+            }
+        });
     }
 
     private void initLayout() {
@@ -60,7 +77,7 @@ public class TabView extends JPanel implements AdjustmentListener {
     }
 
     // Getters & Setters
-    public Node getLevel() {
+    public Level getLevel() {
         return level;
     }
 
@@ -78,13 +95,25 @@ public class TabView extends JPanel implements AdjustmentListener {
 
     public void setScale(double scale) {
         this.scale = scale;
-        this.vScrollBar.setMaximum((int) (H_SCROLLBAR_MAX * scale));
-        this.hScrollBar.setMaximum((int) (V_SCROLLBAR_MAX * scale));
+        this.vScrollBar.setMaximum((int) (level.getHeight()*TILE_SIZE * scale));
+        this.hScrollBar.setMaximum((int) (level.getWidth()*TILE_SIZE * scale));
         this.repaint();
     }
 
-    public void setLevel(Node level) {
+    private void setBars() {
+        this.vScrollBar.setMaximum((int) ((level.getHeight()*TILE_SIZE) * scale));
+        this.hScrollBar.setMaximum((int) ((level.getWidth()*TILE_SIZE) * scale));
+        this.repaint();
+    }
+
+    public void setLevel(Level level) {
+        ((LevelRenderer)renderer).setLevel(level);
         this.level = level;
+    }
+
+    @Override
+    public <T> void updateNode(T t) {
+        setBars();
     }
 
     // Workspace
@@ -97,8 +126,14 @@ public class TabView extends JPanel implements AdjustmentListener {
             tx.translate(-dx,-dy);
             tx.scale(scale, scale);
             g2.transform(tx);
+
+            renderer.render(g);
+
         }
 
     }
 
+    public Renderer getRenderer() {
+        return renderer;
+    }
 }

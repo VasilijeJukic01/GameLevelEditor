@@ -1,7 +1,7 @@
 package editor.model.repository.factory;
 
 import editor.model.repository.Node;
-import editor.model.repository.components.Component;
+import editor.model.repository.components.Tile;
 import editor.model.repository.components.Level;
 import editor.model.repository.components.Project;
 import editor.model.repository.components.ProjectExplorer;
@@ -21,8 +21,8 @@ public class Factory implements NodeFactory {
     }
 
     @Override
-    public Component createComponent(String name, Node parent) {
-        return new Component(name, parent);
+    public Tile createComponent(String name, Node parent) {
+        return new Tile(name, parent);
     }
 
     @Override

@@ -1,6 +1,6 @@
 package editor.gui.controller;
 
-import editor.gui.view.style.RoundedButton;
+import editor.gui.view.style.CustomButton;
 
 import javax.swing.*;
 import java.net.URL;
@@ -19,7 +19,7 @@ public abstract class AbstractEditorAction extends AbstractAction {
 
     public JButton createButton() {
         JButton button = new JButton(this);
-        button.setUI(new RoundedButton());
+        button.setUI(new CustomButton());
         return button;
     }
 

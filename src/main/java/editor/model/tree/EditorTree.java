@@ -2,7 +2,7 @@ package editor.model.tree;
 
 import editor.model.repository.Node;
 import editor.model.repository.Composite;
-import editor.model.repository.components.Component;
+import editor.model.repository.components.Tile;
 import editor.model.repository.components.Level;
 import editor.model.repository.components.ProjectExplorer;
 import editor.model.repository.factory.Factory;
@@ -53,7 +53,7 @@ public class EditorTree implements Tree<TreeItem, TreeView> {
 
     @Override
     public void removeChild(TreeItem child) {
-        if(child.getNode() instanceof ProjectExplorer || child.getNode() instanceof Component) return;
+        if(child.getNode() instanceof ProjectExplorer || child.getNode() instanceof Tile) return;
 
         ((TreeItem) child.getParent()).remove(child);
         Composite<Node> parent = (Composite<Node>) child.getNode().getParent();

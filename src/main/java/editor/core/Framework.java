@@ -1,5 +1,6 @@
 package editor.core;
 
+import editor.model.level.LevelLoader;
 import editor.model.repository.LevelRepository;
 
 public class Framework {
@@ -8,6 +9,7 @@ public class Framework {
 
     protected Gui gui;
     protected Repository repository;
+    protected Loader levelLoader;
 
     private Framework() {}
 
@@ -25,6 +27,7 @@ public class Framework {
     public void init(Gui gui) {
         this.gui = gui;
         this.repository = new LevelRepository();
+        this.levelLoader = new LevelLoader();
     }
 
     public void run(){
@@ -34,5 +37,9 @@ public class Framework {
     // Getters & Setters
     public Repository getRepository() {
         return repository;
+    }
+
+    public Loader getLoader() {
+        return levelLoader;
     }
 }
