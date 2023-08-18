@@ -22,7 +22,7 @@ public class ZoomOutAction extends AbstractEditorAction {
         TabView tab = EditorFrame.getInstance().getCurrentTab();
         if (tab != null) {
             double scale = tab.getScale();
-            if (scale / 1.2 < 0.5) scale = 0.5;
+            if (scale / 1.2 < 0.3) scale = 0.3;
             else scale /= 1.2;
             tab.setScale(scale);
         }

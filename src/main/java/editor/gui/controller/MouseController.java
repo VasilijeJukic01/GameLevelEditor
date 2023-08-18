@@ -3,9 +3,7 @@ package editor.gui.controller;
 import editor.gui.view.EditorFrame;
 import editor.gui.view.tab.TabView;
 
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
+import java.awt.event.*;
 import java.util.function.BiConsumer;
 
 public class MouseController implements MouseListener, MouseMotionListener {

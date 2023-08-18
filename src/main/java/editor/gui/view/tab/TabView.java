@@ -1,7 +1,8 @@
 package editor.gui.view.tab;
 
+import editor.gui.controller.EditorKeyListener;
 import editor.gui.controller.MouseController;
-import editor.gui.controller.tabController.TabMouseListener;
+import editor.gui.controller.tabController.TabWheelListener;
 import editor.gui.view.renderer.LevelRenderer;
 import editor.gui.view.renderer.Renderer;
 import editor.model.repository.components.Level;
@@ -28,6 +29,8 @@ public class TabView extends JPanel implements AdjustmentListener, NodeSubscribe
     private JScrollBar hScrollBar;
     private JScrollBar vScrollBar;
 
+    private TabWheelListener tabWheelListener;
+    private EditorKeyListener editorKeyListener;
     private final Renderer renderer;
 
     public TabView(Level level) {
@@ -60,8 +63,12 @@ public class TabView extends JPanel implements AdjustmentListener, NodeSubscribe
                 setBars();
             }
         });
-        TabMouseListener tabMouseListener = new TabMouseListener(vScrollBar);
-        panel.addMouseWheelListener(tabMouseListener);
+        this.editorKeyListener = new EditorKeyListener();
+        tabWheelListener = new TabWheelListener(vScrollBar, editorKeyListener, this);
+        panel.addMouseWheelListener(tabWheelListener);
+        panel.addKeyListener(editorKeyListener);
+        panel.setFocusable(true);
+        panel.requestFocus();
     }
 
     private void initLayout() {
@@ -128,6 +135,7 @@ public class TabView extends JPanel implements AdjustmentListener, NodeSubscribe
     private class Workspace extends JPanel {
 
         protected void paintComponent(Graphics g) {
+            this.requestFocus(true);
             super.paintComponent(g);
             Graphics2D g2 = (Graphics2D) g;
             tx = new AffineTransform();
