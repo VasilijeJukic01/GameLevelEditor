@@ -1,27 +1,14 @@
 package editor.gui.controller;
 
 import editor.gui.controller.levelActions.*;
-import editor.gui.controller.projectActions.CloseFileAction;
-import editor.gui.controller.projectActions.ExitAction;
-import editor.gui.controller.projectActions.NewFileAction;
-import editor.gui.controller.projectActions.OpenFileAction;
+import editor.gui.controller.projectActions.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class ActionManager {
 
-    // Project Actions
-    private ExitAction exitAction;
-    private NewFileAction newAction;
-    private OpenFileAction openAction;
-    private CloseFileAction closeAction;
-
-    // Editor Actions
-    private ImportLevelAction importLevelAction;
-    private AddNodeAction addNodeAction;
-    private DeleteNodeAction deleteNodeAction;
-    private EditNodeAction editNodeAction;
-    private ShowGridAction showGridAction;
-    private ZoomInAction zoomInAction;
-    private ZoomOutAction zoomOutAction;
+    private final Map<ActionType, AbstractEditorAction> actions = new HashMap<>();
 
     public ActionManager() {
         initProjectActions();
@@ -29,65 +16,24 @@ public class ActionManager {
     }
 
     private void initProjectActions() {
-        this.exitAction = new ExitAction();
-        this.newAction = new NewFileAction();
-        this.openAction = new OpenFileAction();
-        this.closeAction = new CloseFileAction();
+        actions.put(ActionType.EXIT, new ExitAction());
+        actions.put(ActionType.NEW_FILE, new NewFileAction());
+        actions.put(ActionType.OPEN_FILE, new OpenFileAction());
+        actions.put(ActionType.CLOSE_FILE, new CloseFileAction());
+        actions.put(ActionType.RENAME_FILE, new RenameFileAction());
     }
 
     private void initEditorActions() {
-        this.importLevelAction = new ImportLevelAction();
-        this.addNodeAction = new AddNodeAction();
-        this.deleteNodeAction = new DeleteNodeAction();
-        this.editNodeAction = new EditNodeAction();
-        this.showGridAction = new ShowGridAction();
-        this.zoomInAction = new ZoomInAction();
-        this.zoomOutAction = new ZoomOutAction();
+        actions.put(ActionType.IMPORT, new ImportLevelAction());
+        actions.put(ActionType.ADD_NODE, new AddNodeAction());
+        actions.put(ActionType.DELETE_NODE, new DeleteNodeAction());
+        actions.put(ActionType.EDIT_NODE, new EditNodeAction());
+        actions.put(ActionType.SHOW_GRID, new ShowGridAction());
+        actions.put(ActionType.ZOOM_IN, new ZoomInAction());
+        actions.put(ActionType.ZOOM_OUT, new ZoomOutAction());
     }
 
-    // Project Actions Getters
-    public NewFileAction getNewAction() {
-        return newAction;
-    }
-
-    public ExitAction getExitAction() {
-        return exitAction;
-    }
-
-    public OpenFileAction getOpenAction() {
-        return openAction;
-    }
-
-    public CloseFileAction getCloseAction() {
-        return closeAction;
-    }
-
-    // Editor Actions Getters
-    public ImportLevelAction getImportLevelAction() {
-        return importLevelAction;
-    }
-
-    public AddNodeAction getAddNodeAction() {
-        return addNodeAction;
-    }
-
-    public DeleteNodeAction getDeleteNodeAction() {
-        return deleteNodeAction;
-    }
-
-    public EditNodeAction getEditNodeAction() {
-        return editNodeAction;
-    }
-
-    public ShowGridAction getShowGridAction() {
-        return showGridAction;
-    }
-
-    public ZoomInAction getZoomInAction() {
-        return zoomInAction;
-    }
-
-    public ZoomOutAction getZoomOutAction() {
-        return zoomOutAction;
+    public AbstractEditorAction getAction(ActionType type) {
+        return actions.get(type);
     }
 }

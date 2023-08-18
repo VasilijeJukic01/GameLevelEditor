@@ -1,5 +1,6 @@
 package editor.gui.view.tab;
 
+import editor.gui.controller.ActionType;
 import editor.gui.view.EditorFrame;
 
 import javax.swing.*;
@@ -13,17 +14,19 @@ public class TabToolBar extends JToolBar {
         super.setFloatable(false);
         this.setBackground(TAB_TOOLBAR_COLOR);
 
-        this.add(EditorFrame.getInstance().getActionManager().getImportLevelAction().createButton());
+        this.add(EditorFrame.getInstance().getActionManager().getAction(ActionType.IMPORT).createButton());
         this.addSeparator();
-        this.add(EditorFrame.getInstance().getActionManager().getAddNodeAction().createButton());
         this.addSeparator();
-        this.add(EditorFrame.getInstance().getActionManager().getDeleteNodeAction().createButton());
+        this.add(EditorFrame.getInstance().getActionManager().getAction(ActionType.ADD_NODE).createButton());
         this.addSeparator();
-        this.add(EditorFrame.getInstance().getActionManager().getEditNodeAction().createButton());
+        this.add(EditorFrame.getInstance().getActionManager().getAction(ActionType.DELETE_NODE).createButton());
         this.addSeparator();
-        this.add(EditorFrame.getInstance().getActionManager().getZoomInAction().createButton());
+        this.add(EditorFrame.getInstance().getActionManager().getAction(ActionType.EDIT_NODE).createButton());
         this.addSeparator();
-        this.add(EditorFrame.getInstance().getActionManager().getZoomOutAction().createButton());
+        this.addSeparator();
+        this.add(EditorFrame.getInstance().getActionManager().getAction(ActionType.ZOOM_IN).createButton());
+        this.addSeparator();
+        this.add(EditorFrame.getInstance().getActionManager().getAction(ActionType.ZOOM_OUT).createButton());
     }
 
 }

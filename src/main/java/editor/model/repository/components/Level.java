@@ -26,7 +26,6 @@ public class Level extends Composite<Node> implements NodePublisher {
         Optional.ofNullable(text)
                 .filter(str -> !str.isEmpty())
                 .ifPresent(super::setName);
-        System.out.println(getName());
         notify(this);
     }
 
