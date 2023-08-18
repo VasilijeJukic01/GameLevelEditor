@@ -12,7 +12,6 @@ import java.util.EventObject;
 public class TreeCellEditor extends DefaultTreeCellEditor implements ActionListener {
 
     private Object clickedOn = null;
-    private JTextField tfEdit;
 
     public TreeCellEditor(JTree tree, DefaultTreeCellRenderer renderer) {
         super(tree, renderer);
@@ -20,7 +19,7 @@ public class TreeCellEditor extends DefaultTreeCellEditor implements ActionListe
 
     public Component getTreeCellEditorComponent(JTree tree, Object cell, boolean selectionHighlight, boolean isExpanded, boolean isLeaf, int row) {
         clickedOn = cell;
-        tfEdit = new JTextField(cell.toString());
+        JTextField tfEdit = new JTextField(cell.toString());
         tfEdit.addActionListener(this);
         return tfEdit;
     }
@@ -37,19 +36,4 @@ public class TreeCellEditor extends DefaultTreeCellEditor implements ActionListe
         ((TreeItem) clickedOn).setName(e.getActionCommand());
     }
 
-    public Object getClickedOn() {
-        return clickedOn;
-    }
-
-    public void setClickedOn(Object clickedOn) {
-        this.clickedOn = clickedOn;
-    }
-
-    public JTextField getTfEdit() {
-        return tfEdit;
-    }
-
-    public void setTfEdit(JTextField tfEdit) {
-        this.tfEdit = tfEdit;
-    }
 }

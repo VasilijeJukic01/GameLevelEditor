@@ -87,12 +87,10 @@ public class LevelRenderer implements Renderer {
 
     private void renderGrid(Graphics g) {
         if (!level.isShowGrid()) return;
-        int cols = level.getWidth();
-        int rows = level.getHeight();
         g.setColor(Color.BLUE);
 
-        for (int row = 0; row < rows; row++) {
-            for (int col = 0; col < cols; col++) {
+        for (int row = 0; row < level.getHeight(); row++) {
+            for (int col = 0; col < level.getWidth(); col++) {
                 int x = col * TILE_SIZE;
                 int y = row * TILE_SIZE;
                 g.drawRect(x, y, TILE_SIZE, TILE_SIZE);

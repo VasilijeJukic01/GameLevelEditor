@@ -29,6 +29,12 @@ public class Level extends Composite<Node> implements NodePublisher {
         notify(this);
     }
 
+    public void changeGrid() {
+        this.showGrid = !this.showGrid;
+        notify(this);
+    }
+
+    // Observer
     @Override
     public void addSubscriber(NodeSubscriber s) {
         if(s == null) return;
@@ -48,11 +54,6 @@ public class Level extends Composite<Node> implements NodePublisher {
     public <T> void notify(T t) {
         if (t == null || this.subscribers == null || this.subscribers.isEmpty()) return;
         this.subscribers.forEach(s -> s.updateNode(t));
-    }
-
-    public void changeGrid() {
-        this.showGrid = !this.showGrid;
-        notify(this);
     }
 
     // Getters & Setters

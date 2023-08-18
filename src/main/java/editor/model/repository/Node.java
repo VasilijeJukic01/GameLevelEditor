@@ -3,7 +3,7 @@ package editor.model.repository;
 public abstract class Node {
 
     private String name;
-    private transient Node parent;
+    private final transient Node parent;
 
     public Node(String name, Node parent) {
         this.name = name;
@@ -21,10 +21,6 @@ public abstract class Node {
 
     public Node getParent() {
         return parent;
-    }
-
-    public void setParent(Node parent) {
-        this.parent = parent;
     }
 
 }

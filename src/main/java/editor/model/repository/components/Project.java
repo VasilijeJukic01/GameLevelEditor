@@ -56,6 +56,7 @@ public class Project extends Composite<Node> implements NodePublisher {
         this.path = path;
     }
 
+    // Observer
     @Override
     public void addSubscriber(NodeSubscriber s) {
         if(s == null) return;

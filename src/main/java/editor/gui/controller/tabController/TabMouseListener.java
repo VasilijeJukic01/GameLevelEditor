@@ -1,4 +1,4 @@
-package editor.gui.controller;
+package editor.gui.controller.tabController;
 
 import editor.gui.view.EditorFrame;
 import editor.gui.view.tab.TabView;
@@ -6,11 +6,11 @@ import editor.gui.view.tab.TabView;
 import java.awt.event.*;
 import java.util.function.BiConsumer;
 
-public class MouseController implements MouseListener, MouseMotionListener {
+public class TabMouseListener implements MouseListener, MouseMotionListener {
 
     private final TabView tabView;
 
-    public MouseController(TabView tabView) {
+    public TabMouseListener(TabView tabView) {
         this.tabView = tabView;
     }
 

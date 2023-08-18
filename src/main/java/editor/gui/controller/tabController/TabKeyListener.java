@@ -1,15 +1,13 @@
-package editor.gui.controller;
-
-import editor.gui.view.tab.TabView;
+package editor.gui.controller.tabController;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-public class EditorKeyListener implements KeyListener {
+public class TabKeyListener implements KeyListener {
 
     private boolean ctrlFlag = false;
 
-    public EditorKeyListener() {
+    public TabKeyListener() {
     }
 
     @Override

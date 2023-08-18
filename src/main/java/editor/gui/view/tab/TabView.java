@@ -1,7 +1,7 @@
 package editor.gui.view.tab;
 
-import editor.gui.controller.EditorKeyListener;
-import editor.gui.controller.MouseController;
+import editor.gui.controller.tabController.TabKeyListener;
+import editor.gui.controller.tabController.TabMouseListener;
 import editor.gui.controller.tabController.TabWheelListener;
 import editor.gui.view.renderer.LevelRenderer;
 import editor.gui.view.renderer.Renderer;
@@ -26,11 +26,8 @@ public class TabView extends JPanel implements AdjustmentListener, NodeSubscribe
 
     private JPanel panel;
     private SidePanel sidePanel;
-    private JScrollBar hScrollBar;
-    private JScrollBar vScrollBar;
+    private JScrollBar hScrollBar, vScrollBar;
 
-    private TabWheelListener tabWheelListener;
-    private EditorKeyListener editorKeyListener;
     private final Renderer renderer;
 
     public TabView(Level level) {
@@ -39,7 +36,7 @@ public class TabView extends JPanel implements AdjustmentListener, NodeSubscribe
         initBars();
         initPanel();
         initLayout();
-        setBars();
+        refreshBars();
         this.renderer = new LevelRenderer(level);
     }
 
@@ -55,20 +52,24 @@ public class TabView extends JPanel implements AdjustmentListener, NodeSubscribe
         this.panel = new Workspace();
         panel.setLayout(new BorderLayout());
         panel.setBackground(VIEW_COLOR);
-        panel.addMouseListener(new MouseController(this));
-        panel.addMouseMotionListener(new MouseController(this));
+        initListeners();
+        panel.setFocusable(true);
+        panel.requestFocus();
+    }
+
+    private void initListeners() {
+        panel.addMouseListener(new TabMouseListener(this));
+        panel.addMouseMotionListener(new TabMouseListener(this));
         panel.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
-                setBars();
+                refreshBars();
             }
         });
-        this.editorKeyListener = new EditorKeyListener();
-        tabWheelListener = new TabWheelListener(vScrollBar, editorKeyListener, this);
+        TabKeyListener tabKeyListener = new TabKeyListener();
+        TabWheelListener tabWheelListener = new TabWheelListener(vScrollBar, tabKeyListener, this);
         panel.addMouseWheelListener(tabWheelListener);
-        panel.addKeyListener(editorKeyListener);
-        panel.setFocusable(true);
-        panel.requestFocus();
+        panel.addKeyListener(tabKeyListener);
     }
 
     private void initLayout() {
@@ -87,7 +88,7 @@ public class TabView extends JPanel implements AdjustmentListener, NodeSubscribe
         JScrollBar jScrollBar = (JScrollBar) e.getSource();
         if (jScrollBar.getOrientation() == JScrollBar.HORIZONTAL) dx = e.getValue() - panel.getX();
         else dy = e.getValue() - panel.getY();
-        panel.repaint();
+        this.repaint();
     }
 
     // Getters & Setters
@@ -114,7 +115,7 @@ public class TabView extends JPanel implements AdjustmentListener, NodeSubscribe
         this.repaint();
     }
 
-    private void setBars() {
+    private void refreshBars() {
         this.vScrollBar.setMaximum((int) ((level.getHeight()*TILE_SIZE) * scale));
         this.hScrollBar.setMaximum((int) ((level.getWidth()*TILE_SIZE) * scale));
         this.repaint();
@@ -126,9 +127,10 @@ public class TabView extends JPanel implements AdjustmentListener, NodeSubscribe
         this.level = level;
     }
 
+    // Observer
     @Override
     public <T> void updateNode(T t) {
-        setBars();
+        refreshBars();
     }
 
     // Workspace
