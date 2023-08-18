@@ -24,6 +24,7 @@ public class TabView extends JPanel implements AdjustmentListener, NodeSubscribe
     private double scale = 1.0, dx = 0.0, dy = 0.0;
 
     private JPanel panel;
+    private SidePanel sidePanel;
     private JScrollBar hScrollBar;
     private JScrollBar vScrollBar;
 
@@ -32,11 +33,11 @@ public class TabView extends JPanel implements AdjustmentListener, NodeSubscribe
     public TabView(Level level) {
         this.level = level;
         this.level.addSubscriber(this);
-        this.renderer = new LevelRenderer(level);
         initBars();
         initPanel();
         initLayout();
         setBars();
+        this.renderer = new LevelRenderer(level);
     }
 
     // Init
@@ -69,7 +70,8 @@ public class TabView extends JPanel implements AdjustmentListener, NodeSubscribe
         this.add(panel);
         JPanel eastPanel = new JPanel(new BorderLayout());
         eastPanel.add(vScrollBar, BorderLayout.WEST);
-        eastPanel.add(new SidePanel(), BorderLayout.EAST);
+        this.sidePanel = new SidePanel(level);
+        eastPanel.add(sidePanel, BorderLayout.EAST);
         this.add(eastPanel, BorderLayout.EAST);
     }
 
@@ -113,6 +115,7 @@ public class TabView extends JPanel implements AdjustmentListener, NodeSubscribe
 
     public void setLevel(Level level) {
         ((LevelRenderer)renderer).setLevel(level);
+        sidePanel.setLevel(level);
         this.level = level;
     }
 
@@ -122,7 +125,7 @@ public class TabView extends JPanel implements AdjustmentListener, NodeSubscribe
     }
 
     // Workspace
-    private class Workspace extends JPanel{
+    private class Workspace extends JPanel {
 
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
@@ -132,8 +135,7 @@ public class TabView extends JPanel implements AdjustmentListener, NodeSubscribe
             tx.scale(scale, scale);
             g2.transform(tx);
 
-            renderer.render(g);
-
+            renderer.render(g, sidePanel.getCheckBoxes());
         }
 
     }

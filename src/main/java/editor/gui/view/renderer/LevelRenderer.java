@@ -8,6 +8,7 @@ import editor.model.repository.components.Level;
 import editor.model.repository.components.TileType;
 import editor.utils.Utils;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
@@ -40,14 +41,16 @@ public class LevelRenderer implements Renderer {
     }
 
     @Override
-    public void render(Graphics g) {
+    public void render(Graphics g, JCheckBox[] checkBoxes) {
         if (level.getChildren() == null) return;
-        renderDeco(g, 0);              // First deco layer
-        renderDeco(g, 1);              // Second deco layer
-        renderDeco(g, 2);              // Third deco layer
-        renderTerrain(g, 3);           // Terrain behind layer
-        renderDeco(g, 4);              // Fourth deco layer
-        renderTerrain(g, 5);           // Terrain behind layer
+
+        for (int i = 0; i < checkBoxes.length - 1; i++) {
+            if (checkBoxes[checkBoxes.length - 1].isSelected() || checkBoxes[i].isSelected()) {
+                renderDeco(g, i);
+                renderTerrain(g, i);
+            }
+        }
+
         renderGrid(g);
     }
 

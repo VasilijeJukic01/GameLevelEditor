@@ -1,13 +1,20 @@
 package editor.gui.view.tab;
 
+import editor.model.repository.components.Level;
+
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ItemEvent;
 
 public class SidePanel extends JPanel {
 
-    private JCheckBox[] checkBoxes;
+    private Level level;
 
-    public SidePanel() {
+    private JCheckBox[] checkBoxes;
+    private final String[] layerNames = {"Layer 0 [Deco]", "Layer 1 [Deco]", "Layer 2 [Deco]", "Layer 3 [Solid]", "Layer 4 [Deco]", "Layer 5 [Solid]", "All Layers"};
+
+    public SidePanel(Level level) {
+        this.level = level;
         init();
     }
 
@@ -15,9 +22,8 @@ public class SidePanel extends JPanel {
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(8, 2));
 
-        String[] layerNames = {"Layer 1", "Layer 2", "Layer 3", "Layer 4", "Layer 5", "Layer 6", "All Layers"};
         JLabel[] labels = new JLabel[layerNames.length];
-        checkBoxes = new JCheckBox[layerNames.length];
+        this.checkBoxes = new JCheckBox[layerNames.length];
 
         panel.add(new JLabel("Show Layers: "));
         panel.add(new JLabel());
@@ -26,13 +32,36 @@ public class SidePanel extends JPanel {
             checkBoxes[i] = new JCheckBox();
             panel.add(labels[i]);
             panel.add(checkBoxes[i]);
+            if (i != layerNames.length-1) checkBoxes[i].addItemListener(this::resetLastCheckBox);
         }
         checkBoxes[layerNames.length-1].setSelected(true);
+        checkBoxes[layerNames.length-1].addItemListener(this::resetCheckBoxes);
 
         this.add(panel);
     }
 
+    // Reset
+    private void resetCheckBoxes(ItemEvent e) {
+        if (e.getStateChange() == ItemEvent.SELECTED) {
+            for (int i = 0; i < checkBoxes.length - 1; i++) {
+                checkBoxes[i].setSelected(false);
+            }
+        }
+        level.notify(level);
+    }
+
+    private void resetLastCheckBox(ItemEvent e) {
+        if (e.getStateChange() == ItemEvent.SELECTED)
+            checkBoxes[layerNames.length-1].setSelected(false);
+        level.notify(level);
+    }
+
+    // Getters & Setters
     public JCheckBox[] getCheckBoxes() {
         return checkBoxes;
+    }
+
+    public void setLevel(Level level) {
+        this.level = level;
     }
 }
