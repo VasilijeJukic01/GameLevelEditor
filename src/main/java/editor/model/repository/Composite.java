@@ -12,7 +12,6 @@ public abstract class Composite<T extends Node> extends Node {
     }
 
     public void setName(String name) {
-        if (!name.equals("Project Explorer")) return;
         super.setName(name);
     }
 

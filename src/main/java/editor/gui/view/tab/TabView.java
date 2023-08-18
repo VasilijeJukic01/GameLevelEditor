@@ -66,8 +66,11 @@ public class TabView extends JPanel implements AdjustmentListener, NodeSubscribe
     private void initLayout() {
         this.setLayout(new BorderLayout());
         this.add(hScrollBar, BorderLayout.SOUTH);
-        this.add(vScrollBar, BorderLayout.EAST);
         this.add(panel);
+        JPanel eastPanel = new JPanel(new BorderLayout());
+        eastPanel.add(vScrollBar, BorderLayout.WEST);
+        eastPanel.add(new SidePanel(), BorderLayout.EAST);
+        this.add(eastPanel, BorderLayout.EAST);
     }
 
     @Override

@@ -28,11 +28,31 @@ public class Tile extends Node {
         return red;
     }
 
+    public int getBlue() {
+        return blue;
+    }
+
+    public int getGreen() {
+        return green;
+    }
+
     public int getX() {
         return x;
     }
 
     public int getY() {
         return y;
+    }
+
+    public TileType getTileType() {
+        return tileType;
+    }
+
+    public int getLayer() {
+        return layer;
+    }
+
+    public void setLayer(int layer) {
+        this.layer = layer;
     }
 }

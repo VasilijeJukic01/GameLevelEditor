@@ -40,4 +40,14 @@ public class Utils {
         return null;
     }
 
+    public BufferedImage flipImage(BufferedImage src) {
+        int w = src.getWidth();
+        int h = src.getHeight();
+        BufferedImage dest = new BufferedImage(w, h, src.getType());
+        Graphics2D graphics2D = dest.createGraphics();
+        graphics2D.drawImage(src, w, 0, -w, h, null);
+        graphics2D.dispose();
+        return dest;
+    }
+
 }

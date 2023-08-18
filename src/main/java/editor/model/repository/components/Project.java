@@ -25,7 +25,7 @@ public class Project extends Composite<Node> implements NodePublisher {
     public Project(String name, Node parent) {
         super(name, parent);
         this.author = "Default";
-        this.path = "";
+        this.path = "/";
     }
 
     @Override

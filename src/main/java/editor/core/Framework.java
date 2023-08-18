@@ -1,6 +1,6 @@
 package editor.core;
 
-import editor.model.level.LevelLoader;
+import editor.model.loader.LevelLoader;
 import editor.model.repository.LevelRepository;
 
 public class Framework {

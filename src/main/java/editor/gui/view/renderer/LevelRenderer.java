@@ -1,8 +1,11 @@
 package editor.gui.view.renderer;
 
+import editor.model.loader.LevelObject;
+import editor.model.loader.LevelObjectManager;
 import editor.model.repository.Node;
 import editor.model.repository.components.Tile;
 import editor.model.repository.components.Level;
+import editor.model.repository.components.TileType;
 import editor.utils.Utils;
 
 import java.awt.*;
@@ -17,8 +20,11 @@ public class LevelRenderer implements Renderer {
     private Level level;
     private BufferedImage[] forestSprite;
 
+    private final LevelObjectManager levelObjectManager;
+
     public LevelRenderer(Level level) {
         this.level = level;
+        this.levelObjectManager = new LevelObjectManager();
         loadSprite();
     }
 
@@ -36,13 +42,44 @@ public class LevelRenderer implements Renderer {
     @Override
     public void render(Graphics g) {
         if (level.getChildren() == null) return;
+        renderDeco(g, 0);              // First deco layer
+        renderDeco(g, 1);              // Second deco layer
+        renderDeco(g, 2);              // Third deco layer
+        renderTerrain(g, 3);           // Terrain behind layer
+        renderDeco(g, 4);              // Fourth deco layer
+        renderTerrain(g, 5);           // Terrain behind layer
+        renderGrid(g);
+    }
+
+    private void renderTerrain(Graphics g, int layer) {
         for (Node child : level.getChildren()) {
             Tile c = (Tile) child;
             int value = c.getRed();
+            int layerIndex = c.getLayer();
             if (value == -1) continue;
-            g.drawImage(forestSprite[value], c.getX() * TILE_SIZE, c.getY() * TILE_SIZE, TILE_SIZE, TILE_SIZE, null);
+            if (c.getTileType() == TileType.SOLID) {
+                if (layerIndex == layer)
+                    g.drawImage(forestSprite[value], c.getX() * TILE_SIZE, c.getY() * TILE_SIZE, TILE_SIZE, TILE_SIZE, null);
+            }
         }
-        renderGrid(g);
+    }
+
+    private void renderDeco(Graphics g, int layer) {
+        for (Node child : level.getChildren()) {
+            Tile c = (Tile) child;
+            int value = c.getBlue();
+            int layerIndex = c.getLayer();
+            if (value == -1) continue;
+            if (c.getTileType() == TileType.DECO) {
+                LevelObject lvlObject = levelObjectManager.getObjects()[value];
+                if (layerIndex == layer) {
+                    int x = c.getX() * TILE_SIZE + lvlObject.getXOffset();
+                    int y = c.getY() * TILE_SIZE + lvlObject.getYOffset();
+                    g.drawImage(levelObjectManager.getModels()[lvlObject.getType().ordinal()], x, y, lvlObject.getW(), lvlObject.getH(), null);
+                }
+            }
+
+        }
     }
 
     private void renderGrid(Graphics g) {

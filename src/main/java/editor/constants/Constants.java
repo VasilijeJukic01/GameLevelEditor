@@ -30,6 +30,8 @@ public class Constants {
     public static int FOREST_TILES = 49;
     public static final int FOREST_TILE_SIZE = 274;
 
+    public static final int DECO_NUM = 40;
+
     // Counter
     public static int PROJECT_NUM = 1;
     public static int LEVEL_NUM = 1;

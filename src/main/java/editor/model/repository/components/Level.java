@@ -18,7 +18,7 @@ public class Level extends Composite<Node> implements NodePublisher {
 
     public Level(String name, Node parent) {
         super(name, parent);
-        this.width = this.height = 0;
+        this.width = this.height = 30;
     }
 
     @Override
@@ -26,6 +26,7 @@ public class Level extends Composite<Node> implements NodePublisher {
         Optional.ofNullable(text)
                 .filter(str -> !str.isEmpty())
                 .ifPresent(super::setName);
+        System.out.println(getName());
         notify(this);
     }
 
