@@ -1,14 +1,10 @@
 package editor.gui.controller;
 
-import editor.gui.controller.levelActions.AddNodeAction;
-import editor.gui.controller.levelActions.DeleteNodeAction;
-import editor.gui.controller.levelActions.EditNodeAction;
-import editor.gui.controller.levelActions.ImportLevelAction;
+import editor.gui.controller.levelActions.*;
 import editor.gui.controller.projectActions.CloseFileAction;
 import editor.gui.controller.projectActions.ExitAction;
 import editor.gui.controller.projectActions.NewFileAction;
 import editor.gui.controller.projectActions.OpenFileAction;
-import editor.gui.controller.levelActions.ShowGridAction;
 
 public class ActionManager {
 
@@ -24,6 +20,8 @@ public class ActionManager {
     private DeleteNodeAction deleteNodeAction;
     private EditNodeAction editNodeAction;
     private ShowGridAction showGridAction;
+    private ZoomInAction zoomInAction;
+    private ZoomOutAction zoomOutAction;
 
     public ActionManager() {
         initProjectActions();
@@ -43,6 +41,8 @@ public class ActionManager {
         this.deleteNodeAction = new DeleteNodeAction();
         this.editNodeAction = new EditNodeAction();
         this.showGridAction = new ShowGridAction();
+        this.zoomInAction = new ZoomInAction();
+        this.zoomOutAction = new ZoomOutAction();
     }
 
     // Project Actions Getters
@@ -81,5 +81,13 @@ public class ActionManager {
 
     public ShowGridAction getShowGridAction() {
         return showGridAction;
+    }
+
+    public ZoomInAction getZoomInAction() {
+        return zoomInAction;
+    }
+
+    public ZoomOutAction getZoomOutAction() {
+        return zoomOutAction;
     }
 }

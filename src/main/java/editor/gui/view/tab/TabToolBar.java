@@ -20,6 +20,10 @@ public class TabToolBar extends JToolBar {
         this.add(EditorFrame.getInstance().getActionManager().getDeleteNodeAction().createButton());
         this.addSeparator();
         this.add(EditorFrame.getInstance().getActionManager().getEditNodeAction().createButton());
+        this.addSeparator();
+        this.add(EditorFrame.getInstance().getActionManager().getZoomInAction().createButton());
+        this.addSeparator();
+        this.add(EditorFrame.getInstance().getActionManager().getZoomOutAction().createButton());
     }
 
 }
