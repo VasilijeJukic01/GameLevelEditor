@@ -8,7 +8,6 @@ import java.awt.event.MouseListener;
 
 public class TabCloseButton extends JPanel {
 
-
     public TabCloseButton(final Component tab, String title) {
         setOpaque(false);
         FlowLayout flowLayout = new FlowLayout(FlowLayout.CENTER, 3, 3);

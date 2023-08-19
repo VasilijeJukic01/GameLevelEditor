@@ -23,7 +23,14 @@ public class Constants {
     public static final Color BUTTON_HOVER_COLOR = new Color(116, 155, 194);
     public static final Color BUTTON_PRESS_COLOR = new Color(45, 60, 80);
 
+    public static final Color DEFAULT_FADE_COLOR = new Color(1, 130, 120, 110);
+
     // Editor
+    public static double MIN_ZOOM = 0.3;
+    public static double MAX_ZOOM = 3.0;
+    public static int EDITOR_PICKER_ROW = 10;
+    public static int EDITOR_PICKER_COL = 10;
+
     public static int TILE_SIZE = 64;
     public static int FOREST_SPRITE_ROW = 7;
     public static int FOREST_SPRITE_COL = 7;

@@ -9,10 +9,12 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 
+import static editor.constants.Constants.*;
+
 public class BottomPanel extends JPanel {
 
-    private BufferedImage[] forestSprite;
-    private int selectedSpriteIndex = -1;
+    private final BufferedImage[] forestSprite;
+    private int selectedIndex = -1;
     private int lastSelectedIndex = -1;
 
     public BottomPanel(Renderer levelRenderer) {
@@ -21,54 +23,58 @@ public class BottomPanel extends JPanel {
     }
 
     private void init() {
-        int rows = 10, cols = 10;
-        int hGap = 0, vGap = 10;
-        GridBagLayout gridLayout = new GridBagLayout();
-        setLayout(gridLayout);
+        GridBagLayout layout = new GridBagLayout();
+        this.setLayout(layout);
 
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.fill = GridBagConstraints.BOTH;
-        gbc.weightx = 1.0;
-        gbc.weighty = 1.0;
-        gbc.insets = new Insets(vGap, hGap, vGap, hGap); // Postavite razmake između komponenti
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.fill = GridBagConstraints.BOTH;
+        constraints.weightx = 1.0;
+        constraints.weighty = 1.0;
+        constraints.insets = new Insets(10, 0, 10, 0);
 
-        for (int row = 0; row < rows; row++) {
-            for (int col = 0; col < cols; col++) {
-                if (((row * cols) + col) >= 49) break;
-                gbc.gridx = col;
-                gbc.gridy = row;
+        for (int itemIndex = 0; itemIndex < FOREST_TILES; itemIndex++) {
+            int row = itemIndex / EDITOR_PICKER_COL;
+            int col = itemIndex % EDITOR_PICKER_COL;
 
-                ImagePanel imagePanel = new ImagePanel(forestSprite[(row * cols) + col], (row * cols) + col);
-                add(imagePanel, gbc);
-            }
-            if (((row * cols)) >= 49) break;
+            if (row >= EDITOR_PICKER_ROW) break;
+
+            constraints.gridx = col;
+            constraints.gridy = row;
+            ImagePanel imagePanel = new ImagePanel(forestSprite[itemIndex], itemIndex);
+            add(imagePanel, constraints);
         }
     }
 
+    // Image panel
     private class ImagePanel extends JPanel {
-        private BufferedImage image;
-        private int index;
+
+        private final BufferedImage image;
+        private final int index;
 
         public ImagePanel(BufferedImage image, int index) {
-            BorderLayout borderLayout = new BorderLayout();
-            borderLayout.setVgap(0);
-            this.setLayout(borderLayout);
             this.image = image;
             this.index = index;
-            setPreferredSize(new Dimension(64, 64));
-            addMouseListener(new MouseAdapter() {
+            setupPanel();
+            setupMouseListener();
+        }
+
+        private void setupPanel() {
+            this.setLayout(new BorderLayout());
+            this.setPreferredSize(new Dimension(TILE_SIZE, TILE_SIZE));
+        }
+
+        private void setupMouseListener() {
+            this.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                    lastSelectedIndex = selectedSpriteIndex;
-                    selectedSpriteIndex = ImagePanel.this.index;
+                    lastSelectedIndex = selectedIndex;
+                    selectedIndex = ImagePanel.this.index;
                     repaint();
 
                     if (lastSelectedIndex != -1) {
-                        // Ako postoji prethodno izabrani indeks, ažuriraj ga i osveži
                         Component[] components = getParent().getComponents();
                         if (lastSelectedIndex < components.length) {
-                            Component lastSelectedComponent = components[lastSelectedIndex];
-                            lastSelectedComponent.repaint();
+                            components[lastSelectedIndex].repaint();
                         }
                     }
                 }
@@ -78,15 +84,14 @@ public class BottomPanel extends JPanel {
         @Override
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
-            g.drawImage(image, 0, 0, 64, 64, null);
+            g.drawImage(image, 0, 0, TILE_SIZE, TILE_SIZE, null);
 
-            if (selectedSpriteIndex == index) {
+            if (selectedIndex == index) {
                 g.setColor(Color.RED);
                 g.drawRect(0, 0, 63, 63);
             }
         }
+
     }
-
-
 
 }

@@ -22,13 +22,12 @@ public class EditorFrame extends JFrame {
 
     private Tree<TreeItem, TreeView> editorTree;
 
-    private JScrollPane scrollPaneTree;
+    private JScrollPane scrollPane;
     private JSplitPane splitPane;
     private ProjectView projectView;
     private JTree projectExplorer;
 
     private TabbedPaneController tabbedPaneController;
-
     private ActionManager actionManager;
 
     private EditorFrame() {}
@@ -77,10 +76,10 @@ public class EditorFrame extends JFrame {
         projectExplorer.setBackground(EXPLORER_COLOR);
         this.projectView = new ProjectView();
         this.tabbedPaneController = new TabbedPaneController(projectView);
-        this.scrollPaneTree = new JScrollPane(projectExplorer, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        this.splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, scrollPaneTree, projectView);
+        this.scrollPane = new JScrollPane(projectExplorer, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        this.splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, scrollPane, projectView);
         this.add(splitPane);
-        scrollPaneTree.setMinimumSize(new Dimension(EXPLORER_WID, EXPLORER_HEI));
+        scrollPane.setMinimumSize(new Dimension(EXPLORER_WID, EXPLORER_HEI));
         tabbedPaneController.generateTabs(projectExplorer, editorTree);
     }
 

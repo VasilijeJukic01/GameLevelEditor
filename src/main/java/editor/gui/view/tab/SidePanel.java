@@ -12,7 +12,6 @@ public class SidePanel extends JPanel {
 
     private JCheckBox[] layerCheckBoxes;
     private final String[] layerNames = {"Layer 0 [Deco]", "Layer 1 [Deco]", "Layer 2 [Deco]", "Layer 3 [Solid]", "Layer 4 [Deco]", "Layer 5 [Solid]", "All Layers"};
-
     private JCheckBox fadeCheckBox;
 
     public SidePanel(Level level) {

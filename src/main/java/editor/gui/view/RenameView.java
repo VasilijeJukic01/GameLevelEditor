@@ -1,5 +1,9 @@
 package editor.gui.view;
 
+import editor.model.tree.Tree;
+import editor.model.tree.mvc.TreeItem;
+import editor.model.tree.mvc.TreeView;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -13,14 +17,19 @@ public class RenameView extends JDialog {
 
     public RenameView(Frame owner, boolean modal, String name) {
         super(owner, modal);
+        initUI();
+        tfName.setText(name);
+        btnDone.addActionListener(e -> handleDoneButtonClick());
+        btnClose.addActionListener(e -> dispose());
+    }
 
+    private void initUI() {
         setTitle("Rename");
         setSize(250, 200);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
-        JPanel contentPane = new JPanel();
-        contentPane.setLayout(new GridBagLayout());
+        JPanel contentPane = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -45,17 +54,16 @@ public class RenameView extends JDialog {
         contentPane.add(btnClose, gbc);
 
         setContentPane(contentPane);
+    }
 
-        tfName.setText(name);
-
-        btnDone.addActionListener(e -> {
-            if (!tfName.getText().isEmpty()) {
-                EditorFrame.getInstance().getEditorTree().getSelectedNode().getNode().setName(tfName.getText());
-                dispose();
-            }
-        });
-
-        btnClose.addActionListener(e -> dispose());
-
+    private void handleDoneButtonClick() {
+        String newName = tfName.getText();
+        if (!newName.isEmpty()) {
+            EditorFrame editorFrame = EditorFrame.getInstance();
+            Tree<TreeItem, TreeView> editorTree = editorFrame.getEditorTree();
+            TreeItem selectedNode = editorTree.getSelectedNode();
+            selectedNode.getNode().setName(newName);
+            dispose();
+        }
     }
 }

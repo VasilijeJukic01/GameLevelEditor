@@ -1,7 +1,9 @@
 package editor.gui.controller.tabController;
 
 import editor.gui.view.ProjectView;
+import editor.gui.view.ProjectViewTop;
 import editor.gui.view.tab.TabView;
+import editor.gui.view.tab.TabbedPane;
 import editor.model.repository.Node;
 import editor.model.repository.components.Level;
 import editor.model.repository.components.Project;
@@ -23,21 +25,37 @@ public class TabbedPaneController {
 
     public void generateTabs(JTree projectExplorer, Tree<TreeItem, TreeView> editorTree) {
         projectExplorer.addMouseListener(new MouseAdapter() {
+            @Override
             public void mousePressed(MouseEvent e) {
-                if(e.getClickCount() == 2) {
-                    TreeItem treeItem = editorTree.getSelectedNode();
-                    if (treeItem.getNode() instanceof Project) {
-                        projectView.getTabbedPane().refresh();
-                        projectView.getProjectViewTop().setProject((Project)treeItem.getNode());
-                        projectView.getTabbedPane().setProject((Project)treeItem.getNode());
-                        for (Node child : ((Project) treeItem.getNode()).getChildren()) {
-                            TabView mapTab = new TabView((Level)child);
-                            projectView.getTabbedPane().addTab(child.getName(), mapTab);
-                        }
-                    }
-                }
+                handleProjectExplorerMousePress(e, editorTree);
             }
         });
+    }
+
+    private void handleProjectExplorerMousePress(MouseEvent e, Tree<TreeItem, TreeView> editorTree) {
+        if (e.getClickCount() == 2) {
+            TreeItem treeItem = editorTree.getSelectedNode();
+            if (treeItem.getNode() instanceof Project) {
+                refreshProjectAndTabs((Project) treeItem.getNode());
+            }
+        }
+    }
+
+    private void refreshProjectAndTabs(Project selectedProject) {
+        TabbedPane tabbedPane = projectView.getTabbedPane();
+        ProjectViewTop projectViewTop = projectView.getProjectViewTop();
+
+        tabbedPane.refresh();
+        projectViewTop.setProject(selectedProject);
+        tabbedPane.setProject(selectedProject);
+
+        selectedProject.getChildren().forEach(this::addTabToTabbedPane);
+    }
+
+    private void addTabToTabbedPane(Node child) {
+        TabbedPane tabbedPane = projectView.getTabbedPane();
+        TabView mapTab = new TabView((Level) child);
+        tabbedPane.addTab(child.getName(), mapTab);
     }
 
 }

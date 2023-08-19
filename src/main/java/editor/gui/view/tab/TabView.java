@@ -21,11 +21,11 @@ import static editor.constants.Constants.*;
 public class TabView extends JPanel implements AdjustmentListener, NodeSubscriber {
 
     private Level level;
-    private AffineTransform tx;
-    private double scale = 1.0, dx = 0.0, dy = 0.0;
 
-    private JPanel panel;
-    private JPanel mainPanel;
+    private double scale = 1.0;
+    private double dx = 0.0, dy = 0.0;
+
+    private JPanel mainPanel, workspacePanel;
     private SidePanel sidePanel;
     private JScrollBar hScrollBar, vScrollBar;
 
@@ -36,7 +36,7 @@ public class TabView extends JPanel implements AdjustmentListener, NodeSubscribe
         this.level = level;
         this.level.addSubscriber(this);
         initBars();
-        initPanel();
+        initCentralPanels();
         initEastPanel();
         this.renderer = new LevelRenderer(level, sidePanel);
         initSouthPanel();
@@ -51,21 +51,22 @@ public class TabView extends JPanel implements AdjustmentListener, NodeSubscribe
         vScrollBar.addAdjustmentListener(this);
     }
 
-    private void initPanel() {
+    private void initCentralPanels() {
         this.mainPanel = new JPanel(new BorderLayout());
-        this.panel = new Workspace();
-        panel.setLayout(new BorderLayout());
-        panel.setBackground(VIEW_COLOR);
+        mainPanel.add(hScrollBar, BorderLayout.SOUTH);
+        this.workspacePanel = new Workspace();
+        workspacePanel.setLayout(new BorderLayout());
+        workspacePanel.setBackground(VIEW_COLOR);
+        workspacePanel.setFocusable(true);
+        workspacePanel.requestFocus();
+        mainPanel.add(workspacePanel);
         initListeners();
-        panel.setFocusable(true);
-        panel.requestFocus();
-        mainPanel.add(panel);
     }
 
     private void initListeners() {
-        panel.addMouseListener(new TabMouseListener(this));
-        panel.addMouseMotionListener(new TabMouseListener(this));
-        panel.addComponentListener(new ComponentAdapter() {
+        workspacePanel.addMouseListener(new TabMouseListener(this));
+        workspacePanel.addMouseMotionListener(new TabMouseListener(this));
+        workspacePanel.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
                 refreshBars();
@@ -73,14 +74,13 @@ public class TabView extends JPanel implements AdjustmentListener, NodeSubscribe
         });
         TabKeyListener tabKeyListener = new TabKeyListener();
         TabWheelListener tabWheelListener = new TabWheelListener(vScrollBar, tabKeyListener, this);
-        panel.addMouseWheelListener(tabWheelListener);
-        panel.addKeyListener(tabKeyListener);
+        workspacePanel.addMouseWheelListener(tabWheelListener);
+        workspacePanel.addKeyListener(tabKeyListener);
     }
 
     private void initSouthPanel() {
-        JScrollPane scrollableBottomPanel = new JScrollPane(new BottomPanel(renderer));
-        mainPanel.add(hScrollBar, BorderLayout.SOUTH);
-        JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, mainPanel, scrollableBottomPanel);
+        JScrollPane scrollPane = new JScrollPane(new BottomPanel(renderer));
+        JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, mainPanel, scrollPane);
         this.add(splitPane);
     }
 
@@ -92,11 +92,18 @@ public class TabView extends JPanel implements AdjustmentListener, NodeSubscribe
         mainPanel.add(eastPanel, BorderLayout.EAST);
     }
 
+    // Value changes
     @Override
     public void adjustmentValueChanged(AdjustmentEvent e) {
         JScrollBar jScrollBar = (JScrollBar) e.getSource();
-        if (jScrollBar.getOrientation() == JScrollBar.HORIZONTAL) dx = e.getValue() - panel.getX();
-        else dy = e.getValue() - panel.getY();
+        if (jScrollBar.getOrientation() == JScrollBar.HORIZONTAL) dx = e.getValue() - workspacePanel.getX();
+        else dy = e.getValue() - workspacePanel.getY();
+        this.repaint();
+    }
+
+    private void refreshBars() {
+        this.vScrollBar.setMaximum((int) ((level.getHeight() * TILE_SIZE) * scale));
+        this.hScrollBar.setMaximum((int) ((level.getWidth() * TILE_SIZE) * scale));
         this.repaint();
     }
 
@@ -117,32 +124,26 @@ public class TabView extends JPanel implements AdjustmentListener, NodeSubscribe
         return dy;
     }
 
-    public void move(double dx, double dy) {
-        if (this.dx + dx >= 0 && this.dx + dx <= hScrollBar.getMaximum() - hScrollBar.getVisibleAmount()) {
-            this.dx += dx;
-        }
-        if (this.dy + dy >= 0 && this.dy + dy <= vScrollBar.getMaximum() - vScrollBar.getVisibleAmount()) {
-            this.dy += dy;
-        }
-        updateBars();
+    public void setDx(double dx) {
+        this.dx = dx;
     }
 
-    private void updateBars() {
-        hScrollBar.setValue((int) dx);
-        vScrollBar.setValue((int) dy);
-        this.repaint();
+    public void setDy(double dy) {
+        this.dy = dy;
+    }
+
+    public JScrollBar getHScrollBar() {
+        return hScrollBar;
+    }
+
+    public JScrollBar getVScrollBar() {
+        return vScrollBar;
     }
 
     public void setScale(double scale) {
         this.scale = scale;
-        this.vScrollBar.setMaximum((int) (level.getHeight()*TILE_SIZE * scale));
-        this.hScrollBar.setMaximum((int) (level.getWidth()*TILE_SIZE * scale));
-        this.repaint();
-    }
-
-    private void refreshBars() {
-        this.vScrollBar.setMaximum((int) ((level.getHeight()*TILE_SIZE) * scale));
-        this.hScrollBar.setMaximum((int) ((level.getWidth()*TILE_SIZE) * scale));
+        this.vScrollBar.setMaximum((int) (level.getHeight() * TILE_SIZE * scale));
+        this.hScrollBar.setMaximum((int) (level.getWidth() * TILE_SIZE * scale));
         this.repaint();
     }
 
@@ -158,14 +159,14 @@ public class TabView extends JPanel implements AdjustmentListener, NodeSubscribe
         refreshBars();
     }
 
-    // Workspace
+    // Workspace Panel
     private class Workspace extends JPanel {
 
         protected void paintComponent(Graphics g) {
             this.requestFocus(true);
             super.paintComponent(g);
             Graphics2D g2 = (Graphics2D) g;
-            tx = new AffineTransform();
+            AffineTransform tx = new AffineTransform();
             tx.translate(-dx,-dy);
             tx.scale(scale, scale);
             g2.transform(tx);

@@ -7,6 +7,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 
+import static editor.constants.Constants.MAX_ZOOM;
+import static editor.constants.Constants.MIN_ZOOM;
+
 public class TabWheelListener extends MouseAdapter implements MouseWheelListener {
 
     private final JScrollBar vScrollBar;
@@ -21,19 +24,21 @@ public class TabWheelListener extends MouseAdapter implements MouseWheelListener
 
     @Override
     public void mouseWheelMoved(MouseWheelEvent e) {
-        int rotation = e.getWheelRotation() * (-1);
-        if (tabKeyListener.isCtrlFlag()) {
-            double newScale = tabView.getScale() * (1 + 0.1 * (rotation / 3.0));
-            newScale = Math.max(0.3, Math.min(3.0, newScale));
-            tabView.setScale(newScale);
-        }
-        else {
-            if (e.isShiftDown())
-                vScrollBar.setValue(vScrollBar.getValue() + rotation * vScrollBar.getUnitIncrement() * 15);
-            else {
-                vScrollBar.setValue(vScrollBar.getValue() - rotation * vScrollBar.getUnitIncrement() * 15);
-            }
-        }
+        int rotation = -e.getWheelRotation();
+        if (tabKeyListener.isCtrlFlag()) adjustTabViewScale(rotation);
+        else adjustScrollBarValue(e, rotation);
+    }
+
+    private void adjustTabViewScale(int rotation) {
+        double newScale = tabView.getScale() * (1 + 0.1 * (rotation / MAX_ZOOM));
+        newScale = Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, newScale));
+        tabView.setScale(newScale);
+    }
+
+    private void adjustScrollBarValue(MouseWheelEvent e, int rotation) {
+        int increment = rotation * vScrollBar.getUnitIncrement() * 15;
+        if (e.isShiftDown()) vScrollBar.setValue(vScrollBar.getValue() + increment);
+        else vScrollBar.setValue(vScrollBar.getValue() - increment);
     }
 
 }

@@ -26,7 +26,6 @@ public class ProjectView extends JPanel {
         this.projectViewTop = new ProjectViewTop();
         this.tabbedPane = new TabbedPane();
         this.setLayout(new BorderLayout());
-        initTopPanel();
         this.add(tabbedPane);
         this.stateManager = new StateManager();
     }

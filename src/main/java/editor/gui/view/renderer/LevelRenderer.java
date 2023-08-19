@@ -93,7 +93,7 @@ public class LevelRenderer implements Renderer {
     }
 
     private void renderFade(Graphics g) {
-        g.setColor(new Color(1, 130, 120, 110));
+        g.setColor(DEFAULT_FADE_COLOR);
         g.fillRect(0, 0, level.getWidth()*TILE_SIZE, level.getHeight()*TILE_SIZE);
     }
 
