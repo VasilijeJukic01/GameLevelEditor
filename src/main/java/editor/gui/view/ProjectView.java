@@ -3,6 +3,7 @@ package editor.gui.view;
 import editor.gui.view.tab.TabToolBar;
 import editor.gui.view.tab.TabView;
 import editor.gui.view.tab.TabbedPane;
+import editor.state.StateManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,6 +13,8 @@ public class ProjectView extends JPanel {
     private TabToolBar tabToolBar;
     private ProjectViewTop projectViewTop;
     private TabbedPane tabbedPane;
+
+    private StateManager stateManager;
 
     public ProjectView() {
         init();
@@ -25,6 +28,7 @@ public class ProjectView extends JPanel {
         this.setLayout(new BorderLayout());
         initTopPanel();
         this.add(tabbedPane);
+        this.stateManager = new StateManager();
     }
 
     private void initTopPanel() {
@@ -35,16 +39,33 @@ public class ProjectView extends JPanel {
         this.add(topPanel, BorderLayout.NORTH);
     }
 
+    // Mediator
     public void clickPerform(int x, int y, TabView tabView) {
-
+        this.stateManager.getCurrentState().clickPerform(x, y, tabView);
     }
 
     public void releasePerform(int x, int y, TabView tabView) {
-
+        this.stateManager.getCurrentState().releasePerform(x, y, tabView);
     }
 
     public void dragPerform(int x, int y, TabView tabView) {
+        this.stateManager.getCurrentState().dragPerform(x, y, tabView);
+    }
 
+    public void startAddState() {
+        this.stateManager.setAddState();
+    }
+
+    public void startDeleteState() {
+        this.stateManager.setDeleteState();
+    }
+
+    public void startEditState() {
+        this.stateManager.setEditState();
+    }
+
+    public void startMoveState() {
+        this.stateManager.setMoveState();
     }
 
     // Getters

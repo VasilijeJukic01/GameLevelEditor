@@ -108,6 +108,22 @@ public class TabView extends JPanel implements AdjustmentListener, NodeSubscribe
         return dy;
     }
 
+    public void move(double dx, double dy) {
+        if (this.dx + dx >= 0 && this.dx + dx <= hScrollBar.getMaximum() - hScrollBar.getVisibleAmount()) {
+            this.dx += dx;
+        }
+        if (this.dy + dy >= 0 && this.dy + dy <= vScrollBar.getMaximum() - vScrollBar.getVisibleAmount()) {
+            this.dy += dy;
+        }
+        updateBars();
+    }
+
+    private void updateBars() {
+        hScrollBar.setValue((int) dx);
+        vScrollBar.setValue((int) dy);
+        this.repaint();
+    }
+
     public void setScale(double scale) {
         this.scale = scale;
         this.vScrollBar.setMaximum((int) (level.getHeight()*TILE_SIZE * scale));

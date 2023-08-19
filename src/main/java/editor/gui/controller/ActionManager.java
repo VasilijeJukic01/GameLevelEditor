@@ -28,6 +28,7 @@ public class ActionManager {
         actions.put(ActionType.ADD_NODE, new AddNodeAction());
         actions.put(ActionType.DELETE_NODE, new DeleteNodeAction());
         actions.put(ActionType.EDIT_NODE, new EditNodeAction());
+        actions.put(ActionType.MOVE, new MoveAction());
         actions.put(ActionType.SHOW_GRID, new ShowGridAction());
         actions.put(ActionType.ZOOM_IN, new ZoomInAction());
         actions.put(ActionType.ZOOM_OUT, new ZoomOutAction());

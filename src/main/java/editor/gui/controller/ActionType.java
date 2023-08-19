@@ -10,6 +10,7 @@ public enum ActionType {
     ADD_NODE,
     DELETE_NODE,
     EDIT_NODE,
+    MOVE,
     SHOW_GRID,
     ZOOM_IN,
     ZOOM_OUT
