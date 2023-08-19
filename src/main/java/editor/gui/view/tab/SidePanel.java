@@ -1,6 +1,6 @@
 package editor.gui.view.tab;
 
-import editor.model.repository.components.Level;
+import editor.settings.Settings;
 
 import javax.swing.*;
 import java.awt.*;
@@ -8,14 +8,13 @@ import java.awt.event.ItemEvent;
 
 public class SidePanel extends JPanel {
 
-    private Level level;
+    private final TabView tabView;
 
     private JCheckBox[] layerCheckBoxes;
     private final String[] layerNames = {"Layer 0 [Deco]", "Layer 1 [Deco]", "Layer 2 [Deco]", "Layer 3 [Solid]", "Layer 4 [Deco]", "Layer 5 [Solid]", "All Layers"};
-    private JCheckBox fadeCheckBox;
 
-    public SidePanel(Level level) {
-        this.level = level;
+    public SidePanel(TabView tabView) {
+        this.tabView = tabView;
         init();
     }
 
@@ -44,7 +43,7 @@ public class SidePanel extends JPanel {
     }
 
     private void initFade(JPanel panel) {
-        this.fadeCheckBox = new JCheckBox();
+        JCheckBox fadeCheckBox = new JCheckBox();
         panel.add(new JSeparator());
         panel.add(new JSeparator());
         panel.add(new JLabel("Enable Fade: "));
@@ -60,30 +59,29 @@ public class SidePanel extends JPanel {
             for (int i = 0; i < layerCheckBoxes.length - 1; i++) {
                 layerCheckBoxes[i].setSelected(false);
             }
+            layerCheckBoxes[layerCheckBoxes.length - 1].setSelected(true);
+            tabView.getSettings().updateParameter("Layers", "0000001");
         }
-        level.notify(level);
+        else {
+            tabView.getSettings().updateParameter("Layers", "0000000");
+        }
     }
 
     private void resetLastCheckBox(ItemEvent e) {
-        if (e.getStateChange() == ItemEvent.SELECTED)
-            layerCheckBoxes[layerNames.length-1].setSelected(false);
-        level.notify(level);
+        layerCheckBoxes[layerCheckBoxes.length-1].setSelected(false);
+        StringBuilder binaryString = new StringBuilder();
+        for (int i = 0; i < layerCheckBoxes.length - 1; i++) {
+            if (layerCheckBoxes[i].isSelected()) binaryString.append("1");
+            else binaryString.append("0");
+        }
+        binaryString.append("0");
+        tabView.getSettings().updateParameter("Layers", binaryString.toString());
     }
 
     private void changeFade(ItemEvent e) {
-        level.notify(level);
+        Settings settings = tabView.getSettings();
+        int fade = (int) settings.getParameter("Fade");
+        settings.updateParameter("Fade", fade ^ 1);
     }
 
-    // Getters & Setters
-    public JCheckBox[] getLayerCheckBoxes() {
-        return layerCheckBoxes;
-    }
-
-    public JCheckBox getFadeCheckBox() {
-        return fadeCheckBox;
-    }
-
-    public void setLevel(Level level) {
-        this.level = level;
-    }
 }

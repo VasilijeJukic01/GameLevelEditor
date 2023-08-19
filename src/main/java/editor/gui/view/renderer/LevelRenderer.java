@@ -1,6 +1,6 @@
 package editor.gui.view.renderer;
 
-import editor.gui.view.tab.SidePanel;
+import editor.gui.view.tab.TabView;
 import editor.model.loader.LevelObject;
 import editor.model.loader.LevelObjectManager;
 import editor.model.repository.Node;
@@ -9,7 +9,6 @@ import editor.model.repository.components.Level;
 import editor.model.repository.components.TileType;
 import editor.utils.Utils;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
@@ -19,15 +18,15 @@ import static editor.constants.FilePaths.FOREST_SPRITE;
 
 public class LevelRenderer implements Renderer {
 
-    private Level level;
+    private final Level level;
     private BufferedImage[] forestSprite;
 
     private final LevelObjectManager levelObjectManager;
-    private final SidePanel sidePanel;
+    private final TabView tabView;
 
-    public LevelRenderer(Level level, SidePanel sidePanel) {
-        this.level = level;
-        this.sidePanel = sidePanel;
+    public LevelRenderer(TabView tabView) {
+        this.tabView = tabView;
+        this.level = tabView.getLevel();
         this.levelObjectManager = new LevelObjectManager();
         loadSprite();
     }
@@ -46,11 +45,12 @@ public class LevelRenderer implements Renderer {
     @Override
     public void render(Graphics g) {
         if (level.getChildren() == null) return;
+        String layers = (String) tabView.getSettings().getParameter("Layers");
+        int fade = (int) tabView.getSettings().getParameter("Fade");
 
-        for (int i = 0; i < sidePanel.getLayerCheckBoxes().length - 1; i++) {
-            JCheckBox[] checkBoxes = sidePanel.getLayerCheckBoxes();
-            if (checkBoxes[checkBoxes.length - 1].isSelected() || checkBoxes[i].isSelected()) {
-                if (i == 2 && sidePanel.getFadeCheckBox().isSelected()) {
+        for (int i = 0; i < layers.length() - 1; i++) {
+            if (layers.charAt(layers.length()-1) == '1' || layers.charAt(i) == '1') {
+                if (i == 2 && fade == 1) {
                     renderFade(g);
                 }
                 renderDeco(g, i);
@@ -108,10 +108,6 @@ public class LevelRenderer implements Renderer {
                 g.drawRect(x, y, TILE_SIZE, TILE_SIZE);
             }
         }
-    }
-
-    public void setLevel(Level level) {
-        this.level = level;
     }
 
     public BufferedImage[] getForestSprite() {

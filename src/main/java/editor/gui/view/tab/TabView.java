@@ -7,6 +7,8 @@ import editor.gui.view.renderer.LevelRenderer;
 import editor.gui.view.renderer.Renderer;
 import editor.model.repository.components.Level;
 import editor.model.repository.nodeObserver.NodeSubscriber;
+import editor.settings.EditorSettings;
+import editor.settings.Settings;
 
 import javax.swing.*;
 import java.awt.*;
@@ -21,29 +23,36 @@ import static editor.constants.Constants.*;
 public class TabView extends JPanel implements AdjustmentListener, NodeSubscriber {
 
     private Level level;
+    private final Settings settings;
 
     private double scale = 1.0;
     private double dx = 0.0, dy = 0.0;
 
     private JPanel mainPanel, workspacePanel;
-    private SidePanel sidePanel;
     private JScrollBar hScrollBar, vScrollBar;
 
     private final Renderer renderer;
 
     public TabView(Level level) {
         this.setLayout(new BorderLayout());
+        this.settings = new EditorSettings(this);
+        initSettings();
         this.level = level;
         this.level.addSubscriber(this);
         initBars();
         initCentralPanels();
         initEastPanel();
-        this.renderer = new LevelRenderer(level, sidePanel);
+        this.renderer = new LevelRenderer(this);
         initSouthPanel();
         refreshBars();
     }
 
     // Init
+    private void initSettings() {
+        this.settings.addParameter("Layers", "0000001");
+        this.settings.addParameter("Fade", 0);
+    }
+
     private void initBars() {
         this.hScrollBar = new JScrollBar(JScrollBar.HORIZONTAL, 0, 100, 0, H_SCROLLBAR_MAX);
         this.vScrollBar = new JScrollBar(JScrollBar.VERTICAL, 0, 100, 0, V_SCROLLBAR_MAX);
@@ -87,7 +96,7 @@ public class TabView extends JPanel implements AdjustmentListener, NodeSubscribe
     private void initEastPanel() {
         JPanel eastPanel = new JPanel(new BorderLayout());
         eastPanel.add(vScrollBar, BorderLayout.WEST);
-        this.sidePanel = new SidePanel(level);
+        SidePanel sidePanel = new SidePanel(this);
         eastPanel.add(sidePanel, BorderLayout.EAST);
         mainPanel.add(eastPanel, BorderLayout.EAST);
     }
@@ -110,6 +119,10 @@ public class TabView extends JPanel implements AdjustmentListener, NodeSubscribe
     // Getters & Setters
     public Level getLevel() {
         return level;
+    }
+
+    public Settings getSettings() {
+        return settings;
     }
 
     public double getScale() {
@@ -148,8 +161,6 @@ public class TabView extends JPanel implements AdjustmentListener, NodeSubscribe
     }
 
     public void setLevel(Level level) {
-        ((LevelRenderer)renderer).setLevel(level);
-        sidePanel.setLevel(level);
         this.level = level;
     }
 

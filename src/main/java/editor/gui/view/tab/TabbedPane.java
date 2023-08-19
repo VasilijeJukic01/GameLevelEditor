@@ -64,6 +64,7 @@ public class TabbedPane extends JTabbedPane implements TreeSubscriber, NodeSubsc
 
     @Override
     public <T> void updateNode(T t) {
+        if (!(t instanceof Level)) return;
         Level l = (Level)t;
         List<Component> components = new ArrayList<>();
         List<String> titles = new ArrayList<>();
