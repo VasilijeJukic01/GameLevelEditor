@@ -113,4 +113,8 @@ public class LevelRenderer implements Renderer {
     public void setLevel(Level level) {
         this.level = level;
     }
+
+    public BufferedImage[] getForestSprite() {
+        return forestSprite;
+    }
 }

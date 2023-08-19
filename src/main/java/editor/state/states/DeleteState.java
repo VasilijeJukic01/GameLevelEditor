@@ -2,8 +2,11 @@ package editor.state.states;
 
 import editor.gui.view.tab.TabView;
 import editor.model.repository.Node;
+import editor.model.repository.components.Level;
 import editor.model.repository.components.Tile;
 import editor.state.State;
+
+import java.util.Iterator;
 
 import static editor.constants.Constants.TILE_SIZE;
 
@@ -12,18 +15,11 @@ public class DeleteState implements State<TabView> {
 
     @Override
     public void clickPerform(int x, int y, TabView tabView) {
-        Tile target = null;
-        for (Node child : tabView.getLevel().getChildren()) {
-            Tile c = (Tile) child;
-            int xPos = c.getX();
-            int yPos = c.getY();
-            if (isBetween(xPos*TILE_SIZE, (xPos+1)*TILE_SIZE, x) && isBetween(yPos*TILE_SIZE, (yPos+1)*TILE_SIZE, y)) {
-                target = c;
-                break;
-            }
+        Tile target = findTileAtPosition(x, y, tabView);
+        if (target != null) {
+            tabView.getLevel().getChildren().remove(target);
+            tabView.repaint();
         }
-        if (target != null) tabView.getLevel().getChildren().remove(target);
-        tabView.repaint();
     }
 
     @Override
@@ -36,8 +32,28 @@ public class DeleteState implements State<TabView> {
 
     }
 
-    private boolean isBetween(int x1, int x2, int n) {
-        return n >= x1 && n <= x2;
+    private Tile findTileAtPosition(int x, int y, TabView tabView) {
+        int tileSize = TILE_SIZE;
+        Level level = tabView.getLevel();
+        Iterator<Node> iterator = level.getChildren().iterator();
+
+        while (iterator.hasNext()) {
+            Node child = iterator.next();
+            if (child instanceof Tile) {
+                Tile c = (Tile) child;
+                int xPos = c.getX();
+                int yPos = c.getY();
+                if (isBetween(xPos * tileSize, (xPos + 1) * tileSize, x) && isBetween(yPos * tileSize, (yPos + 1) * tileSize, y)) {
+                    iterator.remove();
+                    return c;
+                }
+            }
+        }
+        return null;
+    }
+
+    private boolean isBetween(int start, int end, int value) {
+        return value >= start && value <= end;
     }
 
 }

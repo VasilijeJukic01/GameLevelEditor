@@ -25,19 +25,22 @@ public class TabView extends JPanel implements AdjustmentListener, NodeSubscribe
     private double scale = 1.0, dx = 0.0, dy = 0.0;
 
     private JPanel panel;
+    private JPanel mainPanel;
     private SidePanel sidePanel;
     private JScrollBar hScrollBar, vScrollBar;
 
     private final Renderer renderer;
 
     public TabView(Level level) {
+        this.setLayout(new BorderLayout());
         this.level = level;
         this.level.addSubscriber(this);
         initBars();
         initPanel();
-        initLayout();
-        refreshBars();
+        initEastPanel();
         this.renderer = new LevelRenderer(level, sidePanel);
+        initSouthPanel();
+        refreshBars();
     }
 
     // Init
@@ -49,12 +52,14 @@ public class TabView extends JPanel implements AdjustmentListener, NodeSubscribe
     }
 
     private void initPanel() {
+        this.mainPanel = new JPanel(new BorderLayout());
         this.panel = new Workspace();
         panel.setLayout(new BorderLayout());
         panel.setBackground(VIEW_COLOR);
         initListeners();
         panel.setFocusable(true);
         panel.requestFocus();
+        mainPanel.add(panel);
     }
 
     private void initListeners() {
@@ -72,15 +77,19 @@ public class TabView extends JPanel implements AdjustmentListener, NodeSubscribe
         panel.addKeyListener(tabKeyListener);
     }
 
-    private void initLayout() {
-        this.setLayout(new BorderLayout());
-        this.add(hScrollBar, BorderLayout.SOUTH);
-        this.add(panel);
+    private void initSouthPanel() {
+        JScrollPane scrollableBottomPanel = new JScrollPane(new BottomPanel(renderer));
+        mainPanel.add(hScrollBar, BorderLayout.SOUTH);
+        JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, mainPanel, scrollableBottomPanel);
+        this.add(splitPane);
+    }
+
+    private void initEastPanel() {
         JPanel eastPanel = new JPanel(new BorderLayout());
         eastPanel.add(vScrollBar, BorderLayout.WEST);
         this.sidePanel = new SidePanel(level);
         eastPanel.add(sidePanel, BorderLayout.EAST);
-        this.add(eastPanel, BorderLayout.EAST);
+        mainPanel.add(eastPanel, BorderLayout.EAST);
     }
 
     @Override
