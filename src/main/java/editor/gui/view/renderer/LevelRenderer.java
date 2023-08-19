@@ -1,5 +1,6 @@
 package editor.gui.view.renderer;
 
+import editor.gui.view.tab.SidePanel;
 import editor.model.loader.LevelObject;
 import editor.model.loader.LevelObjectManager;
 import editor.model.repository.Node;
@@ -22,9 +23,11 @@ public class LevelRenderer implements Renderer {
     private BufferedImage[] forestSprite;
 
     private final LevelObjectManager levelObjectManager;
+    private final SidePanel sidePanel;
 
-    public LevelRenderer(Level level) {
+    public LevelRenderer(Level level, SidePanel sidePanel) {
         this.level = level;
+        this.sidePanel = sidePanel;
         this.levelObjectManager = new LevelObjectManager();
         loadSprite();
     }
@@ -41,11 +44,15 @@ public class LevelRenderer implements Renderer {
     }
 
     @Override
-    public void render(Graphics g, JCheckBox[] checkBoxes) {
+    public void render(Graphics g) {
         if (level.getChildren() == null) return;
 
-        for (int i = 0; i < checkBoxes.length - 1; i++) {
+        for (int i = 0; i < sidePanel.getLayerCheckBoxes().length - 1; i++) {
+            JCheckBox[] checkBoxes = sidePanel.getLayerCheckBoxes();
             if (checkBoxes[checkBoxes.length - 1].isSelected() || checkBoxes[i].isSelected()) {
+                if (i == 2 && sidePanel.getFadeCheckBox().isSelected()) {
+                    renderFade(g);
+                }
                 renderDeco(g, i);
                 renderTerrain(g, i);
             }
@@ -83,6 +90,11 @@ public class LevelRenderer implements Renderer {
             }
 
         }
+    }
+
+    private void renderFade(Graphics g) {
+        g.setColor(new Color(1, 130, 120, 110));
+        g.fillRect(0, 0, level.getWidth()*TILE_SIZE, level.getHeight()*TILE_SIZE);
     }
 
     private void renderGrid(Graphics g) {

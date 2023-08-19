@@ -37,7 +37,7 @@ public class TabView extends JPanel implements AdjustmentListener, NodeSubscribe
         initPanel();
         initLayout();
         refreshBars();
-        this.renderer = new LevelRenderer(level);
+        this.renderer = new LevelRenderer(level, sidePanel);
     }
 
     // Init
@@ -145,7 +145,7 @@ public class TabView extends JPanel implements AdjustmentListener, NodeSubscribe
             tx.scale(scale, scale);
             g2.transform(tx);
 
-            renderer.render(g, sidePanel.getCheckBoxes());
+            renderer.render(g);
         }
 
     }
