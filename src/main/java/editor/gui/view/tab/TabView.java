@@ -52,6 +52,9 @@ public class TabView extends JPanel implements AdjustmentListener, NodeSubscribe
         this.settings.addParameter("Grid", true);
         this.settings.addParameter("Layers", "0000001");
         this.settings.addParameter("Fade", 0);
+        this.settings.addParameter("Selected Set", "Solid Tiles");
+        this.settings.addParameter("Selected Tile", 0);
+        this.settings.addParameter("Selected Layer", 3);
     }
 
     private void initBars() {
@@ -89,7 +92,7 @@ public class TabView extends JPanel implements AdjustmentListener, NodeSubscribe
     }
 
     private void initSouthPanel() {
-        JScrollPane scrollPane = new JScrollPane(new BottomPanel());
+        JScrollPane scrollPane = new JScrollPane(new BottomPanel(this));
         JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, mainPanel, scrollPane);
         this.add(splitPane);
     }

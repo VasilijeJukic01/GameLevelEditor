@@ -13,13 +13,18 @@ import static editor.constants.Constants.*;
 
 public class BottomPanel extends JPanel {
 
+    private final TabView tabView;
+
     private final BufferedImage[] tiles;
     private final BufferedImage[] decorations;
     private JPanel panel;
     private int selectedIndex = -1;
     private int lastSelectedIndex = -1;
 
-    public BottomPanel() {
+    private JComboBox<Integer> cbLayers;
+
+    public BottomPanel(TabView tabView) {
+        this.tabView = tabView;
         this.tiles = Framework.getInstance().getStorage().getForestTilesImg();
         this.decorations = Framework.getInstance().getStorage().getForestDecoTilesImg();
         init();
@@ -31,7 +36,6 @@ public class BottomPanel extends JPanel {
         panel = new JPanel();
         BorderLayout borderLayout = new BorderLayout();
         panel.setLayout(borderLayout);
-
         initTopPanel();
 
         GridBagLayout layout = new GridBagLayout();
@@ -46,6 +50,7 @@ public class BottomPanel extends JPanel {
         for (int itemIndex = 0; itemIndex < FOREST_TILES; itemIndex++) {
             if (fillGridLayout(constraints, itemIndex, tiles)) break;
         }
+
         this.add(panel, BorderLayout.CENTER);
     }
 
@@ -64,44 +69,81 @@ public class BottomPanel extends JPanel {
 
     private void initTopPanel() {
         JPanel topPanel = new JPanel();
-        JLabel label = new JLabel("Select:");
-        String[] comboBoxItems = {"Solid Tiles", "Objects", "Decorations"};
-        JComboBox<String> comboBox = new JComboBox<>(comboBoxItems);
-        comboBox.addItemListener(e -> {
+        JLabel lbSelect = new JLabel("Select:");
+        String[] cbTypeNames = {"Solid Tiles", "Objects", "Decorations"};
+        JComboBox<String> cbTypes = new JComboBox<>(cbTypeNames);
+        cbTypes.addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
                 String selectedItem = (String) e.getItem();
                 updateImagePanel(selectedItem);
             }
         });
-        topPanel.add(label);
-        topPanel.add(comboBox);
+        JLabel lbLayer = new JLabel("Layer:");
+        cbLayers = new JComboBox<>(new Integer[]{3, 5});
+        cbLayers.addItemListener(e -> {
+            if (e.getStateChange() == ItemEvent.SELECTED) {
+                Integer selectedItem = (Integer) e.getItem();
+                saveLayer(selectedItem);
+            }
+        });
+
+        topPanel.add(lbSelect);
+        topPanel.add(cbTypes);
+        topPanel.add(lbLayer);
+        topPanel.add(cbLayers);
         this.add(topPanel, BorderLayout.NORTH);
+    }
+
+    private void saveLayer(Integer selectedItem) {
+        tabView.getSettings().updateParameter("Selected Layer", selectedItem);
     }
 
     private void updateImagePanel(String selectedItem) {
         panel.removeAll();
 
         BufferedImage[] selectedImages = null;
+        String selectedSet = "";
+        Integer[] layerOptions = null;
 
-        if (selectedItem.equals("Solid Tiles")) selectedImages = tiles;
-        else if (selectedItem.equals("Decorations")) selectedImages = decorations;
+        if (selectedItem.equals("Solid Tiles")) {
+            selectedSet = "Solid Tiles";
+            layerOptions = new Integer[]{3, 5};
+            selectedImages = tiles;
+        }
+        else if (selectedItem.equals("Decorations")) {
+            selectedSet = "Decorations";
+            layerOptions = new Integer[]{0, 1, 2, 4};
+            selectedImages = decorations;
+        }
 
         if (selectedImages != null) {
-            GridBagConstraints constraints = new GridBagConstraints();
-            constraints.fill = GridBagConstraints.BOTH;
-            constraints.weightx = 1.0;
-            constraints.weighty = 1.0;
-            constraints.insets = new Insets(10, 0, 10, 0);
-
-            for (int itemIndex = 0; itemIndex < selectedImages.length; itemIndex++) {
-                if (fillGridLayout(constraints, itemIndex, selectedImages)) break;
-            }
+            updateSettings(selectedSet, layerOptions);
+            displaySelectedImages(selectedImages);
         }
         panel.revalidate();
         panel.repaint();
     }
 
-    // Image panel
+    private void updateSettings(String selectedSet, Integer[] layerOptions) {
+        tabView.getSettings().updateParameter("Selected Set", selectedSet);
+        cbLayers.setModel(new DefaultComboBoxModel<>(layerOptions));
+        tabView.getSettings().updateParameter("Selected Layer", layerOptions[0]);
+    }
+
+    private void displaySelectedImages(BufferedImage[] selectedImages) {
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.fill = GridBagConstraints.BOTH;
+        constraints.weightx = 1.0;
+        constraints.weighty = 1.0;
+        constraints.insets = new Insets(10, 0, 10, 0);
+
+        for (int itemIndex = 0; itemIndex < selectedImages.length; itemIndex++) {
+            if (fillGridLayout(constraints, itemIndex, selectedImages)) break;
+        }
+    }
+
+
+    // [Class] Image panel
     private class ImagePanel extends JPanel {
 
         private final BufferedImage image;
@@ -125,6 +167,7 @@ public class BottomPanel extends JPanel {
                 public void mouseClicked(MouseEvent e) {
                     lastSelectedIndex = selectedIndex;
                     selectedIndex = ImagePanel.this.index;
+                    tabView.getSettings().updateParameter("Selected Tile", selectedIndex);
                     repaint();
 
                     if (lastSelectedIndex != -1) {
@@ -144,7 +187,7 @@ public class BottomPanel extends JPanel {
 
             if (selectedIndex == index) {
                 g.setColor(Color.RED);
-                g.drawRect(0, 0, 63, 63);
+                g.drawRect(0, 0, TILE_SIZE - 1, TILE_SIZE - 1);
             }
         }
 

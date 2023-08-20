@@ -43,7 +43,7 @@ public class LevelLoader implements Loader {
             for (int j = 0; j < levelImg.getHeight(); j++) {
                 Color color = new Color(levelImg.getRGB(i, j));
                 int value = color.getRed();
-                if (value >= 49) value = -1;
+                if (value >= 49) continue;
                 Tile tile = new Tile("", level, TileType.SOLID, i, j, value, 254, 254);
                 if (color.getBlue() == 255 && color.getGreen() == 255) tile.setLayer(5);
                 else tile.setLayer(3);
@@ -58,7 +58,7 @@ public class LevelLoader implements Loader {
                 Color color = new Color(levelImg.getRGB(i, j));
                 int decoValue = color.getBlue();
                 int layerValue = color.getGreen();
-                if (decoValue >= DECO_NUM) decoValue = -1;
+                if (decoValue >= DECO_NUM) continue;
                 if (layerValue > 5) layerValue = -1;
                 Tile tile = new Tile("", level, TileType.DECO, i - levelImg.getWidth()/2, j, 254, layerValue, decoValue);
                 tile.setLayer(layerValue);
