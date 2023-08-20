@@ -1,6 +1,7 @@
 package editor.gui.controller.levelActions;
 
 import editor.gui.controller.AbstractEditorAction;
+import editor.gui.view.EditorFrame;
 
 import java.awt.event.ActionEvent;
 
@@ -13,7 +14,8 @@ public class EditNodeAction extends AbstractEditorAction {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        // TODO: Edit Node Action
+        EditorFrame.getInstance().getProjectView().startEditState();
+        super.reset();
     }
 
 }

@@ -55,6 +55,7 @@ public class TabView extends JPanel implements AdjustmentListener, NodeSubscribe
         this.settings.addParameter("Selected Set", "Solid Tiles");
         this.settings.addParameter("Selected Tile", 0);
         this.settings.addParameter("Selected Layer", 3);
+        this.settings.addParameter("Selection", null);
     }
 
     private void initBars() {

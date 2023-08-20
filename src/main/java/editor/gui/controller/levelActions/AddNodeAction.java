@@ -15,6 +15,7 @@ public class AddNodeAction extends AbstractEditorAction {
     @Override
     public void actionPerformed(ActionEvent e) {
         EditorFrame.getInstance().getProjectView().startAddState();
+        super.reset();
     }
 
 }

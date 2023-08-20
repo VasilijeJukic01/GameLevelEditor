@@ -1,6 +1,8 @@
 package editor.gui.controller;
 
+import editor.gui.view.EditorFrame;
 import editor.gui.view.style.CustomButton;
+import editor.gui.view.tab.TabView;
 
 import javax.swing.*;
 import java.net.URL;
@@ -21,6 +23,11 @@ public abstract class AbstractEditorAction extends AbstractAction {
         JButton button = new JButton(this);
         button.setUI(new CustomButton());
         return button;
+    }
+
+    protected void reset() {
+        TabView tab = EditorFrame.getInstance().getCurrentTab();
+        tab.getSettings().updateParameter("Selection", null);
     }
 
 }

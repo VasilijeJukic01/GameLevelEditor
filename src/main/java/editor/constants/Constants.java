@@ -24,6 +24,7 @@ public class Constants {
     public static final Color BUTTON_PRESS_COLOR = new Color(45, 60, 80);
 
     public static final Color DEFAULT_FADE_COLOR = new Color(1, 130, 120, 110);
+    public static final Color SELECTION_COLOR = new Color(116, 155, 194, 110);
 
     // Editor
     public static double MIN_ZOOM = 0.3;

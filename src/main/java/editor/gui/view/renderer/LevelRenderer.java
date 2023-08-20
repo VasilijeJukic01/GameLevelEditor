@@ -38,7 +38,11 @@ public class LevelRenderer implements Renderer {
                 renderTerrain(g, i);
             }
         }
-
+        if (tabView.getSettings().getParameter("Selection") != null) {
+            Tile selection = (Tile) tabView.getSettings().getParameter("Selection");
+            g.setColor(SELECTION_COLOR);
+            g.fillRect(selection.getX() * TILE_SIZE, selection.getY() * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+        }
         renderGrid(g);
     }
 

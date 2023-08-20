@@ -36,6 +36,10 @@ public class Tile extends Node {
         return green;
     }
 
+    public void setGreen(int green) {
+        this.green = green;
+    }
+
     public int getX() {
         return x;
     }

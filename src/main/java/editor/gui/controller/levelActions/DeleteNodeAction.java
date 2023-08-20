@@ -15,6 +15,7 @@ public class DeleteNodeAction extends AbstractEditorAction {
     @Override
     public void actionPerformed(ActionEvent e) {
         EditorFrame.getInstance().getProjectView().startDeleteState();
+        super.reset();
     }
 
 }

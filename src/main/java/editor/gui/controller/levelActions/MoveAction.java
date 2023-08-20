@@ -15,6 +15,7 @@ public class MoveAction extends AbstractEditorAction {
     @Override
     public void actionPerformed(ActionEvent e) {
         EditorFrame.getInstance().getProjectView().startMoveState();
+        super.reset();
     }
 
 }
