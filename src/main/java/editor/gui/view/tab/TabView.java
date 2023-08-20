@@ -130,6 +130,10 @@ public class TabView extends JPanel implements AdjustmentListener, NodeSubscribe
         return settings;
     }
 
+    public JPanel getWorkspacePanel() {
+        return workspacePanel;
+    }
+
     public double getScale() {
         return scale;
     }

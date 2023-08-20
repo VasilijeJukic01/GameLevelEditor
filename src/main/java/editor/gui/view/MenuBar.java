@@ -26,4 +26,5 @@ public class MenuBar extends JMenuBar {
 
         this.add(new JMenu("Help"));
     }
+
 }

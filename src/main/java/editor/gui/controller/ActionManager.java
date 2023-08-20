@@ -34,6 +34,7 @@ public class ActionManager {
         actions.put(ActionType.ZOOM_OUT, new ZoomOutAction());
         actions.put(ActionType.UNDO, new UndoAction());
         actions.put(ActionType.REDO, new RedoAction());
+        actions.put(ActionType.SCREENSHOT, new ScreenshotAction());
     }
 
     public AbstractEditorAction getAction(ActionType type) {
