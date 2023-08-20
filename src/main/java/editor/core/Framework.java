@@ -37,6 +37,10 @@ public class Framework {
     }
 
     // Getters & Setters
+    public Gui getGui() {
+        return gui;
+    }
+
     public Repository getRepository() {
         return repository;
     }

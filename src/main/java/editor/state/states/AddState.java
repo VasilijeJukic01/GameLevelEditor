@@ -1,5 +1,7 @@
 package editor.state.states;
 
+import editor.command.Command;
+import editor.command.commands.AddNodeCommand;
 import editor.core.Framework;
 import editor.gui.view.tab.TabView;
 import editor.model.repository.Node;
@@ -60,7 +62,8 @@ public class AddState implements State<TabView> {
 
     private void addTile(Tile newTile, int layer, TabView tabView) {
         newTile.setLayer(layer);
-        tabView.getLevel().addChild(newTile);
+        Command command = new AddNodeCommand(tabView.getLevel(), newTile);
+        Framework.getInstance().getGui().getCommandManager().addCommand(command);
     }
 
     @Override

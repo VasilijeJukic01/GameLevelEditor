@@ -13,5 +13,7 @@ public enum ActionType {
     MOVE,
     SHOW_GRID,
     ZOOM_IN,
-    ZOOM_OUT
+    ZOOM_OUT,
+    UNDO,
+    REDO
 }

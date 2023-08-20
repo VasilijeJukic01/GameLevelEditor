@@ -1,5 +1,8 @@
 package editor.state.states;
 
+import editor.command.Command;
+import editor.command.commands.DeleteNodeCommand;
+import editor.core.Framework;
 import editor.gui.view.tab.TabView;
 import editor.model.repository.Node;
 import editor.model.repository.components.Level;
@@ -16,7 +19,10 @@ public class DeleteState implements State<TabView> {
     @Override
     public void clickPerform(int x, int y, TabView tabView) {
         Tile target = findTileAtPosition(x, y, tabView);
-        if (target != null) tabView.getLevel().removeChild(target);
+        if (target != null) {
+            Command command = new DeleteNodeCommand(tabView.getLevel(), target);
+            Framework.getInstance().getGui().getCommandManager().addCommand(command);
+        }
     }
 
     @Override

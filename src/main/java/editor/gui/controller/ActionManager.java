@@ -32,6 +32,8 @@ public class ActionManager {
         actions.put(ActionType.SHOW_GRID, new ShowGridAction());
         actions.put(ActionType.ZOOM_IN, new ZoomInAction());
         actions.put(ActionType.ZOOM_OUT, new ZoomOutAction());
+        actions.put(ActionType.UNDO, new UndoAction());
+        actions.put(ActionType.REDO, new RedoAction());
     }
 
     public AbstractEditorAction getAction(ActionType type) {
