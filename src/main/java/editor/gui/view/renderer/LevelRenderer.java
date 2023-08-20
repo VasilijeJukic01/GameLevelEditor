@@ -1,45 +1,26 @@
 package editor.gui.view.renderer;
 
+import editor.core.Framework;
 import editor.gui.view.tab.TabView;
 import editor.model.loader.LevelObject;
-import editor.model.loader.LevelObjectManager;
 import editor.model.repository.Node;
 import editor.model.repository.components.Tile;
 import editor.model.repository.components.Level;
 import editor.model.repository.components.TileType;
-import editor.utils.Utils;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
 import static editor.constants.Constants.*;
-import static editor.constants.Constants.FOREST_TILE_SIZE;
-import static editor.constants.FilePaths.FOREST_SPRITE;
 
 public class LevelRenderer implements Renderer {
 
     private final Level level;
-    private BufferedImage[] forestSprite;
-
-    private final LevelObjectManager levelObjectManager;
     private final TabView tabView;
 
     public LevelRenderer(TabView tabView) {
         this.tabView = tabView;
         this.level = tabView.getLevel();
-        this.levelObjectManager = new LevelObjectManager();
-        loadSprite();
-    }
-
-    private void loadSprite() {
-        BufferedImage img = Utils.getInstance().importImage(FOREST_SPRITE, -1, -1);
-        forestSprite = new BufferedImage[FOREST_TILES];
-        for (int i = 0; i < FOREST_SPRITE_ROW; i++) {
-            for (int j = 0; j < FOREST_SPRITE_COL; j++) {
-                int index = j * FOREST_SPRITE_COL + i;
-                forestSprite[index] = img.getSubimage(i*FOREST_TILE_SIZE, j*FOREST_TILE_SIZE, FOREST_TILE_SIZE, FOREST_TILE_SIZE);
-            }
-        }
     }
 
     @Override
@@ -62,6 +43,7 @@ public class LevelRenderer implements Renderer {
     }
 
     private void renderTerrain(Graphics g, int layer) {
+        BufferedImage[] forestTiles = Framework.getInstance().getStorage().getForestTilesImg();
         for (Node child : level.getChildren()) {
             Tile c = (Tile) child;
             int value = c.getRed();
@@ -69,23 +51,25 @@ public class LevelRenderer implements Renderer {
             if (value == -1) continue;
             if (c.getTileType() == TileType.SOLID) {
                 if (layerIndex == layer)
-                    g.drawImage(forestSprite[value], c.getX() * TILE_SIZE, c.getY() * TILE_SIZE, TILE_SIZE, TILE_SIZE, null);
+                    g.drawImage(forestTiles[value], c.getX() * TILE_SIZE, c.getY() * TILE_SIZE, TILE_SIZE, TILE_SIZE, null);
             }
         }
     }
 
     private void renderDeco(Graphics g, int layer) {
+        LevelObject[] objects = Framework.getInstance().getStorage().getForestObjects();
+        BufferedImage[] models = Framework.getInstance().getStorage().getForestDecoTilesImg();
         for (Node child : level.getChildren()) {
             Tile c = (Tile) child;
             int value = c.getBlue();
             int layerIndex = c.getLayer();
             if (value == -1) continue;
             if (c.getTileType() == TileType.DECO) {
-                LevelObject lvlObject = levelObjectManager.getObjects()[value];
+                LevelObject lvlObject = objects[value];
                 if (layerIndex == layer) {
                     int x = c.getX() * TILE_SIZE + lvlObject.getXOffset();
                     int y = c.getY() * TILE_SIZE + lvlObject.getYOffset();
-                    g.drawImage(levelObjectManager.getModels()[lvlObject.getType().ordinal()], x, y, lvlObject.getW(), lvlObject.getH(), null);
+                    g.drawImage(models[lvlObject.getType().ordinal()], x, y, lvlObject.getW(), lvlObject.getH(), null);
                 }
             }
 
@@ -98,7 +82,8 @@ public class LevelRenderer implements Renderer {
     }
 
     private void renderGrid(Graphics g) {
-        if (!level.isShowGrid()) return;
+        boolean isGrid = (boolean) tabView.getSettings().getParameter("Grid");
+        if (!isGrid) return;
         g.setColor(Color.BLUE);
 
         for (int row = 0; row < level.getHeight(); row++) {
@@ -110,7 +95,4 @@ public class LevelRenderer implements Renderer {
         }
     }
 
-    public BufferedImage[] getForestSprite() {
-        return forestSprite;
-    }
 }

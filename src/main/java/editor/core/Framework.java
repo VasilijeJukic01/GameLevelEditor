@@ -10,6 +10,7 @@ public class Framework {
     protected Gui gui;
     protected Repository repository;
     protected Loader levelLoader;
+    protected Storage storage;
 
     private Framework() {}
 
@@ -28,6 +29,7 @@ public class Framework {
         this.gui = gui;
         this.repository = new LevelRepository();
         this.levelLoader = new LevelLoader();
+        this.storage = new Storage();
     }
 
     public void run(){
@@ -41,5 +43,9 @@ public class Framework {
 
     public Loader getLoader() {
         return levelLoader;
+    }
+
+    public Storage getStorage() {
+        return storage;
     }
 }

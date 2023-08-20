@@ -20,7 +20,8 @@ public class ShowGridAction extends AbstractEditorAction {
     @Override
     public void actionPerformed(ActionEvent e) {
         TabView currentTab = EditorFrame.getInstance().getCurrentTab();
-        currentTab.getLevel().changeGrid();
+        boolean isGrid = (boolean) currentTab.getSettings().getParameter("Grid");
+        currentTab.getSettings().updateParameter("Grid", !isGrid);
     }
 
 }

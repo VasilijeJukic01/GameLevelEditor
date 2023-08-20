@@ -12,7 +12,6 @@ import java.util.Optional;
 public class Level extends Composite<Node> implements NodePublisher {
 
     private int width, height;
-    private boolean showGrid = true;
 
     private transient List<NodeSubscriber> subscribers;
 
@@ -26,11 +25,6 @@ public class Level extends Composite<Node> implements NodePublisher {
         Optional.ofNullable(text)
                 .filter(str -> !str.isEmpty())
                 .ifPresent(super::setName);
-        notify(this);
-    }
-
-    public void changeGrid() {
-        this.showGrid = !this.showGrid;
         notify(this);
     }
 
@@ -63,10 +57,6 @@ public class Level extends Composite<Node> implements NodePublisher {
 
     public int getHeight() {
         return height;
-    }
-
-    public boolean isShowGrid() {
-        return showGrid;
     }
 
     public void setSize(int width, int height) {

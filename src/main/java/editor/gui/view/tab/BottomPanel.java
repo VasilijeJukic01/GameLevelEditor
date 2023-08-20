@@ -1,7 +1,6 @@
 package editor.gui.view.tab;
 
-import editor.gui.view.renderer.LevelRenderer;
-import editor.gui.view.renderer.Renderer;
+import editor.core.Framework;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,18 +12,26 @@ import static editor.constants.Constants.*;
 
 public class BottomPanel extends JPanel {
 
-    private final BufferedImage[] forestSprite;
+    private final BufferedImage[] tiles;
     private int selectedIndex = -1;
     private int lastSelectedIndex = -1;
 
-    public BottomPanel(Renderer levelRenderer) {
-        this.forestSprite = ((LevelRenderer)levelRenderer).getForestSprite();
+    public BottomPanel() {
+        this.tiles = Framework.getInstance().getStorage().getForestTilesImg();
         init();
     }
 
     private void init() {
+        this.setLayout(new BorderLayout());
+
+        JPanel panel = new JPanel();
+        BorderLayout borderLayout = new BorderLayout();
+        panel.setLayout(borderLayout);
+
+        initTopPanel();
+
         GridBagLayout layout = new GridBagLayout();
-        this.setLayout(layout);
+        panel.setLayout(layout);
 
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.fill = GridBagConstraints.BOTH;
@@ -40,9 +47,20 @@ public class BottomPanel extends JPanel {
 
             constraints.gridx = col;
             constraints.gridy = row;
-            ImagePanel imagePanel = new ImagePanel(forestSprite[itemIndex], itemIndex);
-            add(imagePanel, constraints);
+            ImagePanel imagePanel = new ImagePanel(tiles[itemIndex], itemIndex);
+            panel.add(imagePanel, constraints);
         }
+        this.add(panel, BorderLayout.CENTER);
+    }
+
+    private void initTopPanel() {
+        JPanel topPanel = new JPanel();
+        JLabel label = new JLabel("Select:");
+        String[] comboBoxItems = {"Solid Tiles", "Objects", "Decorations"};
+        JComboBox<String> comboBox = new JComboBox<>(comboBoxItems);
+        topPanel.add(label);
+        topPanel.add(comboBox);
+        this.add(topPanel, BorderLayout.NORTH);
     }
 
     // Image panel
