@@ -16,10 +16,7 @@ public class DeleteState implements State<TabView> {
     @Override
     public void clickPerform(int x, int y, TabView tabView) {
         Tile target = findTileAtPosition(x, y, tabView);
-        if (target != null) {
-            tabView.getLevel().getChildren().remove(target);
-            tabView.repaint();
-        }
+        if (target != null) tabView.getLevel().removeChild(target);
     }
 
     @Override

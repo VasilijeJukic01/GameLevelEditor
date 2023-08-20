@@ -61,7 +61,6 @@ public class AddState implements State<TabView> {
     private void addTile(Tile newTile, int layer, TabView tabView) {
         newTile.setLayer(layer);
         tabView.getLevel().addChild(newTile);
-        tabView.repaint();
     }
 
     @Override

@@ -28,6 +28,18 @@ public class Level extends Composite<Node> implements NodePublisher {
         notify(this);
     }
 
+    @Override
+    public void addChild(Node child) {
+        this.getChildren().add(child);
+        notify(this);
+    }
+
+    @Override
+    public void removeChild(Node child) {
+        this.getChildren().remove(child);
+        notify(this);
+    }
+
     // Observer
     @Override
     public void addSubscriber(NodeSubscriber s) {
