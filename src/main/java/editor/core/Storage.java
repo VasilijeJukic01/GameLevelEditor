@@ -77,6 +77,7 @@ public final class Storage {
         }
     }
 
+    // Getters
     public BufferedImage[] getForestTilesImg() {
         return forestTilesImg;
     }

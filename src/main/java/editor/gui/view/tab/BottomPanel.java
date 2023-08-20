@@ -4,6 +4,7 @@ import editor.core.Framework;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ItemEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
@@ -13,18 +14,21 @@ import static editor.constants.Constants.*;
 public class BottomPanel extends JPanel {
 
     private final BufferedImage[] tiles;
+    private final BufferedImage[] decorations;
+    private JPanel panel;
     private int selectedIndex = -1;
     private int lastSelectedIndex = -1;
 
     public BottomPanel() {
         this.tiles = Framework.getInstance().getStorage().getForestTilesImg();
+        this.decorations = Framework.getInstance().getStorage().getForestDecoTilesImg();
         init();
     }
 
     private void init() {
         this.setLayout(new BorderLayout());
 
-        JPanel panel = new JPanel();
+        panel = new JPanel();
         BorderLayout borderLayout = new BorderLayout();
         panel.setLayout(borderLayout);
 
@@ -40,17 +44,22 @@ public class BottomPanel extends JPanel {
         constraints.insets = new Insets(10, 0, 10, 0);
 
         for (int itemIndex = 0; itemIndex < FOREST_TILES; itemIndex++) {
-            int row = itemIndex / EDITOR_PICKER_COL;
-            int col = itemIndex % EDITOR_PICKER_COL;
-
-            if (row >= EDITOR_PICKER_ROW) break;
-
-            constraints.gridx = col;
-            constraints.gridy = row;
-            ImagePanel imagePanel = new ImagePanel(tiles[itemIndex], itemIndex);
-            panel.add(imagePanel, constraints);
+            if (fillGridLayout(constraints, itemIndex, tiles)) break;
         }
         this.add(panel, BorderLayout.CENTER);
+    }
+
+    private boolean fillGridLayout(GridBagConstraints constraints, int itemIndex, BufferedImage[] tiles) {
+        int row = itemIndex / EDITOR_PICKER_COL;
+        int col = itemIndex % EDITOR_PICKER_COL;
+
+        if (row >= EDITOR_PICKER_ROW) return true;
+
+        constraints.gridx = col;
+        constraints.gridy = row;
+        ImagePanel imagePanel = new ImagePanel(tiles[itemIndex], itemIndex);
+        panel.add(imagePanel, constraints);
+        return false;
     }
 
     private void initTopPanel() {
@@ -58,9 +67,38 @@ public class BottomPanel extends JPanel {
         JLabel label = new JLabel("Select:");
         String[] comboBoxItems = {"Solid Tiles", "Objects", "Decorations"};
         JComboBox<String> comboBox = new JComboBox<>(comboBoxItems);
+        comboBox.addItemListener(e -> {
+            if (e.getStateChange() == ItemEvent.SELECTED) {
+                String selectedItem = (String) e.getItem();
+                updateImagePanel(selectedItem);
+            }
+        });
         topPanel.add(label);
         topPanel.add(comboBox);
         this.add(topPanel, BorderLayout.NORTH);
+    }
+
+    private void updateImagePanel(String selectedItem) {
+        panel.removeAll();
+
+        BufferedImage[] selectedImages = null;
+
+        if (selectedItem.equals("Solid Tiles")) selectedImages = tiles;
+        else if (selectedItem.equals("Decorations")) selectedImages = decorations;
+
+        if (selectedImages != null) {
+            GridBagConstraints constraints = new GridBagConstraints();
+            constraints.fill = GridBagConstraints.BOTH;
+            constraints.weightx = 1.0;
+            constraints.weighty = 1.0;
+            constraints.insets = new Insets(10, 0, 10, 0);
+
+            for (int itemIndex = 0; itemIndex < selectedImages.length; itemIndex++) {
+                if (fillGridLayout(constraints, itemIndex, selectedImages)) break;
+            }
+        }
+        panel.revalidate();
+        panel.repaint();
     }
 
     // Image panel
