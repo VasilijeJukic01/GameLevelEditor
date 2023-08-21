@@ -17,5 +17,6 @@ public enum ActionType {
     ZOOM_OUT,
     UNDO,
     REDO,
+    OPTIONS,
     SCREENSHOT
 }

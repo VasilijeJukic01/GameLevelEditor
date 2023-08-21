@@ -36,6 +36,7 @@ public class ActionManager {
         actions.put(ActionType.UNDO, new UndoAction());
         actions.put(ActionType.REDO, new RedoAction());
         actions.put(ActionType.SCREENSHOT, new ScreenshotAction());
+        actions.put(ActionType.OPTIONS, new OptionsAction());
     }
 
     public AbstractEditorAction getAction(ActionType type) {
