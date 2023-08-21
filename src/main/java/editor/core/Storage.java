@@ -1,6 +1,7 @@
 package editor.core;
 
-import editor.model.loader.LevelObject;
+import editor.model.loader.LevelDeco;
+import editor.model.loader.LvlDecoType;
 import editor.model.loader.LvlObjType;
 import editor.model.repository.components.Tile;
 import editor.model.repository.components.TileType;
@@ -19,23 +20,27 @@ public final class Storage {
 
     private BufferedImage[] forestTilesImg;
     private BufferedImage[] forestDecoTilesImg;
+    private BufferedImage[] objectsTilesImg;
 
     private final List<Tile> forestSolidTiles;
     private final List<Tile> forestDecoTiles;
+    private final List<Tile> objectTiles;
 
-    private final List<LvlObjType> objData;
-    private LevelObject[] forestObjects;
+    private final List<LvlDecoType> objData;
+    private LevelDeco[] forestObjects;
 
     public Storage() {
         this.forestSolidTiles = new ArrayList<>();
         this.forestDecoTiles = new ArrayList<>();
-        this.objData = Arrays.asList(LvlObjType.values());
+        this.objectTiles = new ArrayList<>();
+        this.objData = Arrays.asList(LvlDecoType.values());
         init();
     }
 
     private void init() {
         loadForestTiles();
         loadForestDecoTiles();
+        loadObjects();
         initDeco();
     }
 
@@ -55,23 +60,34 @@ public final class Storage {
     private void loadForestDecoTiles() {
         this.forestDecoTilesImg = new BufferedImage[objData.size()];
         for (int i = 0; i < forestDecoTilesImg.length; i++) {
-            LvlObjType objType = objData.get(i);
-            String id = objType.getId();
+            LvlDecoType decoType = objData.get(i);
+            String id = decoType.getId();
             int bigFlag = id.contains("_BIG") ? 4 : 0;
             int reverseFlag = id.contains("_REVERSE") ? 8 : 0;
             String name = id.substring(0, id.length() - bigFlag - reverseFlag);
-            forestDecoTilesImg[i] = Utils.getInstance().importImage("/images/data/levelObjects/"+name+".png", objType.getWid(), objType.getHei());
+            forestDecoTilesImg[i] = Utils.getInstance().importImage("/images/data/levelDecos/" +name+".png", decoType.getWid(), decoType.getHei());
             if (reverseFlag != 0) forestDecoTilesImg[i] = Utils.getInstance().flipImage(forestDecoTilesImg[i]);
             Tile t = new Tile("", null, TileType.DECO, 0, 0, 254, 254, i);
             forestDecoTiles.add(t);
         }
     }
 
+    private void loadObjects() {
+        this.objectsTilesImg = new BufferedImage[LvlDecoType.values().length];
+        for (int i = 0; i < 12; i++) {
+            LvlObjType objType = LvlObjType.values()[i];
+            objectsTilesImg[i] = Utils.getInstance().importImage("/images/data/levelObjects/"+objType.getId().replace("~","")+".png", -1, -1);
+            if (objType.getId().contains("~")) objectsTilesImg[i] = Utils.getInstance().flipImage(objectsTilesImg[i]);
+            Tile t = new Tile("", null, TileType.OBJECT, 0, 0, 254, 254, i);
+            objectTiles.add(t);
+        }
+    }
+
     private void initDeco() {
-        this.forestObjects = new LevelObject[objData.size()];
+        this.forestObjects = new LevelDeco[objData.size()];
         for (int i = 0; i < forestObjects.length; i++) {
-            LvlObjType lvlObj = objData.get(i);
-            forestObjects[i] = new LevelObject(lvlObj, forestDecoTilesImg[i].getWidth(), forestDecoTilesImg[i].getHeight());
+            LvlDecoType lvlObj = objData.get(i);
+            forestObjects[i] = new LevelDeco(lvlObj, forestDecoTilesImg[i].getWidth(), forestDecoTilesImg[i].getHeight());
             forestObjects[i].setYOffset(lvlObj.getYOffset());
             forestObjects[i].setXOffset(lvlObj.getXOffset());
         }
@@ -86,6 +102,10 @@ public final class Storage {
         return forestDecoTilesImg;
     }
 
+    public BufferedImage[] getObjectsTilesImg() {
+        return objectsTilesImg;
+    }
+
     public List<Tile> getForestSolidTiles() {
         return forestSolidTiles;
     }
@@ -94,7 +114,11 @@ public final class Storage {
         return forestDecoTiles;
     }
 
-    public LevelObject[] getForestObjects() {
+    public List<Tile> getObjectTiles() {
+        return objectTiles;
+    }
+
+    public LevelDeco[] getForestObjects() {
         return forestObjects;
     }
 }

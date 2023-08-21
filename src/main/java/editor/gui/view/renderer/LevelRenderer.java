@@ -2,7 +2,8 @@ package editor.gui.view.renderer;
 
 import editor.core.Framework;
 import editor.gui.view.tab.TabView;
-import editor.model.loader.LevelObject;
+import editor.model.loader.LevelDeco;
+import editor.model.loader.LvlObjType;
 import editor.model.repository.Node;
 import editor.model.repository.components.Tile;
 import editor.model.repository.components.Level;
@@ -38,6 +39,7 @@ public class LevelRenderer implements Renderer {
                 renderTerrain(g, i);
             }
         }
+        renderObjects(g);
         if (tabView.getSettings().getParameter("Selection") != null) {
             Tile selection = (Tile) tabView.getSettings().getParameter("Selection");
             g.setColor(SELECTION_COLOR);
@@ -60,8 +62,23 @@ public class LevelRenderer implements Renderer {
         }
     }
 
+    private void renderObjects(Graphics g) {
+        BufferedImage[] objectTiles = Framework.getInstance().getStorage().getObjectsTilesImg();
+        for (Node child : level.getChildren()) {
+            Tile c = (Tile) child;
+            int value = c.getBlue();
+            if (value == -1) continue;
+            if (c.getTileType() == TileType.OBJECT) {
+                LvlObjType obj = LvlObjType.values()[value];
+                int x = c.getX() * TILE_SIZE + obj.getXOffset();
+                int y = c.getY() * TILE_SIZE + obj.getYOffset();
+                g.drawImage(objectTiles[value], x, y, obj.getWid(), obj.getHei(), null);
+            }
+        }
+    }
+
     private void renderDeco(Graphics g, int layer) {
-        LevelObject[] objects = Framework.getInstance().getStorage().getForestObjects();
+        LevelDeco[] decorations = Framework.getInstance().getStorage().getForestObjects();
         BufferedImage[] models = Framework.getInstance().getStorage().getForestDecoTilesImg();
         for (Node child : level.getChildren()) {
             Tile c = (Tile) child;
@@ -69,11 +86,11 @@ public class LevelRenderer implements Renderer {
             int layerIndex = c.getLayer();
             if (value == -1) continue;
             if (c.getTileType() == TileType.DECO) {
-                LevelObject lvlObject = objects[value];
+                LevelDeco deco = decorations[value];
                 if (layerIndex == layer) {
-                    int x = c.getX() * TILE_SIZE + lvlObject.getXOffset();
-                    int y = c.getY() * TILE_SIZE + lvlObject.getYOffset();
-                    g.drawImage(models[lvlObject.getType().ordinal()], x, y, lvlObject.getW(), lvlObject.getH(), null);
+                    int x = c.getX() * TILE_SIZE + deco.getXOffset();
+                    int y = c.getY() * TILE_SIZE + deco.getYOffset();
+                    g.drawImage(models[deco.getType().ordinal()], x, y, deco.getW(), deco.getH(), null);
                 }
             }
 

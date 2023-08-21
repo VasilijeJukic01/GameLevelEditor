@@ -18,6 +18,7 @@ public class EditState implements State<TabView> {
         for (Node child : tabView.getLevel().getChildren()) {
             Tile t = (Tile) child;
             if (t.getX() == tileX && t.getY() == tileY) {
+                tabView.getSettings().updateParameter("Selection", t);
                 EditDialog editDialog = new EditDialog(EditorFrame.getInstance(),true, t);
                 editDialog.setVisible(true);
                 return;

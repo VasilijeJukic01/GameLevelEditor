@@ -22,44 +22,69 @@ public class AddState implements State<TabView> {
         int index = (int) tabView.getSettings().getParameter("Selected Tile");
         int layer = (int) tabView.getSettings().getParameter("Selected Layer");
 
-        List<Tile> tiles;
-        if ("Solid Tiles".equals(set))
-            tiles = Framework.getInstance().getStorage().getForestSolidTiles();
-        else if ("Decorations".equals(set))
-            tiles = Framework.getInstance().getStorage().getForestDecoTiles();
-        else return;
+        List<Tile> tiles = getTileSet(set);
+        Tile newTile;
+        if (tiles == null) return;
 
         int tileX = x / TILE_SIZE;
         int tileY = y / TILE_SIZE;
 
-        if (set.equals("Solid Tiles")) {
-            for (Tile tile : tiles) {
-                if (tile.getRed() == index) {
-                    if (!isFree(tileX, tileY, tabView.getLevel(), TileType.SOLID)) return;
-                    int green = (layer == 5) ? 255 : 254;
-                    int blue = (layer == 5) ? 255 : 254;
-                    Tile newTile = new Tile("", tabView.getLevel(), TileType.SOLID, tileX, tileY, index, green, blue);
-                    addTile(newTile, layer, tabView);
-                }
-            }
-        }
-        else {
-            for (Tile tile : tiles) {
-                if (tile.getBlue() == index) {
-                    if (!isFree(tileX, tileY, tabView.getLevel(), TileType.DECO)) return;
-                    Tile newTile = new Tile("", tabView.getLevel(), TileType.DECO, tileX, tileY, 254, layer, index);
-                    addTile(newTile, layer, tabView);
-                }
-            }
-        }
+
+        if (set.equals("Solid Tiles")) newTile = getSolidTile(tabView, tiles, index, layer, tileX, tileY);
+        else if (set.equals("Objects")) newTile = getObjectTile(tabView, tiles, index, tileX, tileY);
+        else newTile = getDecoTile(tabView, tiles, index, layer, tileX, tileY);
+
+        if (newTile != null) addTile(newTile, layer, tabView);
     }
 
-    private boolean isFree(int tileX, int tileY, Level level, TileType type) {
+    private List<Tile> getTileSet(String name) {
+        if ("Solid Tiles".equals(name))
+            return Framework.getInstance().getStorage().getForestSolidTiles();
+        else if ("Decorations".equals(name))
+            return Framework.getInstance().getStorage().getForestDecoTiles();
+        else if ("Objects".equals(name))
+            return Framework.getInstance().getStorage().getObjectTiles();
+       return null;
+    }
+
+    private boolean isFree(int tileX, int tileY, Level level, List<TileType> types) {
         for (Node node : level.getChildren()) {
             Tile tile = (Tile) node;
-            if (tile.getX() == tileX && tile.getY() == tileY && tile.getTileType() == type) return false;
+            if (tile.getX() == tileX && tile.getY() == tileY && types.contains(tile.getTileType())) return false;
         }
         return true;
+    }
+
+    private Tile getSolidTile(TabView tabView, List<Tile> tiles, int index, int layer, int tileX, int tileY) {
+        for (Tile tile : tiles) {
+            if (tile.getRed() == index) {
+                if (!isFree(tileX, tileY, tabView.getLevel(), List.of(TileType.SOLID, TileType.OBJECT, TileType.ENEMY))) return null;
+                int green = (layer == 5) ? 255 : 254;
+                int blue = (layer == 5) ? 255 : 254;
+                return new Tile("", tabView.getLevel(), TileType.SOLID, tileX, tileY, index, green, blue);
+            }
+        }
+        return null;
+    }
+
+    private Tile getObjectTile(TabView tabView, List<Tile> tiles, int index, int tileX, int tileY) {
+        for (Tile tile : tiles) {
+            if (tile.getBlue() == index) {
+                if (!isFree(tileX, tileY, tabView.getLevel(), List.of(TileType.SOLID, TileType.OBJECT, TileType.ENEMY))) return null;
+                return new Tile("", tabView.getLevel(), TileType.OBJECT, tileX, tileY, 254, 254, index);
+            }
+        }
+        return null;
+    }
+
+    private Tile getDecoTile(TabView tabView, List<Tile> tiles, int index, int layer, int tileX, int tileY) {
+        for (Tile tile : tiles) {
+            if (tile.getBlue() == index) {
+                if (!isFree(tileX, tileY, tabView.getLevel(), List.of(TileType.DECO))) return null;
+                return new Tile("", tabView.getLevel(), TileType.DECO, tileX, tileY, 254, layer, index);
+            }
+        }
+        return null;
     }
 
     private void addTile(Tile newTile, int layer, TabView tabView) {

@@ -1,13 +1,13 @@
 package editor.model.loader;
 
-public class LevelObject {
+public class LevelDeco {
 
-    private final LvlObjType type;
+    private final LvlDecoType type;
 
     private int xOffset, yOffset;
     private final int w, h;
 
-    public LevelObject(LvlObjType type, int w, int h) {
+    public LevelDeco(LvlDecoType type, int w, int h) {
         this.type = type;
         this.w = w;
         this.h = h;
@@ -37,7 +37,7 @@ public class LevelObject {
         return h;
     }
 
-    public LvlObjType getType() {
+    public LvlDecoType getType() {
         return type;
     }
 }

@@ -45,7 +45,8 @@ public class ExportLevelAction extends AbstractEditorAction {
 
         for (Node child : tab.getLevel().getChildren()) {
             Tile t = (Tile) child;
-            if (t.getTileType() != tileType) continue;
+            boolean isDeco = t.getTileType() == TileType.OBJECT && tileType == TileType.SOLID;
+            if (t.getTileType() != tileType && !isDeco) continue;
 
             int pixelX = t.getX();
             int pixelY = t.getY();
