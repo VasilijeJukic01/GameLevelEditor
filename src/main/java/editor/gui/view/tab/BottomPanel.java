@@ -19,6 +19,7 @@ public class BottomPanel extends JPanel {
     private final BufferedImage[] tiles;
     private final BufferedImage[] decorations;
     private final BufferedImage[] objects;
+    private final BufferedImage[] enemies;
 
     private JPanel panel;
     private int selectedIndex = -1;
@@ -31,6 +32,7 @@ public class BottomPanel extends JPanel {
         this.tiles = Framework.getInstance().getStorage().getForestTilesImg();
         this.decorations = Framework.getInstance().getStorage().getForestDecoTilesImg();
         this.objects = Framework.getInstance().getStorage().getObjectsTilesImg();
+        this.enemies = Framework.getInstance().getStorage().getEnemiesTilesImg();
         init();
     }
 
@@ -123,6 +125,11 @@ public class BottomPanel extends JPanel {
             selectedSet = "Objects";
             layerOptions = new Integer[]{5};
             selectedImages = objects;
+        }
+        else if (selectedItem.equals("Enemies")) {
+            selectedSet = "Enemies";
+            layerOptions = new Integer[]{5};
+            selectedImages = enemies;
         }
 
         if (selectedImages != null) {

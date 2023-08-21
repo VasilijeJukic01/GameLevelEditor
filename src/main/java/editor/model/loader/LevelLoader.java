@@ -32,8 +32,11 @@ public class LevelLoader implements Loader {
             level.setSize(levelImg.getWidth()/2, levelImg.getHeight());
             level.setName(name);
 
+            level.getChildren().clear();
+
             getLevelData(levelImg, level);
             getObjectData(levelImg, level);
+            getEnemyData(levelImg, level);
             getDecoData(levelImg, level);
         }
         catch (IOException e) {
@@ -66,6 +69,19 @@ public class LevelLoader implements Loader {
                 int value = color.getBlue();
                 if (value >= LvlObjType.MAX.ordinal()) continue;
                 Tile tile = new Tile("", level, TileType.OBJECT, i, j, 254, 254, value);
+                tile.setLayer(5);
+                level.addChild(tile);
+            }
+        }
+    }
+
+    public void getEnemyData(BufferedImage levelImg, Composite<Node> level) { // Green
+        for (int i = 0; i < levelImg.getWidth()/2; i++) {
+            for (int j = 0; j < levelImg.getHeight(); j++) {
+                Color color = new Color(levelImg.getRGB(i, j));
+                int value = color.getGreen();
+                if (value >= LvlEnemyType.MAX.ordinal()) continue;
+                Tile tile = new Tile("", level, TileType.ENEMY, i, j, 254, value, 254);
                 tile.setLayer(5);
                 level.addChild(tile);
             }

@@ -1,6 +1,7 @@
 package editor.core;
 
 import editor.model.loader.LvlDecoType;
+import editor.model.loader.LvlEnemyType;
 import editor.model.loader.LvlObjType;
 import editor.model.repository.components.Tile;
 import editor.model.repository.components.TileType;
@@ -19,15 +20,18 @@ public final class Storage {
     private BufferedImage[] forestTilesImg;
     private BufferedImage[] forestDecoTilesImg;
     private BufferedImage[] objectsTilesImg;
+    private BufferedImage[] enemiesTilesImg;
 
     private final List<Tile> forestSolidTiles;
     private final List<Tile> forestDecoTiles;
     private final List<Tile> objectTiles;
+    private final List<Tile> enemyTiles;
 
     public Storage() {
         this.forestSolidTiles = new ArrayList<>();
         this.forestDecoTiles = new ArrayList<>();
         this.objectTiles = new ArrayList<>();
+        this.enemyTiles = new ArrayList<>();
         init();
     }
 
@@ -35,6 +39,7 @@ public final class Storage {
         loadForestTiles();
         loadForestDecoTiles();
         loadObjects();
+        loadEnemies();
     }
 
     private void loadForestTiles() {
@@ -76,6 +81,16 @@ public final class Storage {
         }
     }
 
+    private void loadEnemies() {
+        this.enemiesTilesImg = new BufferedImage[LvlEnemyType.values().length];
+        for (int i = 0; i < 3; i++) {
+            LvlEnemyType enemyType = LvlEnemyType.values()[i];
+            enemiesTilesImg[i] = Utils.getInstance().importImage("/images/data/levelEnemies/"+enemyType.getId()+".png", -1, -1);
+            Tile t = new Tile("", null, TileType.ENEMY, 0, 0, 254, i, 254);
+            enemyTiles.add(t);
+        }
+    }
+
     // Getters
     public BufferedImage[] getForestTilesImg() {
         return forestTilesImg;
@@ -87,6 +102,10 @@ public final class Storage {
 
     public BufferedImage[] getObjectsTilesImg() {
         return objectsTilesImg;
+    }
+
+    public BufferedImage[] getEnemiesTilesImg() {
+        return enemiesTilesImg;
     }
 
     public List<Tile> getForestSolidTiles() {
@@ -101,4 +120,7 @@ public final class Storage {
         return objectTiles;
     }
 
+    public List<Tile> getEnemyTiles() {
+        return enemyTiles;
+    }
 }

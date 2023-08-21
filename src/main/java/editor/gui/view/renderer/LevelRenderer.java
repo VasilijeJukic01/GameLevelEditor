@@ -2,6 +2,7 @@ package editor.gui.view.renderer;
 
 import editor.core.Framework;
 import editor.gui.view.renderer.renderers.DecoRenderer;
+import editor.gui.view.renderer.renderers.EnemyRenderer;
 import editor.gui.view.renderer.renderers.ObjectRenderer;
 import editor.gui.view.renderer.renderers.TerrainRenderer;
 import editor.gui.view.tab.TabView;
@@ -19,13 +20,14 @@ public class LevelRenderer implements Renderer {
     private final Level level;
     private final TabView tabView;
 
-    private final RenderStrategy<Tile> terrainRenderer, objectRenderer, decoRenderer;
+    private final RenderStrategy<Tile> terrainRenderer, objectRenderer, enemyRenderer, decoRenderer;
 
     public LevelRenderer(TabView tabView) {
         this.tabView = tabView;
         this.level = tabView.getLevel();
         this.terrainRenderer = new TerrainRenderer(Framework.getInstance().getStorage().getForestTilesImg());
         this.objectRenderer = new ObjectRenderer(Framework.getInstance().getStorage().getObjectsTilesImg());
+        this.enemyRenderer = new EnemyRenderer(Framework.getInstance().getStorage().getEnemiesTilesImg());
         this.decoRenderer = new DecoRenderer(Framework.getInstance().getStorage().getForestDecoTilesImg());
     }
 
@@ -51,6 +53,7 @@ public class LevelRenderer implements Renderer {
             terrainRenderer.render(g, tile, layer);
             objectRenderer.render(g, tile, layer);
             decoRenderer.render(g, tile, layer);
+            enemyRenderer.render(g, tile, layer);
         }
     }
 

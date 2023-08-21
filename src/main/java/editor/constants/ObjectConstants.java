@@ -5,7 +5,6 @@ import static editor.constants.Constants.TILE_SIZE;
 
 public class ObjectConstants {
 
-
     public static final int TILE_SIZE_1HALF = (int) (TILE_SIZE * 1.5);
     public static final int TILE_SIZE_2 = TILE_SIZE * 2;
     public static final int TILE_SIZE_3 = TILE_SIZE * 3;
