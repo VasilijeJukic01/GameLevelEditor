@@ -8,6 +8,7 @@ import editor.gui.view.tab.TabView;
 import editor.model.repository.Node;
 import editor.model.repository.components.Tile;
 import editor.model.repository.components.Level;
+import editor.settings.SettingsKey;
 
 import java.awt.*;
 
@@ -31,8 +32,8 @@ public class LevelRenderer implements Renderer {
     @Override
     public void render(Graphics g) {
         if (level.getChildren() == null) return;
-        String layersFlags = (String) tabView.getSettings().getParameter("Layers");
-        int fade = (int) tabView.getSettings().getParameter("Fade");
+        String layersFlags = (String) tabView.getSettings().getParameter(SettingsKey.LAYERS_INFO);
+        int fade = (int) tabView.getSettings().getParameter(SettingsKey.FADE);
 
         for (int layer = 0; layer < layersFlags.length() - 1; layer++) {
             if (layersFlags.charAt(layersFlags.length()-1) == '1' || layersFlags.charAt(layer) == '1') {
@@ -59,15 +60,15 @@ public class LevelRenderer implements Renderer {
     }
 
     private void renderSelection(Graphics g) {
-        if (tabView.getSettings().getParameter("Selection") != null) {
-            Tile selection = (Tile) tabView.getSettings().getParameter("Selection");
+        if (tabView.getSettings().getParameter(SettingsKey.EDIT_SELECTION) != null) {
+            Tile selection = (Tile) tabView.getSettings().getParameter(SettingsKey.EDIT_SELECTION);
             g.setColor(SELECTION_COLOR);
             g.fillRect(selection.getX() * TILE_SIZE, selection.getY() * TILE_SIZE, TILE_SIZE, TILE_SIZE);
         }
     }
 
     private void renderGrid(Graphics g) {
-        boolean isGrid = (boolean) tabView.getSettings().getParameter("Grid");
+        boolean isGrid = (boolean) tabView.getSettings().getParameter(SettingsKey.GRID);
         if (!isGrid) return;
         g.setColor(Color.BLUE);
 

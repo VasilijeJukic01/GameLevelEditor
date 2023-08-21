@@ -3,6 +3,7 @@ package editor.gui.controller.levelActions;
 import editor.gui.controller.AbstractEditorAction;
 import editor.gui.view.EditorFrame;
 import editor.gui.view.tab.TabView;
+import editor.settings.SettingsKey;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -20,8 +21,8 @@ public class ShowGridAction extends AbstractEditorAction {
     @Override
     public void actionPerformed(ActionEvent e) {
         TabView currentTab = EditorFrame.getInstance().getCurrentTab();
-        boolean isGrid = (boolean) currentTab.getSettings().getParameter("Grid");
-        currentTab.getSettings().updateParameter("Grid", !isGrid);
+        boolean isGrid = (boolean) currentTab.getSettings().getParameter(SettingsKey.GRID);
+        currentTab.getSettings().updateParameter(SettingsKey.GRID, !isGrid);
     }
 
 }

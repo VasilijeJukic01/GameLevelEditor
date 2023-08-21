@@ -13,23 +13,23 @@ public class EditorSettings implements Settings {
         this.tabView = tabView;
     }
 
-    private final Map<String, Object> parameters = new HashMap<>();
+    private final Map<SettingsKey, Object> parameters = new HashMap<>();
 
     @Override
-    public Object getParameter(String parameter) {
-        return this.parameters.get(parameter);
+    public Object getParameter(SettingsKey key) {
+        return this.parameters.get(key);
     }
 
     @Override
-    public void addParameter(String parameter, Object value) {
-        this.parameters.put(parameter, value);
+    public void addParameter(SettingsKey key, Object value) {
+        this.parameters.put(key, value);
     }
 
     @Override
-    public void updateParameter(String parameter, Object newValue) {
-        if (parameters.containsKey(parameter)) parameters.put(parameter, newValue);
+    public void updateParameter(SettingsKey key, Object newValue) {
+        if (parameters.containsKey(key)) parameters.put(key, newValue);
         else {
-            throw new IllegalArgumentException("Parameter '" + parameter + "' does not exist.");
+            throw new IllegalArgumentException("Parameter '" + key + "' does not exist.");
         }
         tabView.getLevel().notify(this);
     }

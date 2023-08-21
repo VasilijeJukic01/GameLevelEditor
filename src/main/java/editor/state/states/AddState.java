@@ -8,6 +8,7 @@ import editor.model.repository.Node;
 import editor.model.repository.components.Level;
 import editor.model.repository.components.Tile;
 import editor.model.repository.components.TileType;
+import editor.settings.SettingsKey;
 import editor.state.State;
 
 import java.util.List;
@@ -18,9 +19,9 @@ public class AddState implements State<TabView> {
 
     @Override
     public void clickPerform(int x, int y, TabView tabView) {
-        String set = (String) tabView.getSettings().getParameter("Selected Set");
-        int index = (int) tabView.getSettings().getParameter("Selected Tile");
-        int layer = (int) tabView.getSettings().getParameter("Selected Layer");
+        String set = (String) tabView.getSettings().getParameter(SettingsKey.SELECTED_SET);
+        int index = (int) tabView.getSettings().getParameter(SettingsKey.SELECTED_TILE);
+        int layer = (int) tabView.getSettings().getParameter(SettingsKey.SELECTED_LAYER);
 
         List<Tile> tiles = getTileSet(set);
         Tile newTile;

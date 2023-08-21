@@ -9,6 +9,7 @@ import editor.model.repository.components.Level;
 import editor.model.repository.nodeObserver.NodeSubscriber;
 import editor.settings.EditorSettings;
 import editor.settings.Settings;
+import editor.settings.SettingsKey;
 
 import javax.swing.*;
 import java.awt.*;
@@ -49,13 +50,13 @@ public class TabView extends JPanel implements AdjustmentListener, NodeSubscribe
 
     // Init
     private void initSettings() {
-        this.settings.addParameter("Grid", true);
-        this.settings.addParameter("Layers", "0000001");
-        this.settings.addParameter("Fade", 0);
-        this.settings.addParameter("Selected Set", "Solid Tiles");
-        this.settings.addParameter("Selected Tile", 0);
-        this.settings.addParameter("Selected Layer", 3);
-        this.settings.addParameter("Selection", null);
+        this.settings.addParameter(SettingsKey.GRID, true);
+        this.settings.addParameter(SettingsKey.LAYERS_INFO, "0000001");
+        this.settings.addParameter(SettingsKey.FADE, 0);
+        this.settings.addParameter(SettingsKey.SELECTED_SET, "Solid Tiles");
+        this.settings.addParameter(SettingsKey.SELECTED_TILE, 0);
+        this.settings.addParameter(SettingsKey.SELECTED_LAYER, 3);
+        this.settings.addParameter(SettingsKey.EDIT_SELECTION, null);
     }
 
     private void initBars() {

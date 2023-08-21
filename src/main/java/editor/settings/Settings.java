@@ -2,10 +2,10 @@ package editor.settings;
 
 public interface Settings {
 
-    Object getParameter(String parameter);
+    Object getParameter(SettingsKey key);
 
-    void addParameter(String parameter, Object value);
+    void addParameter(SettingsKey key, Object value);
 
-    void updateParameter(String parameter, Object newValue);
+    void updateParameter(SettingsKey key, Object newValue);
 
 }

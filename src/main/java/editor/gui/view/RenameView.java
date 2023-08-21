@@ -1,5 +1,6 @@
 package editor.gui.view;
 
+import editor.model.tree.EditorTree;
 import editor.model.tree.Tree;
 import editor.model.tree.mvc.TreeItem;
 import editor.model.tree.mvc.TreeView;
@@ -63,6 +64,7 @@ public class RenameView extends JDialog {
             Tree<TreeItem, TreeView> editorTree = editorFrame.getEditorTree();
             TreeItem selectedNode = editorTree.getSelectedNode();
             selectedNode.getNode().setName(newName);
+            ((EditorTree)editorTree).refreshView();
             dispose();
         }
     }

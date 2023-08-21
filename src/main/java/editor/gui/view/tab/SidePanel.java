@@ -1,6 +1,7 @@
 package editor.gui.view.tab;
 
 import editor.settings.Settings;
+import editor.settings.SettingsKey;
 
 import javax.swing.*;
 import java.awt.*;
@@ -60,10 +61,10 @@ public class SidePanel extends JPanel {
                 layerCheckBoxes[i].setSelected(false);
             }
             layerCheckBoxes[layerCheckBoxes.length - 1].setSelected(true);
-            tabView.getSettings().updateParameter("Layers", "0000001");
+            tabView.getSettings().updateParameter(SettingsKey.LAYERS_INFO, "0000001");
         }
         else {
-            tabView.getSettings().updateParameter("Layers", "0000000");
+            tabView.getSettings().updateParameter(SettingsKey.LAYERS_INFO, "0000000");
         }
     }
 
@@ -75,13 +76,13 @@ public class SidePanel extends JPanel {
             else binaryString.append("0");
         }
         binaryString.append("0");
-        tabView.getSettings().updateParameter("Layers", binaryString.toString());
+        tabView.getSettings().updateParameter(SettingsKey.LAYERS_INFO, binaryString.toString());
     }
 
     private void changeFade(ItemEvent e) {
         Settings settings = tabView.getSettings();
-        int fade = (int) settings.getParameter("Fade");
-        settings.updateParameter("Fade", fade ^ 1);
+        int fade = (int) settings.getParameter(SettingsKey.FADE);
+        settings.updateParameter(SettingsKey.FADE, fade ^ 1);
     }
 
 }

@@ -27,10 +27,15 @@ public class TabbedPane extends JTabbedPane implements TreeSubscriber, NodeSubsc
         addTab(title, null, component);
         int count = this.getTabCount() - 1;
         setTabComponentAt(count, new TabCloseButton(component, title));
+        initSubscribers();
     }
 
     public void setProject(Project project) {
         this.project = project;
+        initSubscribers();
+    }
+
+    private void initSubscribers() {
         List<Node> levels = project.getChildren();
         levels.forEach(level -> ((Level) level).addSubscriber(this));
         EditorFrame.getInstance().getEditorTree().addSubscriberTree(this);

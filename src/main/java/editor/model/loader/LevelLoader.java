@@ -31,10 +31,12 @@ public class LevelLoader implements Loader {
             Level level = EditorFrame.getInstance().getCurrentTab().getLevel();
             level.setSize(levelImg.getWidth()/2, levelImg.getHeight());
             level.setName(name);
+
             getLevelData(levelImg, level);
             getObjectData(levelImg, level);
             getDecoData(levelImg, level);
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             e.printStackTrace();
         }
     }

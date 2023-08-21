@@ -3,6 +3,7 @@ package editor.gui.controller;
 import editor.gui.view.EditorFrame;
 import editor.gui.view.style.CustomButton;
 import editor.gui.view.tab.TabView;
+import editor.settings.SettingsKey;
 
 import javax.swing.*;
 import java.net.URL;
@@ -27,7 +28,7 @@ public abstract class AbstractEditorAction extends AbstractAction {
 
     protected void reset() {
         TabView tab = EditorFrame.getInstance().getCurrentTab();
-        tab.getSettings().updateParameter("Selection", null);
+        tab.getSettings().updateParameter(SettingsKey.EDIT_SELECTION, null);
     }
 
 }

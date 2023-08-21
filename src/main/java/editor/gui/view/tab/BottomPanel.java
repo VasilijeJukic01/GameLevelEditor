@@ -1,6 +1,7 @@
 package editor.gui.view.tab;
 
 import editor.core.Framework;
+import editor.settings.SettingsKey;
 
 import javax.swing.*;
 import java.awt.*;
@@ -98,7 +99,7 @@ public class BottomPanel extends JPanel {
     }
 
     private void saveLayer(Integer selectedItem) {
-        tabView.getSettings().updateParameter("Selected Layer", selectedItem);
+        tabView.getSettings().updateParameter(SettingsKey.SELECTED_LAYER, selectedItem);
     }
 
     private void updateImagePanel(String selectedItem) {
@@ -133,9 +134,9 @@ public class BottomPanel extends JPanel {
     }
 
     private void updateSettings(String selectedSet, Integer[] layerOptions) {
-        tabView.getSettings().updateParameter("Selected Set", selectedSet);
+        tabView.getSettings().updateParameter(SettingsKey.SELECTED_SET, selectedSet);
         cbLayers.setModel(new DefaultComboBoxModel<>(layerOptions));
-        tabView.getSettings().updateParameter("Selected Layer", layerOptions[0]);
+        tabView.getSettings().updateParameter(SettingsKey.SELECTED_LAYER, layerOptions[0]);
     }
 
     private void displaySelectedImages(BufferedImage[] selectedImages) {
@@ -175,7 +176,7 @@ public class BottomPanel extends JPanel {
                 public void mouseClicked(MouseEvent e) {
                     lastSelectedIndex = selectedIndex;
                     selectedIndex = ImagePanel.this.index;
-                    tabView.getSettings().updateParameter("Selected Tile", selectedIndex);
+                    tabView.getSettings().updateParameter(SettingsKey.SELECTED_TILE, selectedIndex);
                     repaint();
 
                     if (lastSelectedIndex != -1) {

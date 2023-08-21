@@ -63,7 +63,7 @@ public class EditorTree implements Tree<TreeItem, TreeView> {
         notifyRemove(child.getNode());
     }
 
-    private void refreshView() {
+    public void refreshView() {
         treeView.expandPath(treeView.getSelectionPath());
         SwingUtilities.updateComponentTreeUI(treeView);
     }
