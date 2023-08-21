@@ -13,7 +13,7 @@ public enum LvlObjType {
     ARROW_TRAP_LEFT("ArrowTrap",        TILE_SIZE, TILE_SIZE, 0, 8),
     ARROW_TRAP_RIGHT("~ArrowTrap",      TILE_SIZE, TILE_SIZE, 0, 8),
     COIN("Coin",                   TILE_SIZE/2, TILE_SIZE/2, 15, 20),
-    SHOP("Shop",                        TILE_SIZE_4, TILE_SIZE_3, 0, 8),
+    SHOP("Shop",                        TILE_SIZE_4, TILE_SIZE_4, 0, 8),
     BLOCKER("Blocker",                  TILE_SIZE, TILE_SIZE_3+16, 0, -8),
     BLACKSMITH("Blacksmith",            TILE_SIZE, TILE_SIZE+TILE_SIZE/2, 0, 40),
     DOG("Dog",                          TILE_SIZE, TILE_SIZE, 0, 8),

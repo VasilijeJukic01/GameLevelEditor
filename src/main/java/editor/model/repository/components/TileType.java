@@ -4,5 +4,6 @@ public enum TileType {
     SOLID,
     DECO,
     OBJECT,
-    ENEMY
+    ENEMY,
+    PLAYER
 }

@@ -38,6 +38,7 @@ public class LevelLoader implements Loader {
             getObjectData(levelImg, level);
             getEnemyData(levelImg, level);
             getDecoData(levelImg, level);
+            getPlayer(levelImg, level);
         }
         catch (IOException e) {
             e.printStackTrace();
@@ -99,6 +100,23 @@ public class LevelLoader implements Loader {
                 Tile tile = new Tile("", level, TileType.DECO, i - levelImg.getWidth()/2, j, 254, layerValue, decoValue);
                 tile.setLayer(layerValue);
                 level.addChild(tile);
+            }
+        }
+    }
+
+    private void getPlayer(BufferedImage levelImg, Composite<Node> level) {
+        for (int i = 0; i < levelImg.getWidth()/2; i++) {
+            for (int j = 0; j < levelImg.getHeight(); j++) {
+                Color color = new Color(levelImg.getRGB(i, j));
+                int R = color.getRed();
+                int G = color.getGreen();
+                int B = color.getBlue();
+                if (R == 100 && G == 100 && B == 100) {
+                    Tile tile = new Tile("", level, TileType.PLAYER, i, j, 100, 100, 100);
+                    tile.setLayer(5);
+                    level.addChild(tile);
+                    return;
+                }
             }
         }
     }

@@ -21,6 +21,8 @@ public class BottomPanel extends JPanel {
     private final BufferedImage[] objects;
     private final BufferedImage[] enemies;
 
+    private final BufferedImage[] player;
+
     private JPanel panel;
     private int selectedIndex = -1;
     private int lastSelectedIndex = -1;
@@ -33,6 +35,7 @@ public class BottomPanel extends JPanel {
         this.decorations = Framework.getInstance().getStorage().getForestDecoTilesImg();
         this.objects = Framework.getInstance().getStorage().getObjectsTilesImg();
         this.enemies = Framework.getInstance().getStorage().getEnemiesTilesImg();
+        this.player = new BufferedImage[]{Framework.getInstance().getStorage().getPlayerImg()};
         init();
     }
 
@@ -76,7 +79,7 @@ public class BottomPanel extends JPanel {
     private void initTopPanel() {
         JPanel topPanel = new JPanel();
         JLabel lbSelect = new JLabel("Select:");
-        String[] cbTypeNames = {"Solid Tiles", "Decorations", "Objects", "Enemies", "Player Spawn"};
+        String[] cbTypeNames = {"Solid Tiles", "Decorations", "Objects", "Enemies", "Player"};
         JComboBox<String> cbTypes = new JComboBox<>(cbTypeNames);
         cbTypes.addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
@@ -130,6 +133,11 @@ public class BottomPanel extends JPanel {
             selectedSet = "Enemies";
             layerOptions = new Integer[]{5};
             selectedImages = enemies;
+        }
+        else if (selectedItem.equals("Player")) {
+            selectedSet = "Player";
+            layerOptions = new Integer[]{5};
+            selectedImages = player;
         }
 
         if (selectedImages != null) {

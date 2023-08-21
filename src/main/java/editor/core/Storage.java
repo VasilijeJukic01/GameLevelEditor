@@ -27,6 +27,9 @@ public final class Storage {
     private final List<Tile> objectTiles;
     private final List<Tile> enemyTiles;
 
+    private BufferedImage playerImg;
+    private Tile playerTile;
+
     public Storage() {
         this.forestSolidTiles = new ArrayList<>();
         this.forestDecoTiles = new ArrayList<>();
@@ -40,6 +43,7 @@ public final class Storage {
         loadForestDecoTiles();
         loadObjects();
         loadEnemies();
+        loadPlayer();
     }
 
     private void loadForestTiles() {
@@ -91,6 +95,11 @@ public final class Storage {
         }
     }
 
+    private void loadPlayer() {
+        this.playerImg = Utils.getInstance().importImage("/images/data/Player.png", -1, -1);
+        this.playerTile = new Tile("", null, TileType.PLAYER, 0, 0, 100, 100, 100);
+    }
+
     // Getters
     public BufferedImage[] getForestTilesImg() {
         return forestTilesImg;
@@ -108,6 +117,10 @@ public final class Storage {
         return enemiesTilesImg;
     }
 
+    public BufferedImage getPlayerImg() {
+        return playerImg;
+    }
+
     public List<Tile> getForestSolidTiles() {
         return forestSolidTiles;
     }
@@ -122,5 +135,9 @@ public final class Storage {
 
     public List<Tile> getEnemyTiles() {
         return enemyTiles;
+    }
+
+    public Tile getPlayerTile() {
+        return playerTile;
     }
 }

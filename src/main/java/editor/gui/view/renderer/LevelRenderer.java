@@ -9,11 +9,14 @@ import editor.gui.view.tab.TabView;
 import editor.model.repository.Node;
 import editor.model.repository.components.Tile;
 import editor.model.repository.components.Level;
+import editor.model.repository.components.TileType;
 import editor.settings.SettingsKey;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 
 import static editor.constants.Constants.*;
+import static editor.constants.ObjectConstants.*;
 
 public class LevelRenderer implements Renderer {
 
@@ -54,7 +57,15 @@ public class LevelRenderer implements Renderer {
             objectRenderer.render(g, tile, layer);
             decoRenderer.render(g, tile, layer);
             enemyRenderer.render(g, tile, layer);
+            if (tile.getTileType() == TileType.PLAYER) renderPlayer(g, tile);
         }
+    }
+
+    private void renderPlayer(Graphics g, Tile t) {
+        BufferedImage playerImg = Framework.getInstance().getStorage().getPlayerImg();
+        int x = t.getX() * TILE_SIZE + PLAYER_OFFSET_X;
+        int y = t.getY() * TILE_SIZE + PLAYER_OFFSET_Y;
+        g.drawImage(playerImg, x, y, PLAYER_WID, PLAYER_HEI, null);
     }
 
     private void renderFade(Graphics g) {

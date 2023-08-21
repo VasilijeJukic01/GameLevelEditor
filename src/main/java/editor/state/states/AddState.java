@@ -34,6 +34,7 @@ public class AddState implements State<TabView> {
         if (set.equals("Solid Tiles")) newTile = getSolidTile(tabView, tiles, index, layer, tileX, tileY);
         else if (set.equals("Objects")) newTile = getObjectTile(tabView, tiles, index, tileX, tileY);
         else if (set.equals("Enemies")) newTile = getEnemyTile(tabView, tiles, index, tileX, tileY);
+        else if (set.equals("Player")) newTile = getPlayerTile(tabView, tiles, tileX, tileY);
         else newTile = getDecoTile(tabView, tiles, index, layer, tileX, tileY);
 
         if (newTile != null) addTile(newTile, layer, tabView);
@@ -48,6 +49,8 @@ public class AddState implements State<TabView> {
             return Framework.getInstance().getStorage().getObjectTiles();
         else if ("Enemies".equals(name))
             return Framework.getInstance().getStorage().getEnemyTiles();
+        else if ("Player".equals(name))
+            return List.of(Framework.getInstance().getStorage().getPlayerTile());
        return null;
     }
 
@@ -62,7 +65,7 @@ public class AddState implements State<TabView> {
     private Tile getSolidTile(TabView tabView, List<Tile> tiles, int index, int layer, int tileX, int tileY) {
         for (Tile tile : tiles) {
             if (tile.getRed() == index) {
-                if (!isFree(tileX, tileY, tabView.getLevel(), List.of(TileType.SOLID, TileType.OBJECT, TileType.ENEMY))) return null;
+                if (!isFree(tileX, tileY, tabView.getLevel(), List.of(TileType.SOLID, TileType.OBJECT, TileType.ENEMY, TileType.PLAYER))) return null;
                 int green = (layer == 5) ? 255 : 254;
                 int blue = (layer == 5) ? 255 : 254;
                 return new Tile("", tabView.getLevel(), TileType.SOLID, tileX, tileY, index, green, blue);
@@ -74,7 +77,7 @@ public class AddState implements State<TabView> {
     private Tile getObjectTile(TabView tabView, List<Tile> tiles, int index, int tileX, int tileY) {
         for (Tile tile : tiles) {
             if (tile.getBlue() == index) {
-                if (!isFree(tileX, tileY, tabView.getLevel(), List.of(TileType.SOLID, TileType.OBJECT, TileType.ENEMY))) return null;
+                if (!isFree(tileX, tileY, tabView.getLevel(), List.of(TileType.SOLID, TileType.OBJECT, TileType.ENEMY, TileType.PLAYER))) return null;
                 return new Tile("", tabView.getLevel(), TileType.OBJECT, tileX, tileY, 254, 254, index);
             }
         }
@@ -84,7 +87,7 @@ public class AddState implements State<TabView> {
     private Tile getEnemyTile(TabView tabView, List<Tile> tiles, int index, int tileX, int tileY) {
         for (Tile tile : tiles) {
             if (tile.getGreen() == index) {
-                if (!isFree(tileX, tileY, tabView.getLevel(), List.of(TileType.SOLID, TileType.OBJECT, TileType.ENEMY))) return null;
+                if (!isFree(tileX, tileY, tabView.getLevel(), List.of(TileType.SOLID, TileType.OBJECT, TileType.ENEMY, TileType.PLAYER))) return null;
                 return new Tile("", tabView.getLevel(), TileType.ENEMY, tileX, tileY, 254, index, 254);
             }
         }
@@ -96,6 +99,16 @@ public class AddState implements State<TabView> {
             if (tile.getBlue() == index) {
                 if (!isFree(tileX, tileY, tabView.getLevel(), List.of(TileType.DECO))) return null;
                 return new Tile("", tabView.getLevel(), TileType.DECO, tileX, tileY, 254, layer, index);
+            }
+        }
+        return null;
+    }
+
+    private Tile getPlayerTile(TabView tabView, List<Tile> tiles, int tileX, int tileY) {
+        for (Tile tile : tiles) {
+            if (tile.getTileType() == TileType.PLAYER) {
+                if (!isFree(tileX, tileY, tabView.getLevel(), List.of(TileType.SOLID, TileType.OBJECT, TileType.ENEMY, TileType.PLAYER))) return null;
+                return new Tile("", tabView.getLevel(), TileType.PLAYER, tileX, tileY, 100, 100, 100);
             }
         }
         return null;

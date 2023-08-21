@@ -16,4 +16,9 @@ public class ObjectConstants {
 
     public static final int BIG_TILE_SIZE = 80;
 
+    public static final int PLAYER_WID = 56;
+    public static final int PLAYER_HEI = 80;
+    public static final int PLAYER_OFFSET_X = 10;
+    public static final int PLAYER_OFFSET_Y = 57;
+
 }
