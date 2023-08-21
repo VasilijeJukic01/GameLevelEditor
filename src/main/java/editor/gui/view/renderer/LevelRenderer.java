@@ -1,16 +1,15 @@
 package editor.gui.view.renderer;
 
 import editor.core.Framework;
+import editor.gui.view.renderer.renderers.DecoRenderer;
+import editor.gui.view.renderer.renderers.ObjectRenderer;
+import editor.gui.view.renderer.renderers.TerrainRenderer;
 import editor.gui.view.tab.TabView;
-import editor.model.loader.LevelDeco;
-import editor.model.loader.LvlObjType;
 import editor.model.repository.Node;
 import editor.model.repository.components.Tile;
 import editor.model.repository.components.Level;
-import editor.model.repository.components.TileType;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
 
 import static editor.constants.Constants.*;
 
@@ -19,87 +18,52 @@ public class LevelRenderer implements Renderer {
     private final Level level;
     private final TabView tabView;
 
+    private final RenderStrategy<Tile> terrainRenderer, objectRenderer, decoRenderer;
+
     public LevelRenderer(TabView tabView) {
         this.tabView = tabView;
         this.level = tabView.getLevel();
+        this.terrainRenderer = new TerrainRenderer(Framework.getInstance().getStorage().getForestTilesImg());
+        this.objectRenderer = new ObjectRenderer(Framework.getInstance().getStorage().getObjectsTilesImg());
+        this.decoRenderer = new DecoRenderer(Framework.getInstance().getStorage().getForestDecoTilesImg());
     }
 
     @Override
     public void render(Graphics g) {
         if (level.getChildren() == null) return;
-        String layers = (String) tabView.getSettings().getParameter("Layers");
+        String layersFlags = (String) tabView.getSettings().getParameter("Layers");
         int fade = (int) tabView.getSettings().getParameter("Fade");
 
-        for (int i = 0; i < layers.length() - 1; i++) {
-            if (layers.charAt(layers.length()-1) == '1' || layers.charAt(i) == '1') {
-                if (i == 2 && fade == 1) {
-                    renderFade(g);
-                }
-                renderDeco(g, i);
-                renderTerrain(g, i);
+        for (int layer = 0; layer < layersFlags.length() - 1; layer++) {
+            if (layersFlags.charAt(layersFlags.length()-1) == '1' || layersFlags.charAt(layer) == '1') {
+                if (layer == 2 && fade == 1) renderFade(g);
+                renderLayer(g, layer);
             }
         }
-        renderObjects(g);
-        if (tabView.getSettings().getParameter("Selection") != null) {
-            Tile selection = (Tile) tabView.getSettings().getParameter("Selection");
-            g.setColor(SELECTION_COLOR);
-            g.fillRect(selection.getX() * TILE_SIZE, selection.getY() * TILE_SIZE, TILE_SIZE, TILE_SIZE);
-        }
+        renderSelection(g);
         renderGrid(g);
     }
 
-    private void renderTerrain(Graphics g, int layer) {
-        BufferedImage[] forestTiles = Framework.getInstance().getStorage().getForestTilesImg();
+    private void renderLayer(Graphics g, int layer) {
         for (Node child : level.getChildren()) {
-            Tile c = (Tile) child;
-            int value = c.getRed();
-            int layerIndex = c.getLayer();
-            if (value == -1) continue;
-            if (c.getTileType() == TileType.SOLID) {
-                if (layerIndex == layer)
-                    g.drawImage(forestTiles[value], c.getX() * TILE_SIZE, c.getY() * TILE_SIZE, TILE_SIZE, TILE_SIZE, null);
-            }
-        }
-    }
-
-    private void renderObjects(Graphics g) {
-        BufferedImage[] objectTiles = Framework.getInstance().getStorage().getObjectsTilesImg();
-        for (Node child : level.getChildren()) {
-            Tile c = (Tile) child;
-            int value = c.getBlue();
-            if (value == -1) continue;
-            if (c.getTileType() == TileType.OBJECT) {
-                LvlObjType obj = LvlObjType.values()[value];
-                int x = c.getX() * TILE_SIZE + obj.getXOffset();
-                int y = c.getY() * TILE_SIZE + obj.getYOffset();
-                g.drawImage(objectTiles[value], x, y, obj.getWid(), obj.getHei(), null);
-            }
-        }
-    }
-
-    private void renderDeco(Graphics g, int layer) {
-        LevelDeco[] decorations = Framework.getInstance().getStorage().getForestObjects();
-        BufferedImage[] models = Framework.getInstance().getStorage().getForestDecoTilesImg();
-        for (Node child : level.getChildren()) {
-            Tile c = (Tile) child;
-            int value = c.getBlue();
-            int layerIndex = c.getLayer();
-            if (value == -1) continue;
-            if (c.getTileType() == TileType.DECO) {
-                LevelDeco deco = decorations[value];
-                if (layerIndex == layer) {
-                    int x = c.getX() * TILE_SIZE + deco.getXOffset();
-                    int y = c.getY() * TILE_SIZE + deco.getYOffset();
-                    g.drawImage(models[deco.getType().ordinal()], x, y, deco.getW(), deco.getH(), null);
-                }
-            }
-
+            Tile tile = (Tile) child;
+            terrainRenderer.render(g, tile, layer);
+            objectRenderer.render(g, tile, layer);
+            decoRenderer.render(g, tile, layer);
         }
     }
 
     private void renderFade(Graphics g) {
         g.setColor(DEFAULT_FADE_COLOR);
-        g.fillRect(0, 0, level.getWidth()*TILE_SIZE, level.getHeight()*TILE_SIZE);
+        g.fillRect(0, 0, level.getWidth() * TILE_SIZE, level.getHeight() * TILE_SIZE);
+    }
+
+    private void renderSelection(Graphics g) {
+        if (tabView.getSettings().getParameter("Selection") != null) {
+            Tile selection = (Tile) tabView.getSettings().getParameter("Selection");
+            g.setColor(SELECTION_COLOR);
+            g.fillRect(selection.getX() * TILE_SIZE, selection.getY() * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+        }
     }
 
     private void renderGrid(Graphics g) {
