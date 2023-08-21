@@ -36,7 +36,9 @@ public class AddState implements State<TabView> {
             for (Tile tile : tiles) {
                 if (tile.getRed() == index) {
                     if (!isFree(tileX, tileY, tabView.getLevel(), TileType.SOLID)) return;
-                    Tile newTile = new Tile("", tabView.getLevel(), TileType.SOLID, tileX, tileY, index, 254, 254);
+                    int green = (layer == 5) ? 255 : 254;
+                    int blue = (layer == 5) ? 255 : 254;
+                    Tile newTile = new Tile("", tabView.getLevel(), TileType.SOLID, tileX, tileY, index, green, blue);
                     addTile(newTile, layer, tabView);
                 }
             }

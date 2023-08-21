@@ -45,7 +45,11 @@ public class LevelLoader implements Loader {
                 int value = color.getRed();
                 if (value >= 49) continue;
                 Tile tile = new Tile("", level, TileType.SOLID, i, j, value, 254, 254);
-                if (color.getBlue() == 255 && color.getGreen() == 255) tile.setLayer(5);
+                if (color.getBlue() == 255 && color.getGreen() == 255) {
+                    tile.setLayer(5);
+                    tile.setGreen(255);
+                    tile.setBlue(255);
+                }
                 else tile.setLayer(3);
                 level.addChild(tile);
             }

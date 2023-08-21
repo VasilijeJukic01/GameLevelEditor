@@ -25,6 +25,7 @@ public class ActionManager {
 
     private void initEditorActions() {
         actions.put(ActionType.IMPORT, new ImportLevelAction());
+        actions.put(ActionType.EXPORT, new ExportLevelAction());
         actions.put(ActionType.ADD_NODE, new AddNodeAction());
         actions.put(ActionType.DELETE_NODE, new DeleteNodeAction());
         actions.put(ActionType.EDIT_NODE, new EditNodeAction());

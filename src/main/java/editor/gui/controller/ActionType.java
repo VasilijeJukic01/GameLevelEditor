@@ -7,6 +7,7 @@ public enum ActionType {
     CLOSE_FILE,
     RENAME_FILE,
     IMPORT,
+    EXPORT,
     ADD_NODE,
     DELETE_NODE,
     EDIT_NODE,
