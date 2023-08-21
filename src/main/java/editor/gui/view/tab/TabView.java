@@ -59,6 +59,7 @@ public class TabView extends JPanel implements AdjustmentListener, NodeSubscribe
         this.settings.addParameter(SettingsKey.SELECTED_TILE, 0);
         this.settings.addParameter(SettingsKey.SELECTED_LAYER, 3);
         this.settings.addParameter(SettingsKey.EDIT_SELECTION, null);
+        this.settings.addParameter(SettingsKey.BACKGROUND, null);
     }
 
     private void initBars() {

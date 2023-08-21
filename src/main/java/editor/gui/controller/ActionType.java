@@ -18,5 +18,6 @@ public enum ActionType {
     UNDO,
     REDO,
     OPTIONS,
+    BACKGROUND,
     SCREENSHOT
 }

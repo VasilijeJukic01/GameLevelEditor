@@ -37,6 +37,7 @@ public class ActionManager {
         actions.put(ActionType.REDO, new RedoAction());
         actions.put(ActionType.SCREENSHOT, new ScreenshotAction());
         actions.put(ActionType.OPTIONS, new OptionsAction());
+        actions.put(ActionType.BACKGROUND, new BackgroundAction());
     }
 
     public AbstractEditorAction getAction(ActionType type) {

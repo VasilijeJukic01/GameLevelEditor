@@ -40,6 +40,7 @@ public class LevelRenderer implements Renderer {
         String layersFlags = (String) tabView.getSettings().getParameter(SettingsKey.LAYERS_INFO);
         int fade = (int) tabView.getSettings().getParameter(SettingsKey.FADE);
 
+        renderBackground(g);
         for (int layer = 0; layer < layersFlags.length() - 1; layer++) {
             if (layersFlags.charAt(layersFlags.length()-1) == '1' || layersFlags.charAt(layer) == '1') {
                 if (layer == 2 && fade == 1) renderFade(g);
@@ -48,6 +49,11 @@ public class LevelRenderer implements Renderer {
         }
         renderSelection(g);
         renderGrid(g);
+    }
+
+    private void renderBackground(Graphics g) {
+        BufferedImage background = (BufferedImage) tabView.getSettings().getParameter(SettingsKey.BACKGROUND);
+        if (background != null) g.drawImage(background, 0, 0, level.getWidth()*TILE_SIZE, level.getHeight()*TILE_SIZE, null);
     }
 
     private void renderLayer(Graphics g, int layer) {

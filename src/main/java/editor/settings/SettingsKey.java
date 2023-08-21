@@ -9,5 +9,6 @@ public enum SettingsKey {
     SELECTED_SET,
     SELECTED_LAYER,
     SELECTED_TILE,
-    EDIT_SELECTION
+    EDIT_SELECTION,
+    BACKGROUND
 }
