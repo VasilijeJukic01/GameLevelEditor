@@ -17,7 +17,8 @@ public class OptionsAction extends AbstractEditorAction {
     @Override
     public void actionPerformed(ActionEvent e) {
         TabView tab = EditorFrame.getInstance().getCurrentTab();
-        OptionsDialog dialog = new OptionsDialog(EditorFrame.getInstance(), true, tab.getLevel());
+        if (tab == null) return;
+        OptionsDialog dialog = new OptionsDialog(EditorFrame.getInstance(), true, tab);
         dialog.setVisible(true);
     }
 

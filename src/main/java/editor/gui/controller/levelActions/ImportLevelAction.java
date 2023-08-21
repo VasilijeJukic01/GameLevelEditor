@@ -11,8 +11,8 @@ import java.io.File;
 public class ImportLevelAction extends AbstractEditorAction {
 
     public ImportLevelAction() {
-        super.putValue(NAME, "Import");
-        super.putValue(SHORT_DESCRIPTION, "Import");
+        super.putValue(NAME, "Import PI");
+        super.putValue(SHORT_DESCRIPTION, "Import Pixel Image");
     }
 
     @Override

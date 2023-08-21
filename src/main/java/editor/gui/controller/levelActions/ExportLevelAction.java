@@ -25,6 +25,7 @@ public class ExportLevelAction extends AbstractEditorAction {
     @Override
     public void actionPerformed(ActionEvent e) {
         TabView tab = EditorFrame.getInstance().getCurrentTab();
+        if (tab == null) return;
         Level level = tab.getLevel();
         int levelWidth = level.getWidth();
         int levelHeight = level.getHeight();

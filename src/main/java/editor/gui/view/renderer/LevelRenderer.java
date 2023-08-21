@@ -69,7 +69,8 @@ public class LevelRenderer implements Renderer {
     }
 
     private void renderFade(Graphics g) {
-        g.setColor(DEFAULT_FADE_COLOR);
+        Color fadeColor = (Color) tabView.getSettings().getParameter(SettingsKey.FADE_COLOR);
+        g.setColor(fadeColor);
         g.fillRect(0, 0, level.getWidth() * TILE_SIZE, level.getHeight() * TILE_SIZE);
     }
 
@@ -84,7 +85,8 @@ public class LevelRenderer implements Renderer {
     private void renderGrid(Graphics g) {
         boolean isGrid = (boolean) tabView.getSettings().getParameter(SettingsKey.GRID);
         if (!isGrid) return;
-        g.setColor(Color.BLUE);
+        Color gridColor = (Color) tabView.getSettings().getParameter(SettingsKey.GRID_COLOR);
+        g.setColor(gridColor);
 
         for (int row = 0; row < level.getHeight(); row++) {
             for (int col = 0; col < level.getWidth(); col++) {

@@ -51,8 +51,10 @@ public class TabView extends JPanel implements AdjustmentListener, NodeSubscribe
     // Init
     private void initSettings() {
         this.settings.addParameter(SettingsKey.GRID, true);
+        this.settings.addParameter(SettingsKey.GRID_COLOR, Color.BLUE);
         this.settings.addParameter(SettingsKey.LAYERS_INFO, "0000001");
         this.settings.addParameter(SettingsKey.FADE, 0);
+        this.settings.addParameter(SettingsKey.FADE_COLOR, DEFAULT_FADE_COLOR);
         this.settings.addParameter(SettingsKey.SELECTED_SET, "Solid Tiles");
         this.settings.addParameter(SettingsKey.SELECTED_TILE, 0);
         this.settings.addParameter(SettingsKey.SELECTED_LAYER, 3);
