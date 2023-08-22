@@ -23,19 +23,25 @@ public class LevelRenderer implements Renderer {
     private final Level level;
     private final TabView tabView;
 
-    private final RenderStrategy<Tile> terrainRenderer, objectRenderer, enemyRenderer, decoRenderer;
+    private RenderStrategy<Tile> terrainRenderer, objectRenderer, enemyRenderer, decoRenderer;
 
     public LevelRenderer(TabView tabView) {
         this.tabView = tabView;
         this.level = tabView.getLevel();
-        this.terrainRenderer = new TerrainRenderer(Framework.getInstance().getStorage().getForestTilesImg());
-        this.objectRenderer = new ObjectRenderer(Framework.getInstance().getStorage().getObjectsTilesImg());
-        this.enemyRenderer = new EnemyRenderer(Framework.getInstance().getStorage().getEnemiesTilesImg());
-        this.decoRenderer = new DecoRenderer(Framework.getInstance().getStorage().getForestDecoTilesImg());
+        reloadTileset();
+    }
+
+    private void reloadTileset() {
+        String set = (String) tabView.getSettings().getParameter(SettingsKey.TILE_SET);
+        this.terrainRenderer = new TerrainRenderer(Framework.getInstance().getStorage().getImageMap().get(set+"Tiles"));
+        this.objectRenderer = new ObjectRenderer(Framework.getInstance().getStorage().getImageMap().get("Objects"));
+        this.enemyRenderer = new EnemyRenderer(Framework.getInstance().getStorage().getImageMap().get("Enemies"));
+        this.decoRenderer = new DecoRenderer(Framework.getInstance().getStorage().getImageMap().get(set+"Deco"));
     }
 
     @Override
     public void render(Graphics g) {
+        reloadTileset();
         if (level.getChildren() == null) return;
         String layersFlags = (String) tabView.getSettings().getParameter(SettingsKey.LAYERS_INFO);
         int fade = (int) tabView.getSettings().getParameter(SettingsKey.FADE);

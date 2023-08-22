@@ -19,5 +19,6 @@ public enum ActionType {
     REDO,
     OPTIONS,
     BACKGROUND,
-    SCREENSHOT
+    SCREENSHOT,
+    LOAD_TILESET
 }

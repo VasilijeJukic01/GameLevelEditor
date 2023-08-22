@@ -23,7 +23,7 @@ public class AddState implements State<TabView> {
         int index = (int) tabView.getSettings().getParameter(SettingsKey.SELECTED_TILE);
         int layer = (int) tabView.getSettings().getParameter(SettingsKey.SELECTED_LAYER);
 
-        List<Tile> tiles = getTileSet(set);
+        List<Tile> tiles = getTileSet(set, tabView);
         Tile newTile;
         if (tiles == null) return;
 
@@ -40,15 +40,16 @@ public class AddState implements State<TabView> {
         if (newTile != null) addTile(newTile, layer, tabView);
     }
 
-    private List<Tile> getTileSet(String name) {
+    private List<Tile> getTileSet(String name, TabView tab) {
+        String set = (String) tab.getSettings().getParameter(SettingsKey.TILE_SET);
         if ("Solid Tiles".equals(name))
-            return Framework.getInstance().getStorage().getForestSolidTiles();
+            return Framework.getInstance().getStorage().getTileMap().get(set+"Tiles");
         else if ("Decorations".equals(name))
-            return Framework.getInstance().getStorage().getForestDecoTiles();
+            return Framework.getInstance().getStorage().getTileMap().get(set+"Deco");
         else if ("Objects".equals(name))
-            return Framework.getInstance().getStorage().getObjectTiles();
+            return Framework.getInstance().getStorage().getTileMap().get("Objects");
         else if ("Enemies".equals(name))
-            return Framework.getInstance().getStorage().getEnemyTiles();
+            return Framework.getInstance().getStorage().getTileMap().get("Enemies");
         else if ("Player".equals(name))
             return List.of(Framework.getInstance().getStorage().getPlayerTile());
        return null;

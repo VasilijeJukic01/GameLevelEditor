@@ -30,6 +30,7 @@ public class TabView extends JPanel implements AdjustmentListener, NodeSubscribe
     private double dx = 0.0, dy = 0.0;
 
     private JPanel mainPanel, workspacePanel;
+    private BottomPanel bottomPanel;
     private JScrollBar hScrollBar, vScrollBar;
 
     private final Renderer renderer;
@@ -60,6 +61,7 @@ public class TabView extends JPanel implements AdjustmentListener, NodeSubscribe
         this.settings.addParameter(SettingsKey.SELECTED_LAYER, 3);
         this.settings.addParameter(SettingsKey.EDIT_SELECTION, null);
         this.settings.addParameter(SettingsKey.BACKGROUND, null);
+        this.settings.addParameter(SettingsKey.TILE_SET, "Forest");
     }
 
     private void initBars() {
@@ -97,7 +99,8 @@ public class TabView extends JPanel implements AdjustmentListener, NodeSubscribe
     }
 
     private void initSouthPanel() {
-        JScrollPane scrollPane = new JScrollPane(new BottomPanel(this));
+        this.bottomPanel = new BottomPanel(this);
+        JScrollPane scrollPane = new JScrollPane(bottomPanel);
         JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, mainPanel, scrollPane);
         this.add(splitPane);
     }
@@ -123,6 +126,10 @@ public class TabView extends JPanel implements AdjustmentListener, NodeSubscribe
         this.vScrollBar.setMaximum((int) ((level.getHeight() * TILE_SIZE) * scale));
         this.hScrollBar.setMaximum((int) ((level.getWidth() * TILE_SIZE) * scale));
         this.repaint();
+    }
+
+    public void reload() {
+        this.bottomPanel.reload();
     }
 
     // Getters & Setters

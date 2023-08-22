@@ -9,7 +9,9 @@ import editor.utils.Utils;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static editor.constants.Constants.*;
 import static editor.constants.Constants.FOREST_TILE_SIZE;
@@ -17,50 +19,46 @@ import static editor.constants.FilePaths.FOREST_SPRITE;
 
 public final class Storage {
 
-    private BufferedImage[] forestTilesImg;
-    private BufferedImage[] forestDecoTilesImg;
-    private BufferedImage[] objectsTilesImg;
-    private BufferedImage[] enemiesTilesImg;
-
-    private final List<Tile> forestSolidTiles;
-    private final List<Tile> forestDecoTiles;
-    private final List<Tile> objectTiles;
-    private final List<Tile> enemyTiles;
+    private final Map<String, BufferedImage[]> imageMap;
+    private final Map<String, List<Tile>> tileMap;
 
     private BufferedImage playerImg;
     private Tile playerTile;
 
     public Storage() {
-        this.forestSolidTiles = new ArrayList<>();
-        this.forestDecoTiles = new ArrayList<>();
-        this.objectTiles = new ArrayList<>();
-        this.enemyTiles = new ArrayList<>();
+        imageMap = new HashMap<>();
+        tileMap = new HashMap<>();
         init();
     }
 
     private void init() {
-        loadForestTiles();
+        BufferedImage img = Utils.getInstance().importImage(FOREST_SPRITE, -1, -1);
+        loadTiles(img, FOREST_SPRITE_ROW, FOREST_SPRITE_COL, FOREST_TILE_SIZE, FOREST_TILES, "Forest");
         loadForestDecoTiles();
         loadObjects();
         loadEnemies();
         loadPlayer();
     }
 
-    private void loadForestTiles() {
-        BufferedImage img = Utils.getInstance().importImage(FOREST_SPRITE, -1, -1);
-        forestTilesImg = new BufferedImage[FOREST_TILES];
-        for (int i = 0; i < FOREST_SPRITE_ROW; i++) {
-            for (int j = 0; j < FOREST_SPRITE_COL; j++) {
-                int index = j * FOREST_SPRITE_COL + i;
-                forestTilesImg[index] = img.getSubimage(i*FOREST_TILE_SIZE, j*FOREST_TILE_SIZE, FOREST_TILE_SIZE, FOREST_TILE_SIZE);
+    public void loadTiles(BufferedImage img, int rows, int columns, int size, int maxTiles, String id) {
+        BufferedImage[] tilesImg = new BufferedImage[maxTiles];
+        List<Tile> solidTiles = new ArrayList<>();
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < columns; j++) {
+                int index = i * columns + j;
+                tilesImg[index] = img.getSubimage(j*size, i*size, size, size);
                 Tile t = new Tile("", null, TileType.SOLID, 0, 0, index, 254, 254);
-                forestSolidTiles.add(t);
+                solidTiles.add(t);
             }
         }
+        imageMap.put(id+"Tiles", tilesImg);
+        tileMap.put(id+"Tiles", solidTiles);
     }
 
+
     private void loadForestDecoTiles() {
-        this.forestDecoTilesImg = new BufferedImage[LvlDecoType.values().length];
+        BufferedImage[] forestDecoTilesImg = new BufferedImage[LvlDecoType.values().length];
+        List<Tile> forestDecoTiles = new ArrayList<>();
         for (int i = 0; i < forestDecoTilesImg.length; i++) {
             LvlDecoType decoType = LvlDecoType.values()[i];
             String id = decoType.getId();
@@ -72,10 +70,13 @@ public final class Storage {
             Tile t = new Tile("", null, TileType.DECO, 0, 0, 254, 254, i);
             forestDecoTiles.add(t);
         }
+        imageMap.put("ForestDeco", forestDecoTilesImg);
+        tileMap.put("ForestDeco", forestDecoTiles);
     }
 
     private void loadObjects() {
-        this.objectsTilesImg = new BufferedImage[LvlDecoType.values().length];
+        BufferedImage[] objectsTilesImg = new BufferedImage[LvlDecoType.values().length];
+        List<Tile> objectTiles = new ArrayList<>();
         for (int i = 0; i < 12; i++) {
             LvlObjType objType = LvlObjType.values()[i];
             objectsTilesImg[i] = Utils.getInstance().importImage("/images/data/levelObjects/"+objType.getId().replace("~","")+".png", -1, -1);
@@ -83,16 +84,21 @@ public final class Storage {
             Tile t = new Tile("", null, TileType.OBJECT, 0, 0, 254, 254, i);
             objectTiles.add(t);
         }
+        imageMap.put("Objects", objectsTilesImg);
+        tileMap.put("Objects", objectTiles);
     }
 
     private void loadEnemies() {
-        this.enemiesTilesImg = new BufferedImage[LvlEnemyType.values().length];
+        BufferedImage[] enemiesTilesImg = new BufferedImage[LvlEnemyType.values().length];
+        List<Tile> enemyTiles = new ArrayList<>();
         for (int i = 0; i < 3; i++) {
             LvlEnemyType enemyType = LvlEnemyType.values()[i];
             enemiesTilesImg[i] = Utils.getInstance().importImage("/images/data/levelEnemies/"+enemyType.getId()+".png", -1, -1);
             Tile t = new Tile("", null, TileType.ENEMY, 0, 0, 254, i, 254);
             enemyTiles.add(t);
         }
+        imageMap.put("Enemies", enemiesTilesImg);
+        tileMap.put("Enemies", enemyTiles);
     }
 
     private void loadPlayer() {
@@ -101,40 +107,16 @@ public final class Storage {
     }
 
     // Getters
-    public BufferedImage[] getForestTilesImg() {
-        return forestTilesImg;
+    public Map<String, BufferedImage[]> getImageMap() {
+        return imageMap;
     }
 
-    public BufferedImage[] getForestDecoTilesImg() {
-        return forestDecoTilesImg;
-    }
-
-    public BufferedImage[] getObjectsTilesImg() {
-        return objectsTilesImg;
-    }
-
-    public BufferedImage[] getEnemiesTilesImg() {
-        return enemiesTilesImg;
+    public Map<String, List<Tile>> getTileMap() {
+        return tileMap;
     }
 
     public BufferedImage getPlayerImg() {
         return playerImg;
-    }
-
-    public List<Tile> getForestSolidTiles() {
-        return forestSolidTiles;
-    }
-
-    public List<Tile> getForestDecoTiles() {
-        return forestDecoTiles;
-    }
-
-    public List<Tile> getObjectTiles() {
-        return objectTiles;
-    }
-
-    public List<Tile> getEnemyTiles() {
-        return enemyTiles;
     }
 
     public Tile getPlayerTile() {

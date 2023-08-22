@@ -21,7 +21,7 @@ public class TerrainRenderer implements RenderStrategy<Tile> {
     public void render(Graphics g, Tile tile, int layer) {
         int value = tile.getRed();
         int layerIndex = tile.getLayer();
-        if (value != -1 && tile.getTileType() == TileType.SOLID && layerIndex == layer) {
+        if (value != -1 && value < tiles.length && tile.getTileType() == TileType.SOLID && layerIndex == layer) {
             g.drawImage(tiles[value], tile.getX() * TILE_SIZE, tile.getY() * TILE_SIZE, TILE_SIZE, TILE_SIZE, null);
         }
     }

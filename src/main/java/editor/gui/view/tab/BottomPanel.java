@@ -9,6 +9,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
+import java.util.Objects;
 
 import static editor.constants.Constants.*;
 
@@ -16,10 +17,10 @@ public class BottomPanel extends JPanel {
 
     private final TabView tabView;
 
-    private final BufferedImage[] tiles;
-    private final BufferedImage[] decorations;
-    private final BufferedImage[] objects;
-    private final BufferedImage[] enemies;
+    private BufferedImage[] tiles;
+    private BufferedImage[] decorations;
+    private BufferedImage[] objects;
+    private BufferedImage[] enemies;
 
     private final BufferedImage[] player;
 
@@ -28,15 +29,21 @@ public class BottomPanel extends JPanel {
     private int lastSelectedIndex = -1;
 
     private JComboBox<Integer> cbLayers;
+    private JComboBox<String> cbTypes;
 
     public BottomPanel(TabView tabView) {
         this.tabView = tabView;
-        this.tiles = Framework.getInstance().getStorage().getForestTilesImg();
-        this.decorations = Framework.getInstance().getStorage().getForestDecoTilesImg();
-        this.objects = Framework.getInstance().getStorage().getObjectsTilesImg();
-        this.enemies = Framework.getInstance().getStorage().getEnemiesTilesImg();
+        loadTileset();
         this.player = new BufferedImage[]{Framework.getInstance().getStorage().getPlayerImg()};
         init();
+    }
+
+    private void loadTileset() {
+        String set = (String) tabView.getSettings().getParameter(SettingsKey.TILE_SET);
+        this.tiles = Framework.getInstance().getStorage().getImageMap().get(set+"Tiles");
+        this.decorations = Framework.getInstance().getStorage().getImageMap().get(set+"Deco");
+        this.objects = Framework.getInstance().getStorage().getImageMap().get("Objects");
+        this.enemies = Framework.getInstance().getStorage().getImageMap().get("Enemies");
     }
 
     private void init() {
@@ -56,7 +63,7 @@ public class BottomPanel extends JPanel {
         constraints.weighty = 1.0;
         constraints.insets = new Insets(10, 0, 10, 0);
 
-        for (int itemIndex = 0; itemIndex < FOREST_TILES; itemIndex++) {
+        for (int itemIndex = 0; itemIndex < 48; itemIndex++) {
             if (fillGridLayout(constraints, itemIndex, tiles)) break;
         }
 
@@ -80,7 +87,7 @@ public class BottomPanel extends JPanel {
         JPanel topPanel = new JPanel();
         JLabel lbSelect = new JLabel("Select:");
         String[] cbTypeNames = {"Solid Tiles", "Decorations", "Objects", "Enemies", "Player"};
-        JComboBox<String> cbTypes = new JComboBox<>(cbTypeNames);
+        this.cbTypes = new JComboBox<>(cbTypeNames);
         cbTypes.addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
                 String selectedItem = (String) e.getItem();
@@ -166,6 +173,10 @@ public class BottomPanel extends JPanel {
         }
     }
 
+    public void reload() {
+        loadTileset();
+        updateImagePanel((String) Objects.requireNonNull(cbTypes.getSelectedItem()));
+    }
 
     // [Class] Image panel
     private class ImagePanel extends JPanel {

@@ -38,6 +38,7 @@ public class ActionManager {
         actions.put(ActionType.SCREENSHOT, new ScreenshotAction());
         actions.put(ActionType.OPTIONS, new OptionsAction());
         actions.put(ActionType.BACKGROUND, new BackgroundAction());
+        actions.put(ActionType.LOAD_TILESET, new LoadTilesetAction());
     }
 
     public AbstractEditorAction getAction(ActionType type) {
