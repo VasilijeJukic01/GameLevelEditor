@@ -19,6 +19,8 @@ public class ActionManager {
         actions.put(ActionType.EXIT, new ExitAction());
         actions.put(ActionType.NEW_FILE, new NewFileAction());
         actions.put(ActionType.OPEN_FILE, new OpenFileAction());
+        actions.put(ActionType.SAVE_FILE, new SaveFileAction());
+        actions.put(ActionType.SAVE_AS_FILE, new SaveAsAction());
         actions.put(ActionType.CLOSE_FILE, new CloseFileAction());
         actions.put(ActionType.RENAME_FILE, new RenameFileAction());
     }

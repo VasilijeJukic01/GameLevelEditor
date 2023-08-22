@@ -2,6 +2,9 @@ package editor.core;
 
 import editor.model.loader.LevelLoader;
 import editor.model.repository.LevelRepository;
+import editor.model.repository.components.Project;
+import editor.serializer.Serializer;
+import editor.serializer.GsonSerializer;
 
 public class Framework {
 
@@ -11,6 +14,7 @@ public class Framework {
     protected Repository repository;
     protected Loader levelLoader;
     protected Storage storage;
+    protected Serializer<Project> serializer;
 
     private Framework() {}
 
@@ -30,6 +34,7 @@ public class Framework {
         this.repository = new LevelRepository();
         this.levelLoader = new LevelLoader();
         this.storage = new Storage();
+        this.serializer = new GsonSerializer();
     }
 
     public void run(){
@@ -51,5 +56,9 @@ public class Framework {
 
     public Storage getStorage() {
         return storage;
+    }
+
+    public Serializer<Project> getSerializer() {
+        return serializer;
     }
 }

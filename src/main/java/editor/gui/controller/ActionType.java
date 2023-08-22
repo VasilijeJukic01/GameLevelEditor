@@ -4,6 +4,8 @@ public enum ActionType {
     EXIT,
     NEW_FILE,
     OPEN_FILE,
+    SAVE_FILE,
+    SAVE_AS_FILE,
     CLOSE_FILE,
     RENAME_FILE,
     IMPORT,

@@ -3,7 +3,11 @@ package editor.model.repository;
 public abstract class Node {
 
     private String name;
-    private final transient Node parent;
+    private transient Node parent;
+
+    private transient boolean changed = true;
+
+    private final String type = getClass().getName();
 
     public Node(String name, Node parent) {
         this.name = name;
@@ -21,6 +25,22 @@ public abstract class Node {
 
     public Node getParent() {
         return parent;
+    }
+
+    public void setParent(Node parent) {
+        this.parent = parent;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public boolean isChanged() {
+        return changed;
+    }
+
+    public void setChanged(boolean changed) {
+        this.changed = changed;
     }
 
 }

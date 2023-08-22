@@ -33,6 +33,7 @@ public class Project extends Composite<Node> implements NodePublisher {
         Optional.ofNullable(text)
                 .filter(str -> !str.isEmpty())
                 .ifPresent(super::setName);
+        setChanged(true);
         notify(this);
     }
 
@@ -45,6 +46,7 @@ public class Project extends Composite<Node> implements NodePublisher {
         Optional.ofNullable(author)
                 .filter(str -> !str.isEmpty())
                 .ifPresent(str -> this.author = str);
+        setChanged(true);
         notify(this);
     }
 

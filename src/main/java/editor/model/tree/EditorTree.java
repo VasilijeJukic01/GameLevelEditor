@@ -2,6 +2,7 @@ package editor.model.tree;
 
 import editor.model.repository.Node;
 import editor.model.repository.Composite;
+import editor.model.repository.components.Project;
 import editor.model.repository.components.Tile;
 import editor.model.repository.components.Level;
 import editor.model.repository.components.ProjectExplorer;
@@ -66,6 +67,28 @@ public class EditorTree implements Tree<TreeItem, TreeView> {
     public void refreshView() {
         treeView.expandPath(treeView.getSelectionPath());
         SwingUtilities.updateComponentTreeUI(treeView);
+    }
+
+    @Override
+    public void deserialize(Node n) {
+        Project project = (Project) n;
+        TreeItem treeItemProject = new TreeItem(project);
+        TreeItem root = (TreeItem) treeModel.getRoot();
+        root.add(treeItemProject);
+
+        Composite<Node> explorer = (Composite<Node>) root.getNode();
+        explorer.addChild(project);
+
+        for (Node level : project.getChildren()) {
+            level.setParent(project);
+            TreeItem treeItemLevel = new TreeItem(level);
+            treeItemProject.add(treeItemLevel);
+            for (Node tile : ((Level)level).getChildren()) {
+                treeItemLevel.add(new TreeItem(tile));
+                tile.setParent(level);
+            }
+        }
+        refreshView();
     }
 
     @Override

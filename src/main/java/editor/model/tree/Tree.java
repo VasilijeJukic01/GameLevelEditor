@@ -23,4 +23,6 @@ public interface Tree<U extends DefaultMutableTreeNode, V extends JTree> extends
 
     void clearSelection();
 
+    void deserialize(Node node);
+
 }

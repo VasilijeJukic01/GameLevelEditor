@@ -20,23 +20,32 @@ public class Level extends Composite<Node> implements NodePublisher {
         this.width = this.height = 30;
     }
 
+    public Level(String name, Node parent, int width, int height) {
+        super(name, parent);
+        this.width = width;
+        this.height = height;
+    }
+
     @Override
     public void setName(String text) {
         Optional.ofNullable(text)
                 .filter(str -> !str.isEmpty())
                 .ifPresent(super::setName);
+        super.getParent().setChanged(true);
         notify(this);
     }
 
     @Override
     public void addChild(Node child) {
         this.getChildren().add(child);
+        super.getParent().setChanged(true);
         notify(this);
     }
 
     @Override
     public void removeChild(Node child) {
         this.getChildren().remove(child);
+        super.getParent().setChanged(true);
         notify(this);
     }
 

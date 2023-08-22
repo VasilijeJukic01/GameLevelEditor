@@ -22,11 +22,13 @@ public abstract class Composite<T extends Node> extends Node {
     public void addChild(T child) {
         if (!children.contains(child)) {
             children.add(child);
+            setChanged(true);
         }
     }
 
     public void removeChild(T child) {
         children.remove(child);
+        setChanged(true);
     }
 
 }
