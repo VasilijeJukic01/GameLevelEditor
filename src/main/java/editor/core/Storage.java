@@ -1,5 +1,6 @@
 package editor.core;
 
+import editor.logger.LogType;
 import editor.model.loader.LvlDecoType;
 import editor.model.loader.LvlEnemyType;
 import editor.model.loader.LvlObjType;
@@ -38,6 +39,7 @@ public final class Storage {
         loadObjects();
         loadEnemies();
         loadPlayer();
+        Framework.getInstance().log("Storage initialized.", LogType.INFORMATION);
     }
 
     public void loadTiles(BufferedImage img, int rows, int columns, int size, int maxTiles, String id) {

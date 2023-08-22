@@ -1,6 +1,8 @@
 package editor.gui.controller.projectActions;
 
+import editor.core.Framework;
 import editor.gui.controller.AbstractEditorAction;
+import editor.logger.LogType;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -17,6 +19,7 @@ public class ExitAction extends AbstractEditorAction {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        Framework.getInstance().log("Destroying!", LogType.WARNING);
         System.exit(0);
     }
 

@@ -1,0 +1,14 @@
+[INFORMATION] [2023-08-22 21:01:59] Storage initialized.
+[INFORMATION] [2023-08-22 21:02:10] Settings update: (Key-FADE) Value changed from 0 to 1
+[INFORMATION] [2023-08-22 21:02:18] Settings update: (Key-FADE) Value changed from 1 to 0
+[INFORMATION] [2023-08-22 21:02:19] Settings update: (Key-LAYERS_INFO) Value changed from 0000001 to 0000000
+[INFORMATION] [2023-08-22 21:02:19] Settings update: (Key-LAYERS_INFO) Value changed from 0000000 to 0010000
+[INFORMATION] [2023-08-22 21:02:25] Settings update: (Key-LAYERS_INFO) Value changed from 0010000 to 0000000
+[INFORMATION] [2023-08-22 21:02:25] Settings update: (Key-LAYERS_INFO) Value changed from 0000000 to 0000000
+[INFORMATION] [2023-08-22 21:02:25] Settings update: (Key-LAYERS_INFO) Value changed from 0000000 to 0000001
+[INFORMATION] [2023-08-22 21:02:25] Settings update: (Key-LAYERS_INFO) Value changed from 0000001 to 0000001
+[INFORMATION] [2023-08-22 21:02:37] Settings update: (Key-TILE_SET) Value changed from Forest to Custom
+[INFORMATION] [2023-08-22 21:02:40] Settings update: (Key-TILE_SET) Value changed from Custom to Forest
+[INFORMATION] [2023-08-22 21:02:40] Settings update: (Key-SELECTED_SET) Value changed from Solid Tiles to Solid Tiles
+[INFORMATION] [2023-08-22 21:02:40] Settings update: (Key-SELECTED_LAYER) Value changed from 3 to 3
+[WARNING] [2023-08-22 21:02:54] Destroying!

@@ -1,6 +1,8 @@
 package editor.settings;
 
+import editor.core.Framework;
 import editor.gui.view.tab.TabView;
+import editor.logger.LogType;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,7 +29,10 @@ public class EditorSettings implements Settings {
 
     @Override
     public void updateParameter(SettingsKey key, Object newValue) {
-        if (parameters.containsKey(key)) parameters.put(key, newValue);
+        if (parameters.containsKey(key)) {
+            Framework.getInstance().log("Settings update: (Key-"+key+") Value changed from "+parameters.get(key)+" to "+newValue, LogType.INFORMATION);
+            parameters.put(key, newValue);
+        }
         else {
             throw new IllegalArgumentException("Parameter '" + key + "' does not exist.");
         }

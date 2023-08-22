@@ -3,6 +3,7 @@ package editor.gui.controller.projectActions;
 import editor.core.Framework;
 import editor.gui.controller.AbstractEditorAction;
 import editor.gui.view.EditorFrame;
+import editor.logger.LogType;
 import editor.model.repository.components.Project;
 import editor.model.tree.mvc.TreeItem;
 
@@ -31,6 +32,7 @@ public class SaveFileAction extends AbstractEditorAction {
 
         if (project.getPath() != null && !project.getPath().isEmpty()) {
             Framework.getInstance().getSerializer().saveProject(project);
+            Framework.getInstance().log("Project saved successfully!", LogType.NOTIFICATION);
             project.setChanged(false);
         }
     }

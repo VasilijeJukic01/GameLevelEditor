@@ -1,5 +1,8 @@
 package editor.core;
 
+import editor.logger.CombinatorLogger;
+import editor.logger.LogType;
+import editor.logger.Logger;
 import editor.model.loader.LevelLoader;
 import editor.model.repository.LevelRepository;
 import editor.model.repository.components.Project;
@@ -15,6 +18,7 @@ public class Framework {
     protected Loader levelLoader;
     protected Storage storage;
     protected Serializer<Project> serializer;
+    protected Logger logger;
 
     private Framework() {}
 
@@ -30,6 +34,7 @@ public class Framework {
     }
 
     public void init(Gui gui) {
+        this.logger = CombinatorLogger.createLogger();
         this.gui = gui;
         this.repository = new LevelRepository();
         this.levelLoader = new LevelLoader();
@@ -39,6 +44,10 @@ public class Framework {
 
     public void run(){
         this.gui.start();
+    }
+
+    public void log(String message, LogType type) {
+        this.logger.log(message, type);
     }
 
     // Getters & Setters
@@ -61,4 +70,5 @@ public class Framework {
     public Serializer<Project> getSerializer() {
         return serializer;
     }
+
 }

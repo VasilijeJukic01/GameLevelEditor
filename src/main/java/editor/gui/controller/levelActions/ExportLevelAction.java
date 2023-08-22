@@ -1,8 +1,10 @@
 package editor.gui.controller.levelActions;
 
+import editor.core.Framework;
 import editor.gui.controller.AbstractEditorAction;
 import editor.gui.view.EditorFrame;
 import editor.gui.view.tab.TabView;
+import editor.logger.LogType;
 import editor.model.repository.Node;
 import editor.model.repository.components.Level;
 import editor.model.repository.components.Tile;
@@ -97,6 +99,7 @@ public class ExportLevelAction extends AbstractEditorAction {
         try {
             File outputFile = new File("output.png");
             ImageIO.write(image, "png", outputFile);
+            Framework.getInstance().log("Level exported to pixel image successfully!", LogType.NOTIFICATION);
         }
         catch (IOException ex) {
             ex.printStackTrace();

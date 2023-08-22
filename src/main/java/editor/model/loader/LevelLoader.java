@@ -1,7 +1,9 @@
 package editor.model.loader;
 
+import editor.core.Framework;
 import editor.core.Loader;
 import editor.gui.view.EditorFrame;
+import editor.logger.LogType;
 import editor.model.repository.Composite;
 import editor.model.repository.Node;
 import editor.model.repository.components.Tile;
@@ -39,6 +41,8 @@ public class LevelLoader implements Loader {
             getEnemyData(levelImg, level);
             getDecoData(levelImg, level);
             getPlayer(levelImg, level);
+
+            Framework.getInstance().log("Level imported: "+name, LogType.INFORMATION);
         }
         catch (IOException e) {
             e.printStackTrace();

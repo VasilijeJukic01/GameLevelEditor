@@ -3,6 +3,7 @@ package editor.gui.controller.projectActions;
 import editor.core.Framework;
 import editor.gui.controller.AbstractEditorAction;
 import editor.gui.view.EditorFrame;
+import editor.logger.LogType;
 
 import javax.swing.*;
 
@@ -27,10 +28,11 @@ public class OpenFileAction extends AbstractEditorAction {
             try {
                 File file = fileChooser.getSelectedFile();
                 Framework.getInstance().getSerializer().loadProject(file);
+                Framework.getInstance().log("Project deserialized successfully!", LogType.NOTIFICATION);
 
             }
             catch (Exception error) {
-                error.printStackTrace();
+                Framework.getInstance().log("Project deserialization failed!", LogType.ERROR);
             }
         }
     }
