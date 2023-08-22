@@ -29,7 +29,7 @@ public class BottomPanel extends JPanel {
     private int lastSelectedIndex = -1;
 
     private JComboBox<Integer> cbLayers;
-    private JComboBox<String> cbTypes;
+    private JComboBox<String> cbTypes, cbTileset;
 
     public BottomPanel(TabView tabView) {
         this.tabView = tabView;
@@ -94,6 +94,7 @@ public class BottomPanel extends JPanel {
                 updateImagePanel(selectedItem);
             }
         });
+
         JLabel lbLayer = new JLabel("Layer:");
         cbLayers = new JComboBox<>(new Integer[]{3, 5});
         cbLayers.addItemListener(e -> {
@@ -103,6 +104,18 @@ public class BottomPanel extends JPanel {
             }
         });
 
+
+        JLabel lbSet = new JLabel("Tileset:");
+        cbTileset = new JComboBox<>(new String[]{"Forest", "Custom"});
+        cbTileset.addItemListener(e -> {
+            if (e.getStateChange() == ItemEvent.SELECTED) {
+                String selectedItem = (String) e.getItem();
+                getTileset(selectedItem);
+            }
+        });
+
+        topPanel.add(lbSet);
+        topPanel.add(cbTileset);
         topPanel.add(lbSelect);
         topPanel.add(cbTypes);
         topPanel.add(lbLayer);
@@ -112,6 +125,11 @@ public class BottomPanel extends JPanel {
 
     private void saveLayer(Integer selectedItem) {
         tabView.getSettings().updateParameter(SettingsKey.SELECTED_LAYER, selectedItem);
+    }
+
+    private void getTileset(String selectedItem) {
+        tabView.getSettings().updateParameter(SettingsKey.TILE_SET, selectedItem);
+        reload();
     }
 
     private void updateImagePanel(String selectedItem) {
@@ -175,6 +193,7 @@ public class BottomPanel extends JPanel {
 
     public void reload() {
         loadTileset();
+        cbTileset.setSelectedItem(tabView.getSettings().getParameter(SettingsKey.TILE_SET));
         updateImagePanel((String) Objects.requireNonNull(cbTypes.getSelectedItem()));
     }
 
