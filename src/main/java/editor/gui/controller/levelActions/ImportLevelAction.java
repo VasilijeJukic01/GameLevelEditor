@@ -3,6 +3,7 @@ package editor.gui.controller.levelActions;
 import editor.core.Framework;
 import editor.gui.controller.AbstractEditorAction;
 import editor.gui.view.EditorFrame;
+import editor.utils.Utils;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -21,17 +22,11 @@ public class ImportLevelAction extends AbstractEditorAction {
         if (fileChooser.showOpenDialog(EditorFrame.getInstance()) == JFileChooser.APPROVE_OPTION) {
             try {
                 File file = fileChooser.getSelectedFile();
-                if (!isValidExtension(file)) return;
+                if (!Utils.getInstance().isValidExtension(file)) return;
                 Framework.getInstance().getLoader().load(file);
 
             } catch (Exception ignored) {}
         }
-    }
-
-    private boolean isValidExtension(File file) {
-        String fileName = file.getName();
-        String extension = fileName.substring(fileName.lastIndexOf('.') + 1);
-        return (extension.equalsIgnoreCase("png"));
     }
 
 }

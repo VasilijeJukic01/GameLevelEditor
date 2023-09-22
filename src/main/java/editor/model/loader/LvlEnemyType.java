@@ -6,6 +6,8 @@ public enum LvlEnemyType {
     SKELETON("Skeleton",            TILE_SIZE, TILE_SIZE + TILE_SIZE/2, 0, 40),
     GHOUL("Ghoul",                  TILE_SIZE, TILE_SIZE + TILE_SIZE/2, 0, 40),
     SPEAR_WOMAN("SpearWoman",   TILE_SIZE + (int)(TILE_SIZE/1.7), 2*TILE_SIZE, -30, 10),
+    KNIGHT("Knight",                TILE_SIZE, TILE_SIZE + TILE_SIZE/2, 0, 40),
+    WRAITH("Wraith",                TILE_SIZE + TILE_SIZE/2, 2*TILE_SIZE, -20, 10),
     MAX("",                     0, 0, 0,0);
 
     private final String id;

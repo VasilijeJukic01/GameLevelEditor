@@ -1,8 +1,7 @@
 package editor.model.loader;
 
 import static editor.constants.Constants.TILE_SIZE;
-import static editor.constants.ObjectConstants.TILE_SIZE_3;
-import static editor.constants.ObjectConstants.TILE_SIZE_4;
+import static editor.constants.ObjectConstants.*;
 
 public enum LvlObjType {
     BLUE_POTION("BluePotion",       24, 40, 20, 20),
@@ -17,6 +16,9 @@ public enum LvlObjType {
     BLOCKER("Blocker",                  TILE_SIZE, TILE_SIZE_3+16, 0, -8),
     BLACKSMITH("Blacksmith",            TILE_SIZE, TILE_SIZE+TILE_SIZE/2, 0, 40),
     DOG("Dog",                          TILE_SIZE, TILE_SIZE, 0, 8),
+    TOTEM("Totem",                      TILE_SIZE, TILE_SIZE, 0, 12),
+    SMASH_TRAP("SmashTrap",             TILE_SIZE, TILE_SIZE_2, 0, -15),
+    CANDLE("Candle",                    TILE_SIZE, TILE_SIZE_2, 0, 8),
     MAX("",                         0,0,0,0);
 
     private final String id;

@@ -19,10 +19,12 @@ public class TerrainRenderer implements RenderStrategy<Tile> {
 
     @Override
     public void render(Graphics g, Tile tile, int layer) {
+        if (tiles == null || tiles.length == 0) return;
         int value = tile.getRed();
         int layerIndex = tile.getLayer();
         if (value != -1 && value < tiles.length && tile.getTileType() == TileType.SOLID && layerIndex == layer) {
-            g.drawImage(tiles[value], tile.getX() * TILE_SIZE, tile.getY() * TILE_SIZE, TILE_SIZE, TILE_SIZE, null);
+            if (tiles[value] != null)
+                g.drawImage(tiles[value], tile.getX() * TILE_SIZE, tile.getY() * TILE_SIZE, TILE_SIZE, TILE_SIZE, null);
         }
     }
 

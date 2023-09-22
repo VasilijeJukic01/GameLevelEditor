@@ -41,7 +41,9 @@ public enum LvlDecoType {
     BLACK("BLACK",                  TILE_SIZE, TILE_SIZE, 0, 0),
     LEFT_END("LEFT_END",            TILE_SIZE, TILE_SIZE, 0, 0),
     RIGHT_END("RIGHT_END",          TILE_SIZE, TILE_SIZE, 0, 0),
-    LEAF1_REVERSE("LEAF1_REVERSE",  BIG_TILE_SIZE, TILE_SIZE, -10, -20);
+    LEAF1_REVERSE("LEAF1_REVERSE",  BIG_TILE_SIZE, TILE_SIZE, -10, -20),
+    UPPER_END("UPPER_END",          TILE_SIZE, TILE_SIZE, 0, 0),
+    BOTTOM_END("BOTTOM_END",        TILE_SIZE, TILE_SIZE, 0, 0);
 
     private final String id;
     private final int wid, hei;

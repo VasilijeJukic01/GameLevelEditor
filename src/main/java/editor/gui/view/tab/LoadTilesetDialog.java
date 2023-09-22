@@ -2,6 +2,7 @@ package editor.gui.view.tab;
 
 import editor.core.Framework;
 import editor.gui.view.EditorFrame;
+import editor.utils.Utils;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -74,7 +75,7 @@ public class LoadTilesetDialog extends JDialog {
         if (fileChooser.showOpenDialog(EditorFrame.getInstance()) == JFileChooser.APPROVE_OPTION) {
             try {
                 File file = fileChooser.getSelectedFile();
-                if (!isValidExtension(file)) return;
+                if (!Utils.getInstance().isValidExtension(file)) return;
 
                 int tileSize = Integer.parseInt(tfTileSize.getText());
 
@@ -89,12 +90,6 @@ public class LoadTilesetDialog extends JDialog {
             }
             catch (Exception ignored) {}
         }
-    }
-
-    private boolean isValidExtension(File file) {
-        String fileName = file.getName();
-        String extension = fileName.substring(fileName.lastIndexOf('.') + 1);
-        return (extension.equalsIgnoreCase("png"));
     }
 
 }

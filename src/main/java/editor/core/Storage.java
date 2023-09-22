@@ -77,9 +77,9 @@ public final class Storage {
     }
 
     private void loadObjects() {
-        BufferedImage[] objectsTilesImg = new BufferedImage[LvlDecoType.values().length];
+        BufferedImage[] objectsTilesImg = new BufferedImage[LvlObjType.values().length-1];
         List<Tile> objectTiles = new ArrayList<>();
-        for (int i = 0; i < 12; i++) {
+        for (int i = 0; i < objectsTilesImg.length; i++) {
             LvlObjType objType = LvlObjType.values()[i];
             objectsTilesImg[i] = Utils.getInstance().importImage("/images/data/levelObjects/"+objType.getId().replace("~","")+".png", -1, -1);
             if (objType.getId().contains("~")) objectsTilesImg[i] = Utils.getInstance().flipImage(objectsTilesImg[i]);
@@ -93,7 +93,7 @@ public final class Storage {
     private void loadEnemies() {
         BufferedImage[] enemiesTilesImg = new BufferedImage[LvlEnemyType.values().length];
         List<Tile> enemyTiles = new ArrayList<>();
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < enemiesTilesImg.length-1; i++) {
             LvlEnemyType enemyType = LvlEnemyType.values()[i];
             enemiesTilesImg[i] = Utils.getInstance().importImage("/images/data/levelEnemies/"+enemyType.getId()+".png", -1, -1);
             Tile t = new Tile("", null, TileType.ENEMY, 0, 0, 254, i, 254);

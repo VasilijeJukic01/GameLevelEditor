@@ -20,13 +20,15 @@ public class DecoRenderer implements RenderStrategy<Tile> {
 
     @Override
     public void render(Graphics g, Tile tile, int layer) {
+        if (decoTiles == null || decoTiles.length == 0) return;
         int value = tile.getBlue();
         int layerIndex = tile.getLayer();
         if (value != -1 && tile.getTileType() == TileType.DECO && layerIndex == layer) {
             LvlDecoType deco = LvlDecoType.values()[value];
             int x = tile.getX() * TILE_SIZE + deco.getXOffset();
             int y = tile.getY() * TILE_SIZE + deco.getYOffset();
-            g.drawImage(decoTiles[value], x, y, deco.getWid(), deco.getHei(), null);
+            if (decoTiles[value] != null)
+                g.drawImage(decoTiles[value], x, y, deco.getWid(), deco.getHei(), null);
         }
     }
 

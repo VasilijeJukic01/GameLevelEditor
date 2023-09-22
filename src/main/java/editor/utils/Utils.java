@@ -3,6 +3,7 @@ package editor.utils;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.util.Objects;
 
 public class Utils {
@@ -48,6 +49,12 @@ public class Utils {
         graphics2D.drawImage(src, w, 0, -w, h, null);
         graphics2D.dispose();
         return dest;
+    }
+
+    public boolean isValidExtension(File file) {
+        String fileName = file.getName();
+        String extension = fileName.substring(fileName.lastIndexOf('.') + 1);
+        return (extension.equalsIgnoreCase("png"));
     }
 
 }
