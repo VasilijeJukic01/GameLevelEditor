@@ -1,7 +1,6 @@
 package editor.logger;
 
 import java.io.FileWriter;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -44,9 +43,7 @@ public class CombinatorLogger implements Logger {
         try (PrintWriter writer = new PrintWriter(new FileWriter("src/main/resources/log.txt", true))) {
             writer.println(message);
         }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
+        catch (Exception ignored) {}
         return message;
     }
 

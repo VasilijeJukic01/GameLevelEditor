@@ -14,7 +14,6 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
 
 import static editor.constants.Constants.DECO_NUM;
 
@@ -44,9 +43,7 @@ public class LevelLoader implements Loader {
 
             Framework.getInstance().log("Level imported: "+name, LogType.INFORMATION);
         }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
+        catch (Exception ignored) {}
     }
 
     private void getLevelData(BufferedImage levelImg, Composite<Node> level) { // Red

@@ -22,5 +22,6 @@ public enum ActionType {
     OPTIONS,
     BACKGROUND,
     SCREENSHOT,
-    LOAD_TILESET
+    LOAD_TILESET,
+    HELP
 }

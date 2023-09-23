@@ -30,7 +30,7 @@ public class SaveFileAction extends AbstractEditorAction {
 
         if (!project.isChanged()) return;
 
-        if (project.getPath() != null && !project.getPath().isEmpty()) {
+        if (project.getPath() != null && !project.getPath().isEmpty() && !project.getPath().equals("/")) {
             Framework.getInstance().getSerializer().saveProject(project);
             Framework.getInstance().log("Project saved successfully!", LogType.NOTIFICATION);
             project.setChanged(false);

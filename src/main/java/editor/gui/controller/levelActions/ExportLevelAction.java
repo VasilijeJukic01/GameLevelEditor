@@ -15,7 +15,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
 
 public class ExportLevelAction extends AbstractEditorAction {
 
@@ -101,9 +100,7 @@ public class ExportLevelAction extends AbstractEditorAction {
             ImageIO.write(image, "png", outputFile);
             Framework.getInstance().log("Level exported to pixel image successfully!", LogType.NOTIFICATION);
         }
-        catch (IOException ex) {
-            ex.printStackTrace();
-        }
+        catch (Exception ignored) {}
     }
 
 }

@@ -10,7 +10,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
 
 import static editor.constants.Constants.TILE_SIZE;
 
@@ -55,9 +54,7 @@ public class ScreenshotAction extends AbstractEditorAction {
                 ImageIO.write(image, "PNG", new File(file.getPath() + ".png"));
                 tab.setScale(prevScale);
             }
-            catch (IOException ex) {
-                ex.printStackTrace();
-            }
+            catch (Exception ignored) {}
         }
     }
 

@@ -30,7 +30,7 @@ public class LoadTilesetDialog extends JDialog {
 
     private void initUI() {
         setTitle("Load Tileset");
-        setSize(350, 250);  // Adjusted size for the added components
+        setSize(350, 250);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 

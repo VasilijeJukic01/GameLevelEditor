@@ -14,6 +14,8 @@ public class MenuBar extends JMenuBar {
         mFile.add(actionManager.getAction(ActionType.NEW_FILE));
         mFile.add(actionManager.getAction(ActionType.OPEN_FILE));
         mFile.add(actionManager.getAction(ActionType.CLOSE_FILE));
+        mFile.add(actionManager.getAction(ActionType.SAVE_AS_FILE));
+        mFile.add(actionManager.getAction(ActionType.SAVE_FILE));
         mFile.add(actionManager.getAction(ActionType.EXIT));
         this.add(mFile);
 
@@ -24,7 +26,10 @@ public class MenuBar extends JMenuBar {
         mEdit.add(actionManager.getAction(ActionType.REDO));
         this.add(mEdit);
 
-        this.add(new JMenu("Help"));
+        JMenu mHelp = new JMenu("Help");
+        mHelp.add(actionManager.getAction(ActionType.HELP));
+        this.add(mHelp);
+
     }
 
 }

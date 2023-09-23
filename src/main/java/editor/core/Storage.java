@@ -27,8 +27,8 @@ public final class Storage {
     private Tile playerTile;
 
     public Storage() {
-        imageMap = new HashMap<>();
-        tileMap = new HashMap<>();
+        this.imageMap = new HashMap<>();
+        this.tileMap = new HashMap<>();
         init();
     }
 

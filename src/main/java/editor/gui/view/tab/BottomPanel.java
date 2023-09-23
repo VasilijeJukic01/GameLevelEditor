@@ -17,10 +17,7 @@ public class BottomPanel extends JPanel {
 
     private final TabView tabView;
 
-    private BufferedImage[] tiles;
-    private BufferedImage[] decorations;
-    private BufferedImage[] objects;
-    private BufferedImage[] enemies;
+    private BufferedImage[] tiles, decorations, objects, enemies;
 
     private final BufferedImage[] player;
 
