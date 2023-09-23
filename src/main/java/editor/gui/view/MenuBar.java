@@ -21,6 +21,7 @@ public class MenuBar extends JMenuBar {
 
         JMenu mEdit = new JMenu("Edit");
         mEdit.add(actionManager.getAction(ActionType.RENAME_FILE));
+        mEdit.add(actionManager.getAction(ActionType.ADD_AUTHOR));
         mEdit.add(actionManager.getAction(ActionType.SHOW_GRID));
         mEdit.add(actionManager.getAction(ActionType.UNDO));
         mEdit.add(actionManager.getAction(ActionType.REDO));
