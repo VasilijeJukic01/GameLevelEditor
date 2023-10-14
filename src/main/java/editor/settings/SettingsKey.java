@@ -11,5 +11,6 @@ public enum SettingsKey {
     SELECTED_TILE,
     EDIT_SELECTION,
     BACKGROUND,
-    TILE_SET
+    TILE_SET,
+    EXPORT_TYPE
 }
