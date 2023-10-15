@@ -14,17 +14,23 @@ public class MenuBar extends JMenuBar {
         mFile.add(actionManager.getAction(ActionType.NEW_FILE));
         mFile.add(actionManager.getAction(ActionType.OPEN_FILE));
         mFile.add(actionManager.getAction(ActionType.CLOSE_FILE));
+        mFile.add(actionManager.getAction(ActionType.SAVE_AS_FILE));
+        mFile.add(actionManager.getAction(ActionType.SAVE_FILE));
         mFile.add(actionManager.getAction(ActionType.EXIT));
         this.add(mFile);
 
         JMenu mEdit = new JMenu("Edit");
         mEdit.add(actionManager.getAction(ActionType.RENAME_FILE));
+        mEdit.add(actionManager.getAction(ActionType.ADD_AUTHOR));
         mEdit.add(actionManager.getAction(ActionType.SHOW_GRID));
         mEdit.add(actionManager.getAction(ActionType.UNDO));
         mEdit.add(actionManager.getAction(ActionType.REDO));
         this.add(mEdit);
 
-        this.add(new JMenu("Help"));
+        JMenu mHelp = new JMenu("Help");
+        mHelp.add(actionManager.getAction(ActionType.HELP));
+        this.add(mHelp);
+
     }
 
 }

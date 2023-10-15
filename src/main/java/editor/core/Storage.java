@@ -9,10 +9,7 @@ import editor.model.repository.components.TileType;
 import editor.utils.Utils;
 
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static editor.constants.Constants.*;
 import static editor.constants.Constants.FOREST_TILE_SIZE;
@@ -27,8 +24,8 @@ public final class Storage {
     private Tile playerTile;
 
     public Storage() {
-        imageMap = new HashMap<>();
-        tileMap = new HashMap<>();
+        this.imageMap = new HashMap<>();
+        this.tileMap = new HashMap<>();
         init();
     }
 
@@ -124,4 +121,16 @@ public final class Storage {
     public Tile getPlayerTile() {
         return playerTile;
     }
+
+    public String[] getTilesetNames() {
+        List<String> namesList = new ArrayList<>();
+        int index = 0;
+        for (String name : tileMap.keySet()) {
+            if (name.endsWith("Tiles")) {
+                namesList.add(name.substring(0, name.indexOf("Tiles")));
+            }
+        }
+        return namesList.toArray(new String[index]);
+    }
+
 }

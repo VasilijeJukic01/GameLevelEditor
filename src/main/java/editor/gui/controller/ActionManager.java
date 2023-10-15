@@ -23,6 +23,8 @@ public class ActionManager {
         actions.put(ActionType.SAVE_AS_FILE, new SaveAsAction());
         actions.put(ActionType.CLOSE_FILE, new CloseFileAction());
         actions.put(ActionType.RENAME_FILE, new RenameFileAction());
+        actions.put(ActionType.ADD_AUTHOR, new AddAuthorAction());
+        actions.put(ActionType.HELP, new HelpAction());
     }
 
     private void initEditorActions() {

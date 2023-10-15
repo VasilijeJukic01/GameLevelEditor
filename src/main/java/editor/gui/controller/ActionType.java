@@ -8,6 +8,7 @@ public enum ActionType {
     SAVE_AS_FILE,
     CLOSE_FILE,
     RENAME_FILE,
+    ADD_AUTHOR,
     IMPORT,
     EXPORT,
     ADD_NODE,
@@ -22,5 +23,6 @@ public enum ActionType {
     OPTIONS,
     BACKGROUND,
     SCREENSHOT,
-    LOAD_TILESET
+    LOAD_TILESET,
+    HELP
 }

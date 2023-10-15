@@ -21,6 +21,8 @@ public class ToolBar extends JToolBar {
         this.add(EditorFrame.getInstance().getActionManager().getAction(ActionType.CLOSE_FILE).createButton());
         this.addSeparator();
         this.addSeparator();
+        this.add(EditorFrame.getInstance().getActionManager().getAction(ActionType.ADD_AUTHOR).createButton());
+        this.addSeparator();
         this.add(EditorFrame.getInstance().getActionManager().getAction(ActionType.RENAME_FILE).createButton());
         this.addSeparator();
         this.add(Box.createHorizontalGlue());

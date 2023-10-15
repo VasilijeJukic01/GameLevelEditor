@@ -6,12 +6,10 @@ import editor.model.repository.Node;
 import editor.model.repository.components.Level;
 import editor.model.repository.components.Project;
 import editor.model.repository.components.Tile;
-import editor.model.tree.EditorTree;
 
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.io.IOException;
 
 public class GsonSerializer implements Serializer<Project> {
 
@@ -32,20 +30,16 @@ public class GsonSerializer implements Serializer<Project> {
             EditorFrame.getInstance().getEditorTree().deserialize(project);
 
         }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
+        catch (Exception ignored) {}
     }
 
     @Override
     public void saveProject(Project node) {
-        if (node.getPath() == null || node.getPath().equals("")) return;
+        if (node.getPath() == null || node.getPath().isEmpty()) return;
         try (FileWriter writer = new FileWriter(node.getPath())) {
             gson.toJson(node, writer);
         }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
+        catch (Exception ignored) {}
     }
 
 }

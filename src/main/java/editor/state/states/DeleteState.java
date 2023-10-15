@@ -15,9 +15,7 @@ import static editor.constants.Constants.TILE_SIZE;
 
 public class DeleteState implements State<TabView> {
 
-
-    @Override
-    public void clickPerform(int x, int y, TabView tabView) {
+    private void deleteTile(int x, int y, TabView tabView) {
         Tile target = findTileAtPosition(x, y, tabView);
         if (target != null) {
             Command command = new DeleteNodeCommand(tabView.getLevel(), target);
@@ -26,8 +24,13 @@ public class DeleteState implements State<TabView> {
     }
 
     @Override
-    public void dragPerform(int x, int y, TabView tabView) {
+    public void clickPerform(int x, int y, TabView tabView) {
+        deleteTile(x, y, tabView);
+    }
 
+    @Override
+    public void dragPerform(int x, int y, TabView tabView) {
+        deleteTile(x, y, tabView);
     }
 
     @Override

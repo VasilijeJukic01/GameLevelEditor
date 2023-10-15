@@ -3,19 +3,20 @@ package editor.gui.controller.levelActions;
 import editor.core.Framework;
 import editor.gui.controller.AbstractEditorAction;
 import editor.gui.view.EditorFrame;
+import editor.gui.view.tab.ExportDialog;
 import editor.gui.view.tab.TabView;
 import editor.logger.LogType;
 import editor.model.repository.Node;
 import editor.model.repository.components.Level;
 import editor.model.repository.components.Tile;
 import editor.model.repository.components.TileType;
+import editor.settings.SettingsKey;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
 
 public class ExportLevelAction extends AbstractEditorAction {
 
@@ -28,12 +29,30 @@ public class ExportLevelAction extends AbstractEditorAction {
     public void actionPerformed(ActionEvent e) {
         TabView tab = EditorFrame.getInstance().getCurrentTab();
         if (tab == null) return;
+
+        ExportDialog dialog = new ExportDialog(EditorFrame.getInstance(), true, tab);
+        dialog.setVisible(true);
+
+        String exportType = (String) tab.getSettings().getParameter(SettingsKey.EXPORT_TYPE);
+        if (exportType == null) return;
+
         Level level = tab.getLevel();
         int levelWidth = level.getWidth();
         int levelHeight = level.getHeight();
 
         BufferedImage pixelImgLeft = createPixelImage(tab, levelWidth, levelHeight, TileType.SOLID);
         BufferedImage pixelImgRight = createPixelImage(tab, levelWidth, levelHeight, TileType.DECO);
+
+        if (exportType.equals("Solid tiles only")) {
+            fillEmptySpace(pixelImgLeft);
+            exportCombinedImage(pixelImgLeft);
+            return;
+        }
+        else if (exportType.equals("Decoration tiles only")) {
+            fillEmptySpace(pixelImgRight);
+            exportCombinedImage(pixelImgRight);
+            return;
+        }
 
         BufferedImage combinedImage = combineImages(pixelImgLeft, pixelImgRight);
         if (combinedImage != null) {
@@ -101,9 +120,7 @@ public class ExportLevelAction extends AbstractEditorAction {
             ImageIO.write(image, "png", outputFile);
             Framework.getInstance().log("Level exported to pixel image successfully!", LogType.NOTIFICATION);
         }
-        catch (IOException ex) {
-            ex.printStackTrace();
-        }
+        catch (Exception ignored) {}
     }
 
 }

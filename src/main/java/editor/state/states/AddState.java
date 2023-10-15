@@ -17,8 +17,7 @@ import static editor.constants.Constants.*;
 
 public class AddState implements State<TabView> {
 
-    @Override
-    public void clickPerform(int x, int y, TabView tabView) {
+    private void placeTile(int x, int y, TabView tabView) {
         String set = (String) tabView.getSettings().getParameter(SettingsKey.SELECTED_SET);
         int index = (int) tabView.getSettings().getParameter(SettingsKey.SELECTED_TILE);
         int layer = (int) tabView.getSettings().getParameter(SettingsKey.SELECTED_LAYER);
@@ -38,6 +37,11 @@ public class AddState implements State<TabView> {
         else newTile = getDecoTile(tabView, tiles, index, layer, tileX, tileY);
 
         if (newTile != null) addTile(newTile, layer, tabView);
+    }
+
+    @Override
+    public void clickPerform(int x, int y, TabView tabView) {
+        placeTile(x, y, tabView);
     }
 
     private List<Tile> getTileSet(String name, TabView tab) {
@@ -123,7 +127,7 @@ public class AddState implements State<TabView> {
 
     @Override
     public void dragPerform(int x, int y, TabView tabView) {
-
+        placeTile(x, y, tabView);
     }
 
     @Override

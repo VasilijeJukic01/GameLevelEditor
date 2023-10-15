@@ -21,7 +21,6 @@ public class LoadTilesetAction extends AbstractEditorAction {
         if (tab == null) return;
         LoadTilesetDialog dialog = new LoadTilesetDialog(EditorFrame.getInstance(), true);
         dialog.setVisible(true);
-        tab.getSettings().updateParameter(SettingsKey.TILE_SET, "Custom");
         tab.reload();
     }
 
