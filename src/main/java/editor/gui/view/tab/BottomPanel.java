@@ -103,7 +103,7 @@ public class BottomPanel extends JPanel {
 
 
         JLabel lbSet = new JLabel("Tileset:");
-        cbTileset = new JComboBox<>(new String[]{"Forest", "Custom"});
+        cbTileset = new JComboBox<>(Framework.getInstance().getStorage().getTilesetNames());
         cbTileset.addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
                 String selectedItem = (String) e.getItem();
@@ -126,7 +126,7 @@ public class BottomPanel extends JPanel {
 
     private void getTileset(String selectedItem) {
         tabView.getSettings().updateParameter(SettingsKey.TILE_SET, selectedItem);
-        reload();
+        reload(false);
     }
 
     private void updateImagePanel(String selectedItem) {
@@ -188,7 +188,8 @@ public class BottomPanel extends JPanel {
         }
     }
 
-    public void reload() {
+    public void reload(boolean reloadComboBox) {
+        if (reloadComboBox) cbTileset.setModel(new DefaultComboBoxModel<>(Framework.getInstance().getStorage().getTilesetNames()));
         loadTileset();
         cbTileset.setSelectedItem(tabView.getSettings().getParameter(SettingsKey.TILE_SET));
         updateImagePanel((String) Objects.requireNonNull(cbTypes.getSelectedItem()));
