@@ -34,6 +34,7 @@ public class ExportLevelAction extends AbstractEditorAction {
         dialog.setVisible(true);
 
         String exportType = (String) tab.getSettings().getParameter(SettingsKey.EXPORT_TYPE);
+        if (exportType == null) return;
 
         Level level = tab.getLevel();
         int levelWidth = level.getWidth();

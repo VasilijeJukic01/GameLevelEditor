@@ -20,7 +20,7 @@ public class ExportDialog extends JDialog {
         initComboBox();
         initUI();
         btnDone.addActionListener(e -> handleDoneButtonClick());
-        btnClose.addActionListener(e -> dispose());
+        btnClose.addActionListener(e -> handleCloseButtonClick());
     }
 
     private void initComboBox() {
@@ -63,6 +63,11 @@ public class ExportDialog extends JDialog {
         String exportType = (String) cbExportType.getSelectedItem();
         if (exportType == null) return;
         tabView.getSettings().updateParameter(SettingsKey.EXPORT_TYPE, exportType);
+        dispose();
+    }
+
+    private void handleCloseButtonClick() {
+        tabView.getSettings().updateParameter(SettingsKey.EXPORT_TYPE, null);
         dispose();
     }
 
