@@ -102,7 +102,11 @@ public class TabView extends JPanel implements AdjustmentListener, NodeSubscribe
     private void initSouthPanel() {
         this.bottomPanel = new BottomPanel(this);
         JScrollPane scrollPane = new JScrollPane(bottomPanel);
+        scrollPane.getVerticalScrollBar().setUnitIncrement(16);
+        scrollPane.getVerticalScrollBar().setBlockIncrement(64);
         JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, mainPanel, scrollPane);
+        splitPane.setResizeWeight(0.4);
+        splitPane.setDividerLocation(0.4);
         this.add(splitPane);
     }
 
@@ -194,6 +198,10 @@ public class TabView extends JPanel implements AdjustmentListener, NodeSubscribe
 
     // Workspace Panel
     private class Workspace extends JPanel {
+
+        public Workspace() {
+            this.setDoubleBuffered(true);
+        }
 
         protected void paintComponent(Graphics g) {
             this.requestFocus(true);
