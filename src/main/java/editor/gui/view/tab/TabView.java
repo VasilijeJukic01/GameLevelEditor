@@ -194,6 +194,7 @@ public class TabView extends JPanel implements AdjustmentListener, NodeSubscribe
     @Override
     public <T> void updateNode(T t) {
         refreshBars();
+        repaint();
     }
 
     // Workspace Panel

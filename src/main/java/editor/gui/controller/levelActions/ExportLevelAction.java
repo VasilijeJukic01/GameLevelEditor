@@ -1,11 +1,15 @@
 package editor.gui.controller.levelActions;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import editor.core.Framework;
 import editor.gui.controller.AbstractEditorAction;
 import editor.gui.view.EditorFrame;
 import editor.gui.view.tab.ExportDialog;
 import editor.gui.view.tab.TabView;
 import editor.logger.LogType;
+import editor.model.metadata.LevelMetadata;
+import editor.model.metadata.ObjectMetadata;
 import editor.model.repository.Node;
 import editor.model.repository.components.Level;
 import editor.model.repository.components.Tile;
@@ -13,10 +17,12 @@ import editor.model.repository.components.TileType;
 import editor.settings.SettingsKey;
 
 import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileWriter;
 
 public class ExportLevelAction extends AbstractEditorAction {
 
@@ -59,6 +65,45 @@ public class ExportLevelAction extends AbstractEditorAction {
             fillEmptySpace(combinedImage);
             exportCombinedImage(combinedImage);
         }
+
+        int result = JOptionPane.showConfirmDialog(EditorFrame.getInstance(), "Do you want to save rotation/scale metadata for this level?", "Save Metadata", JOptionPane.YES_NO_OPTION);
+        if (result == JOptionPane.YES_OPTION) saveMetadataAsJson(tab.getLevel());
+    }
+
+    private void saveMetadataAsJson(Level level) {
+        LevelMetadata levelMetadata = new LevelMetadata();
+
+        for (Node child : level.getChildren()) {
+            Tile tile = (Tile) child;
+            if (tile.getTileType() == TileType.DECO && (tile.getRotation() != 0.0 || tile.getScaleX() != 1.0 || tile.getScaleY() != 1.0)) {
+                ObjectMetadata metadata = new ObjectMetadata();
+                metadata.setX(tile.getX());
+                metadata.setY(tile.getY());
+                metadata.setLayer(tile.getLayer());
+                metadata.setRotation(tile.getRotation());
+                metadata.setScaleX(tile.getScaleX());
+                metadata.setScaleY(tile.getScaleY());
+                levelMetadata.getDecorations().add(metadata);
+            }
+        }
+
+        if (!levelMetadata.getDecorations().isEmpty()) {
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setDialogTitle("Save Metadata JSON File");
+            fileChooser.setSelectedFile(new File(level.getName() + ".json"));
+
+            if (fileChooser.showSaveDialog(EditorFrame.getInstance()) == JFileChooser.APPROVE_OPTION) {
+                File file = fileChooser.getSelectedFile();
+                Gson gson = new GsonBuilder().setPrettyPrinting().create();
+                try (FileWriter writer = new FileWriter(file)) {
+                    gson.toJson(levelMetadata, writer);
+                    Framework.getInstance().log("Metadata saved to " + file.getName(), LogType.NOTIFICATION);
+                } catch (Exception ex) {
+                    Framework.getInstance().log("Failed to save metadata JSON: " + ex.getMessage(), LogType.ERROR);
+                }
+            }
+        }
+        else Framework.getInstance().log("No special metadata to save for level: " + level.getName(), LogType.INFORMATION);
     }
 
     private BufferedImage createPixelImage(TabView tab, int width, int height, TileType tileType) {

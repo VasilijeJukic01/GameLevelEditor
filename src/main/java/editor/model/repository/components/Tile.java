@@ -9,6 +9,8 @@ public class Tile extends Node {
 
     private int x, y;
     private int red, green, blue;
+    private double rotation = 0.0;
+    private double scaleX = 1.0, scaleY = 1.0;
 
     public Tile(String name, Node parent) {
         super(name, parent);
@@ -22,6 +24,12 @@ public class Tile extends Node {
         this.red = red;
         this.green = green;
         this.blue = blue;
+    }
+
+    private void notifyParent() {
+        if (getParent() != null && getParent() instanceof Level) {
+            ((Level) getParent()).notify(this);
+        }
     }
 
     public int getRed() {
@@ -62,5 +70,32 @@ public class Tile extends Node {
 
     public void setLayer(int layer) {
         this.layer = layer;
+    }
+
+    public double getRotation() {
+        return rotation;
+    }
+
+    public void setRotation(double rotation) {
+        this.rotation = rotation;
+        notifyParent();
+    }
+
+    public double getScaleX() {
+        return scaleX;
+    }
+
+    public void setScaleX(double scaleX) {
+        this.scaleX = scaleX;
+        notifyParent();
+    }
+
+    public double getScaleY() {
+        return scaleY;
+    }
+
+    public void setScaleY(double scaleY) {
+        this.scaleY = scaleY;
+        notifyParent();
     }
 }
