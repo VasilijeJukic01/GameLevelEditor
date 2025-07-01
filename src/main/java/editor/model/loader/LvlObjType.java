@@ -8,7 +8,7 @@ public enum LvlObjType {
     RED_POTION("RedPotion",         24, 40, 20, 20),
     CRATE("Crate",                      TILE_SIZE, TILE_SIZE, 5, 8),
     BARREL("Barrel",                    TILE_SIZE, TILE_SIZE, 5, 8),
-    SPIKES("Spikes",                    TILE_SIZE, TILE_SIZE, 0, 8),
+    SPIKES_UP("Spikes",                    TILE_SIZE, TILE_SIZE, 0, 8),
     ARROW_TRAP_LEFT("ArrowTrap",        TILE_SIZE, TILE_SIZE, 0, 8),
     ARROW_TRAP_RIGHT("~ArrowTrap",      TILE_SIZE, TILE_SIZE, 0, 8),
     COIN("Coin",                   TILE_SIZE/2, TILE_SIZE/2, 15, 20),
@@ -19,6 +19,16 @@ public enum LvlObjType {
     TOTEM("Totem",                      TILE_SIZE, TILE_SIZE, 0, 12),
     SMASH_TRAP("SmashTrap",             TILE_SIZE, TILE_SIZE_2, 0, -15),
     CANDLE("Candle",                    TILE_SIZE, TILE_SIZE_2, 0, 8),
+    LOOT("Loot",                        TILE_SIZE, TILE_SIZE, 0, 8),
+    TABLE("Table",                      TILE_SIZE, TILE_SIZE, 0, 8),
+    BOARD("Board",                      TILE_SIZE_2, TILE_SIZE_2, 0, 8),
+    NPC("NPC",                          TILE_SIZE, (int)(TILE_SIZE*1.3), 0, 8),
+    LAVA("Lava",                        TILE_SIZE, TILE_SIZE, 0, 8),
+    BRICK("Brick",                      TILE_SIZE, TILE_SIZE, 0, 0),
+    JUMP_PAD("JumpPad",                      TILE_SIZE, TILE_SIZE, 0, 0),
+    SPIKES_DOWN("SpikesDown",              TILE_SIZE, TILE_SIZE, 0, 0),
+    SPIKES_LEFT("SpikesLeft",              TILE_SIZE, TILE_SIZE, 0, 0),
+    SPIKES_RIGHT("SpikesRight",            TILE_SIZE, TILE_SIZE, 0, 0),
     MAX("",                         0,0,0,0);
 
     private final String id;
