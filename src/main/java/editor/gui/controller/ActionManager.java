@@ -43,6 +43,9 @@ public class ActionManager {
         actions.put(ActionType.OPTIONS, new OptionsAction());
         actions.put(ActionType.BACKGROUND, new BackgroundAction());
         actions.put(ActionType.LOAD_TILESET, new LoadTilesetAction());
+        actions.put(ActionType.SELECT, new SelectAction());
+        actions.put(ActionType.COPY, new CopyAction());
+        actions.put(ActionType.PASTE, new PasteAction());
     }
 
     public AbstractEditorAction getAction(ActionType type) {

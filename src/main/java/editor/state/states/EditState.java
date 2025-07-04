@@ -8,6 +8,8 @@ import editor.model.repository.components.Tile;
 import editor.settings.SettingsKey;
 import editor.state.State;
 
+import java.util.List;
+
 import static editor.constants.Constants.TILE_SIZE;
 
 public class EditState implements State<TabView> {
@@ -19,9 +21,14 @@ public class EditState implements State<TabView> {
         for (Node child : tabView.getLevel().getChildren()) {
             Tile t = (Tile) child;
             if (t.getX() == tileX && t.getY() == tileY) {
-                tabView.getSettings().updateParameter(SettingsKey.EDIT_SELECTION, t);
-                EditDialog editDialog = new EditDialog(EditorFrame.getInstance(),true, t);
+                List<Tile> selection = (List<Tile>) tabView.getSettings().getParameter(SettingsKey.EDIT_SELECTION);
+                selection.clear();
+                selection.add(t);
+                tabView.getLevel().notify(selection);
+                EditDialog editDialog = new EditDialog(EditorFrame.getInstance(), true, t);
                 editDialog.setVisible(true);
+                selection.clear();
+                tabView.getLevel().notify(selection);
                 return;
             }
         }

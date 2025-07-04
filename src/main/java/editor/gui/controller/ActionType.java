@@ -24,5 +24,8 @@ public enum ActionType {
     BACKGROUND,
     SCREENSHOT,
     LOAD_TILESET,
-    HELP
+    HELP,
+    SELECT,
+    COPY,
+    PASTE
 }

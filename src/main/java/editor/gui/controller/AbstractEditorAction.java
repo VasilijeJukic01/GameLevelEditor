@@ -3,10 +3,12 @@ package editor.gui.controller;
 import editor.gui.view.EditorFrame;
 import editor.gui.view.style.CustomButton;
 import editor.gui.view.tab.TabView;
+import editor.model.repository.components.Tile;
 import editor.settings.SettingsKey;
 
 import javax.swing.*;
 import java.net.URL;
+import java.util.List;
 import java.util.Optional;
 
 public abstract class AbstractEditorAction extends AbstractAction {
@@ -28,7 +30,13 @@ public abstract class AbstractEditorAction extends AbstractAction {
 
     protected void reset() {
         TabView tab = EditorFrame.getInstance().getCurrentTab();
-        tab.getSettings().updateParameter(SettingsKey.EDIT_SELECTION, null);
+        if (tab == null) return;
+
+        List<Tile> selection = (List<Tile>) tab.getSettings().getParameter(SettingsKey.EDIT_SELECTION);
+        if (selection != null && !selection.isEmpty()) {
+            selection.clear();
+            tab.getLevel().notify(selection);
+        }
     }
 
 }

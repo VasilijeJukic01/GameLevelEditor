@@ -67,6 +67,10 @@ public class ProjectView extends JPanel {
         this.stateManager.setMoveState();
     }
 
+    public void startSelectState() {
+        this.stateManager.setSelectState();
+    }
+
     // Getters
     public ProjectViewTop getProjectViewTop() {
         return projectViewTop;
@@ -74,6 +78,10 @@ public class ProjectView extends JPanel {
 
     public TabbedPane getTabbedPane() {
         return tabbedPane;
+    }
+
+    public StateManager getStateManager() {
+        return stateManager;
     }
 
 }

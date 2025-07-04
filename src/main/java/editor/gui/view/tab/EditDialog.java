@@ -53,8 +53,8 @@ public class EditDialog extends JDialog {
 
     private void updateLabels() {
         if (rotationAndScalePanel != null) {
-            lbRotationValue.setText(String.format("%.1f°", rotationAndScalePanel.getRotationAngle()));
-            lbScaleValue.setText(String.format("%.2fx", rotationAndScalePanel.getScale()));
+            lbRotationValue.setText(String.format("%5.1f°", rotationAndScalePanel.getRotationAngle()));
+            lbScaleValue.setText(String.format("%4.2fx", rotationAndScalePanel.getScale()));
         }
     }
 

@@ -3,6 +3,7 @@ package editor.gui;
 import editor.command.CommandManager;
 import editor.core.Gui;
 import editor.gui.view.EditorFrame;
+import editor.gui.view.ProjectView;
 
 public class SwingGui implements Gui {
 
@@ -15,6 +16,11 @@ public class SwingGui implements Gui {
     @Override
     public CommandManager getCommandManager() {
         return commandManager;
+    }
+
+    @Override
+    public ProjectView getProjectView() {
+        return EditorFrame.getInstance().getProjectView();
     }
 
     @Override

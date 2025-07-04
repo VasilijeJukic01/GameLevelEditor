@@ -6,6 +6,7 @@ import editor.gui.controller.tabController.TabWheelListener;
 import editor.gui.view.renderer.LevelRenderer;
 import editor.gui.view.renderer.Renderer;
 import editor.model.repository.components.Level;
+import editor.model.repository.components.Tile;
 import editor.model.repository.nodeObserver.NodeSubscriber;
 import editor.settings.EditorSettings;
 import editor.settings.Settings;
@@ -18,6 +19,7 @@ import java.awt.event.AdjustmentListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.geom.AffineTransform;
+import java.util.ArrayList;
 
 import static editor.constants.Constants.*;
 
@@ -34,6 +36,7 @@ public class TabView extends JPanel implements AdjustmentListener, NodeSubscribe
     private JScrollBar hScrollBar, vScrollBar;
 
     private final Renderer renderer;
+    private TabKeyListener tabKeyListener;
 
     public TabView(Level level) {
         this.setLayout(new BorderLayout());
@@ -59,7 +62,7 @@ public class TabView extends JPanel implements AdjustmentListener, NodeSubscribe
         this.settings.addParameter(SettingsKey.SELECTED_SET, "Solid Tiles");
         this.settings.addParameter(SettingsKey.SELECTED_TILE, 0);
         this.settings.addParameter(SettingsKey.SELECTED_LAYER, 3);
-        this.settings.addParameter(SettingsKey.EDIT_SELECTION, null);
+        this.settings.addParameter(SettingsKey.EDIT_SELECTION, new ArrayList<Tile>());
         this.settings.addParameter(SettingsKey.BACKGROUND, null);
         this.settings.addParameter(SettingsKey.TILE_SET, "Forest");
         this.settings.addParameter(SettingsKey.EXPORT_TYPE, "Both");
@@ -85,15 +88,17 @@ public class TabView extends JPanel implements AdjustmentListener, NodeSubscribe
     }
 
     private void initListeners() {
-        workspacePanel.addMouseListener(new TabMouseListener(this));
-        workspacePanel.addMouseMotionListener(new TabMouseListener(this));
+        TabMouseListener tabMouseListener = new TabMouseListener(this);
+        workspacePanel.addMouseListener(tabMouseListener);
+        workspacePanel.addMouseMotionListener(tabMouseListener);
         workspacePanel.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
                 refreshBars();
             }
         });
-        TabKeyListener tabKeyListener = new TabKeyListener();
+
+        this.tabKeyListener = new TabKeyListener();
         TabWheelListener tabWheelListener = new TabWheelListener(vScrollBar, tabKeyListener, this);
         workspacePanel.addMouseWheelListener(tabWheelListener);
         workspacePanel.addKeyListener(tabKeyListener);
@@ -122,8 +127,8 @@ public class TabView extends JPanel implements AdjustmentListener, NodeSubscribe
     @Override
     public void adjustmentValueChanged(AdjustmentEvent e) {
         JScrollBar jScrollBar = (JScrollBar) e.getSource();
-        if (jScrollBar.getOrientation() == JScrollBar.HORIZONTAL) dx = e.getValue() - workspacePanel.getX();
-        else dy = e.getValue() - workspacePanel.getY();
+        if (jScrollBar.getOrientation() == JScrollBar.HORIZONTAL) dx = e.getValue();
+        else dy = e.getValue();
         this.repaint();
     }
 
@@ -164,19 +169,17 @@ public class TabView extends JPanel implements AdjustmentListener, NodeSubscribe
     }
 
     public void setDx(double dx) {
-        this.dx = dx;
+        int max_dx = hScrollBar.getMaximum() - hScrollBar.getVisibleAmount();
+        this.dx = Math.max(0, Math.min(dx, max_dx));
+        hScrollBar.setValue((int) this.dx);
+        repaint();
     }
 
     public void setDy(double dy) {
-        this.dy = dy;
-    }
-
-    public JScrollBar getHScrollBar() {
-        return hScrollBar;
-    }
-
-    public JScrollBar getVScrollBar() {
-        return vScrollBar;
+        int max_dy = vScrollBar.getMaximum() - vScrollBar.getVisibleAmount();
+        this.dy = Math.max(0, Math.min(dy, max_dy));
+        vScrollBar.setValue((int) this.dy);
+        repaint();
     }
 
     public void setScale(double scale) {
@@ -188,6 +191,10 @@ public class TabView extends JPanel implements AdjustmentListener, NodeSubscribe
 
     public void setLevel(Level level) {
         this.level = level;
+    }
+
+    public TabKeyListener getTabKeyListener() {
+        return tabKeyListener;
     }
 
     // Observer

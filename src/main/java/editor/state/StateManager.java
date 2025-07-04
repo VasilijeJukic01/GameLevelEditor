@@ -1,10 +1,7 @@
 package editor.state;
 
 import editor.gui.view.tab.TabView;
-import editor.state.states.AddState;
-import editor.state.states.DeleteState;
-import editor.state.states.EditState;
-import editor.state.states.MoveState;
+import editor.state.states.*;
 
 public class StateManager {
 
@@ -14,6 +11,8 @@ public class StateManager {
     private DeleteState deleteState;
     private EditState editState;
     private MoveState moveState;
+    private SelectState selectState;
+    private PasteState pasteState;
 
     public StateManager() {
         init();
@@ -24,6 +23,8 @@ public class StateManager {
         this.deleteState = new DeleteState();
         this.editState = new EditState();
         this.moveState = new MoveState();
+        this.selectState = new SelectState();
+        this.pasteState = new PasteState();
         this.currentState = moveState;
     }
 
@@ -45,6 +46,18 @@ public class StateManager {
 
     public void setMoveState() {
         this.currentState = moveState;
+    }
+
+    public void setSelectState() {
+        this.currentState = selectState;
+    }
+
+    public void setPasteState() {
+        this.currentState = pasteState;
+    }
+
+    public State<TabView> getSelectState() {
+        return selectState;
     }
 
 }

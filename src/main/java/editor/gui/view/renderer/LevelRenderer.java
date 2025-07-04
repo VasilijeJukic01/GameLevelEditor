@@ -11,9 +11,11 @@ import editor.model.repository.components.Tile;
 import editor.model.repository.components.Level;
 import editor.model.repository.components.TileType;
 import editor.settings.SettingsKey;
+import editor.state.states.SelectState;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.List;
 
 import static editor.constants.Constants.*;
 import static editor.constants.ObjectConstants.*;
@@ -55,6 +57,7 @@ public class LevelRenderer implements Renderer {
         }
         renderSelection(g);
         renderGrid(g);
+        ((SelectState) Framework.getInstance().getGui().getProjectView().getStateManager().getSelectState()).renderSelection(g);
     }
 
     private void renderBackground(Graphics g) {
@@ -87,10 +90,12 @@ public class LevelRenderer implements Renderer {
     }
 
     private void renderSelection(Graphics g) {
-        if (tabView.getSettings().getParameter(SettingsKey.EDIT_SELECTION) != null) {
-            Tile selection = (Tile) tabView.getSettings().getParameter(SettingsKey.EDIT_SELECTION);
+        List<Tile> selection = (List<Tile>) tabView.getSettings().getParameter(SettingsKey.EDIT_SELECTION);
+        if (selection != null && !selection.isEmpty()) {
             g.setColor(SELECTION_COLOR);
-            g.fillRect(selection.getX() * TILE_SIZE, selection.getY() * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+            for (Tile selectedTile : selection) {
+                g.fillRect(selectedTile.getX() * TILE_SIZE, selectedTile.getY() * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+            }
         }
     }
 

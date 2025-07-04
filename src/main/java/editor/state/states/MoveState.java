@@ -1,71 +1,102 @@
 package editor.state.states;
 
+import editor.command.Command;
+import editor.command.commands.MoveNodeCommand;
+import editor.core.Framework;
 import editor.gui.view.tab.TabView;
+import editor.model.repository.components.Tile;
+import editor.settings.SettingsKey;
 import editor.state.State;
 
-import javax.swing.*;
 import java.awt.*;
-import java.util.function.IntConsumer;
-import java.util.function.Supplier;
+import java.util.ArrayList;
+import java.util.List;
+
+import static editor.constants.Constants.TILE_SIZE;
 
 public class MoveState implements State<TabView> {
 
     private Point startPoint;
+    private List<Tile> selectionSnapshot;
+    private List<Point> originalPositions;
     private boolean isDragging = false;
 
     @Override
     public void clickPerform(int x, int y, TabView tabView) {
-        this.startPoint = new Point(x, y);
-        this.isDragging = true;
+        List<Tile> selectedTiles = (List<Tile>) tabView.getSettings().getParameter(SettingsKey.EDIT_SELECTION);
+        int tileX = x / TILE_SIZE;
+        int tileY = y / TILE_SIZE;
+
+        boolean clickedOnSelection = false;
+        if (selectedTiles != null) {
+            for (Tile tile : selectedTiles) {
+                if (tile.getX() == tileX && tile.getY() == tileY) {
+                    clickedOnSelection = true;
+                    break;
+                }
+            }
+        }
+
+        if (clickedOnSelection) {
+            isDragging = true;
+            startPoint = new Point(tileX, tileY);
+            selectionSnapshot = new ArrayList<>(selectedTiles);
+            originalPositions = new ArrayList<>();
+            for (Tile tile : selectionSnapshot) {
+                originalPositions.add(new Point(tile.getX(), tile.getY()));
+            }
+        }
+        else {
+            if (selectedTiles != null) selectedTiles.clear();
+            isDragging = false;
+            selectionSnapshot = null;
+            originalPositions = null;
+            tabView.repaint();
+        }
     }
 
     @Override
     public void dragPerform(int x, int y, TabView tabView) {
-        if (!isDragging) return;
+        if (!isDragging || startPoint == null || selectionSnapshot == null) return;
 
-        Point currentPoint = new Point(x, y);
-        double dx = (currentPoint.getX() - startPoint.getX()) * tabView.getScale();
-        double dy = (currentPoint.getY() - startPoint.getY()) * tabView.getScale();
+        int currentTileX = x / TILE_SIZE;
+        int currentTileY = y / TILE_SIZE;
+        int dx = currentTileX - startPoint.x;
+        int dy = currentTileY - startPoint.y;
 
-        move(-dx, -dy, tabView);
+        for (int i = 0; i < selectionSnapshot.size(); i++) {
+            Tile tile = selectionSnapshot.get(i);
+            Point originalPos = originalPositions.get(i);
+            tile.setX(originalPos.x + dx);
+            tile.setY(originalPos.y + dy);
+        }
+        tabView.repaint();
     }
 
     @Override
     public void releasePerform(int x, int y, TabView tabView) {
-        this.isDragging = false;
-    }
-
-    public void move(double dx, double dy, TabView tabView) {
-        JScrollBar hScrollBar = tabView.getHScrollBar();
-        JScrollBar vScrollBar = tabView.getVScrollBar();
-        double currentDx = tabView.getDx();
-        double currentDy = tabView.getDy();
-
-        boolean moved = false;
-        if (isWithinBounds(currentDx + dx, hScrollBar)) {
-            tabView.setDx(currentDx + dx);
-            moved = true;
-        }
-        if (isWithinBounds(currentDy + dy, vScrollBar)) {
-            tabView.setDy(currentDy + dy);
-            moved = true;
+        if (!isDragging || startPoint == null || selectionSnapshot == null || originalPositions == null) {
+            isDragging = false;
+            return;
         }
 
-        if (moved) updateBars(tabView, hScrollBar, vScrollBar);
-    }
+        int finalTileX = x / TILE_SIZE;
+        int finalTileY = y / TILE_SIZE;
+        int dx = finalTileX - startPoint.x;
+        int dy = finalTileY - startPoint.y;
 
-    private boolean isWithinBounds(double value, JScrollBar scrollBar) {
-        int max = scrollBar.getMaximum();
-        int visibleAmount = scrollBar.getVisibleAmount();
-        return value >= 0 && value <= max - visibleAmount;
-    }
+        for (int i = 0; i < selectionSnapshot.size(); i++) {
+            Tile tile = selectionSnapshot.get(i);
+            Point originalPos = originalPositions.get(i);
+            tile.setX(originalPos.x);
+            tile.setY(originalPos.y);
+            Command moveCommand = new MoveNodeCommand(tabView.getLevel(), tile, originalPos.x, originalPos.y, originalPos.x + dx, originalPos.y + dy);
+            Framework.getInstance().getGui().getCommandManager().addCommand(moveCommand);
+        }
 
-    private void updateBars(TabView tabView, JScrollBar hScrollBar, JScrollBar vScrollBar) {
-        updateScrollBar(tabView::getDx, hScrollBar::setValue);
-        updateScrollBar(tabView::getDy, vScrollBar::setValue);
-    }
-
-    private void updateScrollBar(Supplier<Double> getValue, IntConsumer setValue) {
-        setValue.accept(getValue.get().intValue());
+        isDragging = false;
+        startPoint = null;
+        selectionSnapshot = null;
+        originalPositions = null;
     }
 }

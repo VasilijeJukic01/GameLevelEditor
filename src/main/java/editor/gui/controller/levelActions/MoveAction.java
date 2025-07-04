@@ -18,7 +18,6 @@ public class MoveAction extends AbstractEditorAction {
         TabView tab = EditorFrame.getInstance().getCurrentTab();
         if (tab == null) return;
         EditorFrame.getInstance().getProjectView().startMoveState();
-        super.reset();
     }
 
 }

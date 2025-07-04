@@ -18,7 +18,6 @@ public class EditNodeAction extends AbstractEditorAction {
         TabView tab = EditorFrame.getInstance().getCurrentTab();
         if (tab == null) return;
         EditorFrame.getInstance().getProjectView().startEditState();
-        super.reset();
     }
 
 }
