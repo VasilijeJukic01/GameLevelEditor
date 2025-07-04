@@ -4,6 +4,8 @@ import editor.core.Framework;
 import editor.core.Loader;
 import editor.gui.view.EditorFrame;
 import editor.logger.LogType;
+import editor.model.metadata.LevelMetadata;
+import editor.model.metadata.ObjectMetadata;
 import editor.model.repository.Composite;
 import editor.model.repository.Node;
 import editor.model.repository.components.Tile;
@@ -26,9 +28,13 @@ public class LevelLoader implements Loader {
 
     @Override
     public void load(File file) {
+        load(file, null);
+    }
+
+    public void load(File file, LevelMetadata metadata) {
         try {
             BufferedImage levelImg = ImageIO.read(file);
-            String name = file.getName().substring(0, file.getName().indexOf("."));
+            String name = file.getName().substring(0, file.getName().lastIndexOf('.'));
             Level level = EditorFrame.getInstance().getCurrentTab().getLevel();
             level.setSize(levelImg.getWidth()/2, levelImg.getHeight());
             level.setName(name);
@@ -41,9 +47,31 @@ public class LevelLoader implements Loader {
             getDecoData(levelImg, level);
             getPlayer(levelImg, level);
 
+            if (metadata != null) {
+                applyMetadata(level, metadata);
+                Framework.getInstance().log("Successfully applied metadata for " + name, LogType.INFORMATION);
+            }
             Framework.getInstance().log("Level imported: "+name, LogType.INFORMATION);
         }
-        catch (Exception ignored) {}
+        catch (Exception e) {
+            Framework.getInstance().log("Failed to import level: " + e.getMessage(), LogType.ERROR);
+        }
+    }
+
+    private void applyMetadata(Level level, LevelMetadata metadata) {
+        for (ObjectMetadata meta : metadata.getDecorations()) {
+            for (Node node : level.getChildren()) {
+                if (node instanceof Tile) {
+                    Tile tile = (Tile) node;
+                    if (tile.getTileType() == TileType.DECO && tile.getX() == meta.getX() && tile.getY() == meta.getY() && tile.getLayer() == meta.getLayer()) {
+                        tile.setRotation(meta.getRotation());
+                        tile.setScaleX(meta.getScaleX());
+                        tile.setScaleY(meta.getScaleY());
+                        break;
+                    }
+                }
+            }
+        }
     }
 
     private void getLevelData(BufferedImage levelImg, Composite<Node> level) { // Red
