@@ -1,32 +1,37 @@
 package editor.gui.view.renderer.renderers;
 
 import editor.gui.view.renderer.RenderStrategy;
-import editor.model.loader.LvlDecoType;
+import editor.model.metadata.DecoMetadata;
 import editor.model.repository.components.Tile;
 import editor.model.repository.components.TileType;
 
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.List;
 
 import static editor.constants.Constants.TILE_SIZE;
 
 public class DecoRenderer implements RenderStrategy<Tile> {
 
     private final BufferedImage[] decoTiles;
+    private final List<DecoMetadata> decoMetadata;
 
-    public DecoRenderer(BufferedImage[] decoTiles) {
+    public DecoRenderer(BufferedImage[] decoTiles, List<DecoMetadata> decoMetadata) {
         this.decoTiles = decoTiles;
+        this.decoMetadata = decoMetadata;
     }
 
     @Override
     public void render(Graphics g, Tile tile, int layer) {
-        if (decoTiles == null || decoTiles.length == 0 || tile.getTileType() != TileType.DECO) return;
+        if (decoTiles == null || decoTiles.length == 0 || decoMetadata == null || tile.getTileType() != TileType.DECO) return;
 
         int value = tile.getBlue();
         int layerIndex = tile.getLayer();
 
-        if (value != -1 && layerIndex == layer) {
-            LvlDecoType deco = LvlDecoType.values()[value];
+        // Check bounds
+        if (value != -1 && value < decoMetadata.size() && layerIndex == layer) {
+            DecoMetadata deco = decoMetadata.get(value);
             BufferedImage model = decoTiles[value];
             if (model == null) return;
 
@@ -35,8 +40,8 @@ public class DecoRenderer implements RenderStrategy<Tile> {
             double scaleY = tile.getScaleY();
 
             if (rotation == 0.0 && scaleX == 1.0 && scaleY == 1.0) {
-                int x = tile.getX() * TILE_SIZE + deco.getXOffset();
-                int y = tile.getY() * TILE_SIZE + deco.getYOffset();
+                int x = tile.getX() * TILE_SIZE + deco.getxOffset();
+                int y = tile.getY() * TILE_SIZE + deco.getyOffset();
                 g.drawImage(model, x, y, deco.getWid(), deco.getHei(), null);
             }
             else {

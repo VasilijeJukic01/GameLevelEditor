@@ -6,6 +6,7 @@ import editor.gui.view.renderer.renderers.EnemyRenderer;
 import editor.gui.view.renderer.renderers.ObjectRenderer;
 import editor.gui.view.renderer.renderers.TerrainRenderer;
 import editor.gui.view.tab.TabView;
+import editor.model.metadata.DecoMetadata;
 import editor.model.repository.Node;
 import editor.model.repository.components.Tile;
 import editor.model.repository.components.Level;
@@ -35,10 +36,11 @@ public class LevelRenderer implements Renderer {
 
     private void reloadTileset() {
         String set = (String) tabView.getSettings().getParameter(SettingsKey.TILE_SET);
+        List<DecoMetadata> metadata = Framework.getInstance().getStorage().getDecoMetadataMap().get(set);
         this.terrainRenderer = new TerrainRenderer(Framework.getInstance().getStorage().getImageMap().get(set+"Tiles"));
         this.objectRenderer = new ObjectRenderer(Framework.getInstance().getStorage().getImageMap().get("Objects"));
         this.enemyRenderer = new EnemyRenderer(Framework.getInstance().getStorage().getImageMap().get("Enemies"));
-        this.decoRenderer = new DecoRenderer(Framework.getInstance().getStorage().getImageMap().get(set+"Deco"));
+        this.decoRenderer = new DecoRenderer(Framework.getInstance().getStorage().getImageMap().get(set+"Deco"), metadata);
     }
 
     @Override

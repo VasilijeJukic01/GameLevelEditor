@@ -1,0 +1,74 @@
+[
+  {
+    "id": "BANNER",
+    "wid": 64,
+    "hei": 192,
+    "xOffset": 0,
+    "yOffset": 0
+  },
+  {
+    "id": "BAR",
+    "wid": 256,
+    "hei": 128,
+    "xOffset": 0,
+    "yOffset": 10
+  },
+  {
+    "id": "BED",
+    "wid": 128,
+    "hei": 96,
+    "xOffset": 0,
+    "yOffset": -16
+  },
+  {
+    "id": "CHAIR_LEFT",
+    "wid": 64,
+    "hei": 96,
+    "xOffset": 0,
+    "yOffset": -16
+  },
+  {
+    "id": "CHAIR_RIGHT",
+    "filename": "CHAIR_LEFT",
+    "flipped": true,
+    "wid": 64,
+    "hei": 96,
+    "xOffset": 0,
+    "yOffset": -16
+  },
+  {
+    "id": "DOOR",
+    "wid": 64,
+    "hei": 128,
+    "xOffset": 0,
+    "yOffset": 1
+  },
+  {
+    "id": "SHELF",
+    "wid": 128,
+    "hei": 192,
+    "xOffset": 0,
+    "yOffset": 7
+  },
+  {
+    "id": "TABLE1",
+    "wid": 128,
+    "hei": 128,
+    "xOffset": 0,
+    "yOffset": 16
+  },
+  {
+    "id": "BLACK",
+    "wid": 64,
+    "hei": 64,
+    "xOffset": 0,
+    "yOffset": 0
+  },
+  {
+    "id": "WOOD1",
+    "wid": 64,
+    "hei": 64,
+    "xOffset": 0,
+    "yOffset": 0
+  }
+]
