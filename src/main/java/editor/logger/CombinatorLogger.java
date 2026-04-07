@@ -40,10 +40,10 @@ public class CombinatorLogger implements Logger {
     }
 
     private static String logToFile(String message) {
-        try (PrintWriter writer = new PrintWriter(new FileWriter("src/main/resources/log.txt", true))) {
-            writer.println(message);
-        }
-        catch (Exception ignored) {}
+//        try (PrintWriter writer = new PrintWriter(new FileWriter("src/main/resources/log.txt", true))) {
+//            writer.println(message);
+//        }
+//        catch (Exception ignored) {}
         return message;
     }
 
