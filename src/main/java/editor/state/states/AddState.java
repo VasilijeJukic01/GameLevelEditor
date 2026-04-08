@@ -34,6 +34,7 @@ public class AddState implements State<TabView> {
         else if (set.equals("Objects")) newTile = getObjectTile(tabView, tiles, index, tileX, tileY);
         else if (set.equals("Enemies")) newTile = getEnemyTile(tabView, tiles, index, tileX, tileY);
         else if (set.equals("Player")) newTile = getPlayerTile(tabView, tiles, tileX, tileY);
+        else if (set.equals("Triggers")) newTile = getTriggerTile(tabView, tiles, index, tileX, tileY); // <-- Add this
         else newTile = getDecoTile(tabView, tiles, index, layer, tileX, tileY);
 
         if (newTile != null) addTile(newTile, layer, tabView);
@@ -56,6 +57,8 @@ public class AddState implements State<TabView> {
             return Framework.getInstance().getStorage().getTileMap().get("Enemies");
         else if ("Player".equals(name))
             return List.of(Framework.getInstance().getStorage().getPlayerTile());
+        else if ("Triggers".equals(name))
+            return Framework.getInstance().getStorage().getTileMap().get("Triggers");
        return null;
     }
 
@@ -114,6 +117,16 @@ public class AddState implements State<TabView> {
             if (tile.getTileType() == TileType.PLAYER) {
                 if (!isFree(tileX, tileY, tabView.getLevel(), List.of(TileType.SOLID, TileType.OBJECT, TileType.ENEMY, TileType.PLAYER))) return null;
                 return new Tile("", tabView.getLevel(), TileType.PLAYER, tileX, tileY, 100, 100, 100);
+            }
+        }
+        return null;
+    }
+
+    private Tile getTriggerTile(TabView tabView, List<Tile> tiles, int index, int tileX, int tileY) {
+        for (Tile tile : tiles) {
+            if (tile.getBlue() == index) {
+                if (!isFree(tileX, tileY, tabView.getLevel(), List.of(TileType.TRIGGER))) return null;
+                return new Tile("", tabView.getLevel(), TileType.TRIGGER, tileX, tileY, 254, 254, index);
             }
         }
         return null;

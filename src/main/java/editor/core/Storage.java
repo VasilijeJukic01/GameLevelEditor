@@ -5,18 +5,21 @@ import com.google.gson.reflect.TypeToken;
 import editor.logger.LogType;
 import editor.model.loader.LvlEnemyType;
 import editor.model.loader.LvlObjType;
+import editor.model.loader.LvlTriggerType;
 import editor.model.metadata.DecoMetadata;
 import editor.model.metadata.TilesetMetadata;
 import editor.model.repository.components.Tile;
 import editor.model.repository.components.TileType;
 import editor.utils.Utils;
 
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.lang.reflect.Type;
 import java.util.*;
+import java.util.List;
 
 public final class Storage {
 
@@ -41,6 +44,7 @@ public final class Storage {
         loadObjects();
         loadEnemies();
         loadPlayer();
+        loadTriggers();
         Framework.getInstance().log("Storage initialized.", LogType.INFORMATION);
     }
 
@@ -148,6 +152,29 @@ public final class Storage {
     private void loadPlayer() {
         this.playerImg = Utils.getInstance().importImage("/images/data/Player.png", -1, -1);
         this.playerTile = new Tile("", null, TileType.PLAYER, 0, 0, 100, 100, 100);
+    }
+
+    private void loadTriggers() {
+        BufferedImage[] triggerIcons = new BufferedImage[LvlTriggerType.values().length - 1];
+        List<Tile> triggerTiles = new ArrayList<>();
+
+        for (int i = 0; i < triggerIcons.length; i++) {
+            LvlTriggerType type = LvlTriggerType.values()[i];
+
+            BufferedImage img = new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB);
+            Graphics2D g = img.createGraphics();
+            g.setColor(type.getColor());
+            g.fillRect(16, 0, 32, 64);
+            g.setColor(Color.WHITE);
+            g.fillOval(28, 28, 8, 8);
+            g.dispose();
+
+            triggerIcons[i] = img;
+            Tile t = new Tile("", null, TileType.TRIGGER, 0, 0, 254, 254, i);
+            triggerTiles.add(t);
+        }
+        imageMap.put("Triggers", triggerIcons);
+        tileMap.put("Triggers", triggerTiles);
     }
 
     // Getters

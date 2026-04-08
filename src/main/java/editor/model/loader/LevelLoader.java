@@ -36,16 +36,26 @@ public class LevelLoader implements Loader {
             BufferedImage levelImg = ImageIO.read(file);
             String name = file.getName().substring(0, file.getName().lastIndexOf('.'));
             Level level = EditorFrame.getInstance().getCurrentTab().getLevel();
-            level.setSize(levelImg.getWidth()/2, levelImg.getHeight());
+
+            int panels = (levelImg.getWidth() % 3 == 0) ? 3 : 2;
+            int panelWidth = levelImg.getWidth() / panels;
+
+            level.setSize(panelWidth, levelImg.getHeight());
             level.setName(name);
 
             level.getChildren().clear();
 
-            getLevelData(levelImg, level);
-            getObjectData(levelImg, level);
-            getEnemyData(levelImg, level);
-            getDecoData(levelImg, level);
-            getPlayer(levelImg, level);
+            getLevelData(levelImg, level, panelWidth);
+            getObjectData(levelImg, level, panelWidth);
+            getEnemyData(levelImg, level, panelWidth);
+            getDecoData(levelImg, level, panelWidth);
+            getPlayer(levelImg, level, panelWidth);
+
+            // Read triggers if it's a 3-panel map
+            if (panels == 3) {
+                getTriggerData(levelImg, level, panelWidth);
+            }
+
 
             if (metadata != null) {
                 applyMetadata(level, metadata);
@@ -74,8 +84,8 @@ public class LevelLoader implements Loader {
         }
     }
 
-    private void getLevelData(BufferedImage levelImg, Composite<Node> level) { // Red
-        for (int i = 0; i < levelImg.getWidth()/2; i++) {
+    private void getLevelData(BufferedImage levelImg, Composite<Node> level, int panelWidth) { // Red
+        for (int i = 0; i < panelWidth; i++) {
             for (int j = 0; j < levelImg.getHeight(); j++) {
                 Color color = new Color(levelImg.getRGB(i, j));
                 int value = color.getRed();
@@ -92,8 +102,8 @@ public class LevelLoader implements Loader {
         }
     }
 
-    public void getObjectData(BufferedImage levelImg, Composite<Node> level) { // Blue
-        for (int i = 0; i < levelImg.getWidth()/2; i++) {
+    public void getObjectData(BufferedImage levelImg, Composite<Node> level, int panelWidth) { // Blue
+        for (int i = 0; i < panelWidth; i++) {
             for (int j = 0; j < levelImg.getHeight(); j++) {
                 Color color = new Color(levelImg.getRGB(i, j));
                 int value = color.getBlue();
@@ -105,8 +115,8 @@ public class LevelLoader implements Loader {
         }
     }
 
-    public void getEnemyData(BufferedImage levelImg, Composite<Node> level) { // Green
-        for (int i = 0; i < levelImg.getWidth()/2; i++) {
+    public void getEnemyData(BufferedImage levelImg, Composite<Node> level, int panelWidth) { // Green
+        for (int i = 0; i < panelWidth; i++) {
             for (int j = 0; j < levelImg.getHeight(); j++) {
                 Color color = new Color(levelImg.getRGB(i, j));
                 int value = color.getGreen();
@@ -118,23 +128,23 @@ public class LevelLoader implements Loader {
         }
     }
 
-    private void getDecoData(BufferedImage levelImg, Composite<Node> level) { // Blue && Green
-        for (int i = levelImg.getWidth()/2; i < levelImg.getWidth(); i++) {
+    private void getDecoData(BufferedImage levelImg, Composite<Node> level, int panelWidth) { // Blue && Green
+        for (int i = panelWidth; i < levelImg.getWidth(); i++) {
             for (int j = 0; j < levelImg.getHeight(); j++) {
                 Color color = new Color(levelImg.getRGB(i, j));
                 int decoValue = color.getBlue();
                 int layerValue = color.getGreen();
                 if (decoValue >= DECO_NUM) continue;
                 if (layerValue > 5) layerValue = -1;
-                Tile tile = new Tile("", level, TileType.DECO, i - levelImg.getWidth()/2, j, 254, layerValue, decoValue);
+                Tile tile = new Tile("", level, TileType.DECO, i - panelWidth, j, 254, layerValue, decoValue);
                 tile.setLayer(layerValue);
                 level.addChild(tile);
             }
         }
     }
 
-    private void getPlayer(BufferedImage levelImg, Composite<Node> level) {
-        for (int i = 0; i < levelImg.getWidth()/2; i++) {
+    private void getPlayer(BufferedImage levelImg, Composite<Node> level, int panelWidth) {
+        for (int i = 0; i < panelWidth; i++) {
             for (int j = 0; j < levelImg.getHeight(); j++) {
                 Color color = new Color(levelImg.getRGB(i, j));
                 int R = color.getRed();
@@ -145,6 +155,21 @@ public class LevelLoader implements Loader {
                     tile.setLayer(5);
                     level.addChild(tile);
                     return;
+                }
+            }
+        }
+    }
+
+    private void getTriggerData(BufferedImage levelImg, Composite<Node> level, int panelWidth) {
+        for (int i = panelWidth * 2; i < levelImg.getWidth(); i++) {
+            for (int j = 0; j < levelImg.getHeight(); j++) {
+                Color color = new Color(levelImg.getRGB(i, j));
+                int triggerValue = color.getBlue();
+
+                if (triggerValue < LvlTriggerType.MAX.ordinal() && color.getRed() == 254 && color.getGreen() == 254) {
+                    Tile tile = new Tile("", level, TileType.TRIGGER, i - (panelWidth * 2), j, 254, 254, triggerValue);
+                    tile.setLayer(5);
+                    level.addChild(tile);
                 }
             }
         }

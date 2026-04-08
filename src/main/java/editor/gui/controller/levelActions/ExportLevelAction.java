@@ -48,6 +48,7 @@ public class ExportLevelAction extends AbstractEditorAction {
 
         BufferedImage pixelImgLeft = createPixelImage(tab, levelWidth, levelHeight, TileType.SOLID);
         BufferedImage pixelImgRight = createPixelImage(tab, levelWidth, levelHeight, TileType.DECO);
+        BufferedImage pixelImgLogic = createPixelImage(tab, levelWidth, levelHeight, TileType.TRIGGER);
 
         if (exportType.equals("Solid tiles only")) {
             fillEmptySpace(pixelImgLeft);
@@ -60,7 +61,7 @@ public class ExportLevelAction extends AbstractEditorAction {
             return;
         }
 
-        BufferedImage combinedImage = combineImages(pixelImgLeft, pixelImgRight);
+        BufferedImage combinedImage = combineImages(pixelImgLeft, pixelImgRight, pixelImgLogic);
         if (combinedImage != null) {
             fillEmptySpace(combinedImage);
             exportCombinedImage(combinedImage);
@@ -125,20 +126,19 @@ public class ExportLevelAction extends AbstractEditorAction {
         return pixelImage;
     }
 
-    private BufferedImage combineImages(BufferedImage leftImage, BufferedImage rightImage) {
-        if (leftImage.getWidth() != rightImage.getWidth() || leftImage.getHeight() != rightImage.getHeight())
-            return null;
+    private BufferedImage combineImages(BufferedImage terrain, BufferedImage deco, BufferedImage logic) {
+        int w = terrain.getWidth();
+        int h = terrain.getHeight();
 
-        int newWidth = 2 * leftImage.getWidth();
-        int newHeight = leftImage.getHeight();
-        BufferedImage combinedImage = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_ARGB);
+        BufferedImage combined = new BufferedImage(w * 3, h, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2d = combined.createGraphics();
 
-        Graphics2D g2d = combinedImage.createGraphics();
-        g2d.drawImage(leftImage, 0, 0, null);
-        g2d.drawImage(rightImage, leftImage.getWidth(), 0, null);
+        g2d.drawImage(terrain, 0, 0, null);
+        g2d.drawImage(deco, w, 0, null);
+        g2d.drawImage(logic, w * 2, 0, null);
+
         g2d.dispose();
-
-        return combinedImage;
+        return combined;
     }
 
     private void fillEmptySpace(BufferedImage image) {

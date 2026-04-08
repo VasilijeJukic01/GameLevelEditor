@@ -17,7 +17,7 @@ public class BottomPanel extends JPanel {
 
     private final TabView tabView;
 
-    private BufferedImage[] tiles, decorations, objects, enemies;
+    private BufferedImage[] tiles, decorations, objects, enemies, triggers;
 
     private final BufferedImage[] player;
 
@@ -41,6 +41,7 @@ public class BottomPanel extends JPanel {
         this.decorations = Framework.getInstance().getStorage().getImageMap().get(set+"Deco");
         this.objects = Framework.getInstance().getStorage().getImageMap().get("Objects");
         this.enemies = Framework.getInstance().getStorage().getImageMap().get("Enemies");
+        this.triggers = Framework.getInstance().getStorage().getImageMap().get("Triggers");
     }
 
     private void init() {
@@ -71,19 +72,20 @@ public class BottomPanel extends JPanel {
         int row = itemIndex / EDITOR_PICKER_COL;
         int col = itemIndex % EDITOR_PICKER_COL;
 
-        if (row >= EDITOR_PICKER_ROW) return true;
-
         constraints.gridx = col;
         constraints.gridy = row;
-        ImagePanel imagePanel = new ImagePanel(tiles[itemIndex], itemIndex);
-        panel.add(imagePanel, constraints);
+
+        if (tiles[itemIndex] != null) {
+            ImagePanel imagePanel = new ImagePanel(tiles[itemIndex], itemIndex);
+            panel.add(imagePanel, constraints);
+        }
         return false;
     }
 
     private void initTopPanel() {
         JPanel topPanel = new JPanel();
         JLabel lbSelect = new JLabel("Select:");
-        String[] cbTypeNames = {"Solid Tiles", "Decorations", "Objects", "Enemies", "Player"};
+        String[] cbTypeNames = {"Solid Tiles", "Decorations", "Objects", "Enemies", "Player", "Triggers"};
         this.cbTypes = new JComboBox<>(cbTypeNames);
         cbTypes.addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
@@ -160,6 +162,11 @@ public class BottomPanel extends JPanel {
             selectedSet = "Player";
             layerOptions = new Integer[]{5};
             selectedImages = player;
+        }
+        else if (selectedItem.equals("Triggers")) {
+            selectedSet = "Triggers";
+            layerOptions = new Integer[]{5};
+            selectedImages = triggers;
         }
 
         if (selectedImages != null) {
