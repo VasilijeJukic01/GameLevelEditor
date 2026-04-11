@@ -37,8 +37,7 @@ public class LevelLoader implements Loader {
             String name = file.getName().substring(0, file.getName().lastIndexOf('.'));
             Level level = EditorFrame.getInstance().getCurrentTab().getLevel();
 
-            int panels = (levelImg.getWidth() % 3 == 0) ? 3 : 2;
-            int panelWidth = levelImg.getWidth() / panels;
+            int panelWidth = levelImg.getWidth() / 3;
 
             level.setSize(panelWidth, levelImg.getHeight());
             level.setName(name);
@@ -50,12 +49,7 @@ public class LevelLoader implements Loader {
             getEnemyData(levelImg, level, panelWidth);
             getDecoData(levelImg, level, panelWidth);
             getPlayer(levelImg, level, panelWidth);
-
-            // Read triggers if it's a 3-panel map
-            if (panels == 3) {
-                getTriggerData(levelImg, level, panelWidth);
-            }
-
+            getTriggerData(levelImg, level, panelWidth);
 
             if (metadata != null) {
                 applyMetadata(level, metadata);

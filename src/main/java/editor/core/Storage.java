@@ -163,10 +163,23 @@ public final class Storage {
 
             BufferedImage img = new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB);
             Graphics2D g = img.createGraphics();
-            g.setColor(type.getColor());
-            g.fillRect(16, 0, 32, 64);
+            g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+            int p = 8, s = 64 - (p * 2);
+
+            // Frame
+            g.setColor(new Color(50, 50, 50));
+            g.fillRoundRect(p, p, s, s, 10, 10);
             g.setColor(Color.WHITE);
-            g.fillOval(28, 28, 8, 8);
+            g.setStroke(new BasicStroke(2f));
+            g.drawRoundRect(p, p, s, s, 10, 10);
+
+            // Circle
+            int cS = s / 2;
+            int o = (s - cS) / 2;
+            g.setColor(type.getColor());
+            g.fillOval(p + o, p + o, cS, cS);
+
             g.dispose();
 
             triggerIcons[i] = img;
