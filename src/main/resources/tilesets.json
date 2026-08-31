@@ -6,13 +6,5 @@
     "columns": 7,
     "tileSizeInSprite": 274,
     "tileCount": 49
-  },
-  {
-    "name": "Interior",
-    "spritePath": "/images/tiles/interiorTiles.png",
-    "rows": 2,
-    "columns": 7,
-    "tileSizeInSprite": 64,
-    "tileCount": 14
   }
 ]
