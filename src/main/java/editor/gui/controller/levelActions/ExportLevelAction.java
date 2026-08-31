@@ -22,6 +22,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 
 public class ExportLevelAction extends AbstractEditorAction {
@@ -51,21 +52,16 @@ public class ExportLevelAction extends AbstractEditorAction {
         BufferedImage pixelImgLogic = createPixelImage(tab, levelWidth, levelHeight, TileType.TRIGGER);
 
         if (exportType.equals("Solid tiles only")) {
-            fillEmptySpace(pixelImgLeft);
             exportCombinedImage(pixelImgLeft);
             return;
         }
         else if (exportType.equals("Decoration tiles only")) {
-            fillEmptySpace(pixelImgRight);
             exportCombinedImage(pixelImgRight);
             return;
         }
 
         BufferedImage combinedImage = combineImages(pixelImgLeft, pixelImgRight, pixelImgLogic);
-        if (combinedImage != null) {
-            fillEmptySpace(combinedImage);
-            exportCombinedImage(combinedImage);
-        }
+        exportCombinedImage(combinedImage);
 
         int result = JOptionPane.showConfirmDialog(EditorFrame.getInstance(), "Do you want to save rotation/scale metadata for this level?", "Save Metadata", JOptionPane.YES_NO_OPTION);
         if (result == JOptionPane.YES_OPTION) saveMetadataAsJson(tab.getLevel());
@@ -73,6 +69,16 @@ public class ExportLevelAction extends AbstractEditorAction {
 
     private void saveMetadataAsJson(Level level) {
         LevelMetadata levelMetadata = new LevelMetadata();
+        File file = new File(level.getName() + ".json");
+
+        if (file.exists()) {
+            try (FileReader reader = new FileReader(file)) {
+                levelMetadata = new Gson().fromJson(reader, LevelMetadata.class);
+                levelMetadata.getDecorations().clear();
+            } catch (Exception ex) {
+                Framework.getInstance().log("Failed to read existing metadata: " + ex.getMessage(), LogType.WARNING);
+            }
+        }
 
         for (Node child : level.getChildren()) {
             Tile tile = (Tile) child;
@@ -88,33 +94,34 @@ public class ExportLevelAction extends AbstractEditorAction {
             }
         }
 
-        if (!levelMetadata.getDecorations().isEmpty()) {
-            JFileChooser fileChooser = new JFileChooser();
-            fileChooser.setDialogTitle("Save Metadata JSON File");
-            fileChooser.setSelectedFile(new File(level.getName() + ".json"));
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Save Metadata JSON File");
+        fileChooser.setSelectedFile(file);
 
-            if (fileChooser.showSaveDialog(EditorFrame.getInstance()) == JFileChooser.APPROVE_OPTION) {
-                File file = fileChooser.getSelectedFile();
-                Gson gson = new GsonBuilder().setPrettyPrinting().create();
-                try (FileWriter writer = new FileWriter(file)) {
-                    gson.toJson(levelMetadata, writer);
-                    Framework.getInstance().log("Metadata saved to " + file.getName(), LogType.NOTIFICATION);
-                } catch (Exception ex) {
-                    Framework.getInstance().log("Failed to save metadata JSON: " + ex.getMessage(), LogType.ERROR);
-                }
+        if (fileChooser.showSaveDialog(EditorFrame.getInstance()) == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = fileChooser.getSelectedFile();
+            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+            try (FileWriter writer = new FileWriter(selectedFile)) {
+                gson.toJson(levelMetadata, writer);
+                Framework.getInstance().log("Metadata saved to " + selectedFile.getName(), LogType.NOTIFICATION);
+            } catch (Exception ex) {
+                Framework.getInstance().log("Failed to save metadata JSON: " + ex.getMessage(), LogType.ERROR);
             }
         }
-        else Framework.getInstance().log("No special metadata to save for level: " + level.getName(), LogType.INFORMATION);
     }
 
     private BufferedImage createPixelImage(TabView tab, int width, int height, TileType tileType) {
         BufferedImage pixelImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         Graphics2D g2d = pixelImage.createGraphics();
 
+        g2d.setColor(new Color(254, 254, 254));
+        g2d.fillRect(0, 0, width, height);
+
         for (Node child : tab.getLevel().getChildren()) {
             Tile t = (Tile) child;
             boolean notDeco = (t.getTileType() == TileType.ENEMY || t.getTileType() == TileType.OBJECT || t.getTileType() == TileType.PLAYER) && tileType == TileType.SOLID;
-            if (t.getTileType() != tileType && !notDeco) continue;
+            boolean isLogic = (t.getTileType() == TileType.NPC) && tileType == TileType.TRIGGER;
+            if (t.getTileType() != tileType && !notDeco && !isLogic) continue;
 
             int pixelX = t.getX();
             int pixelY = t.getY();
@@ -139,24 +146,6 @@ public class ExportLevelAction extends AbstractEditorAction {
 
         g2d.dispose();
         return combined;
-    }
-
-    private void fillEmptySpace(BufferedImage image) {
-        for (int y = 0; y < image.getHeight(); y++) {
-            for (int x = 0; x < image.getWidth(); x++) {
-                int rgb = image.getRGB(x, y);
-
-                int red = (rgb >> 16) & 0xFF;
-                int green = (rgb >> 8) & 0xFF;
-                int blue = rgb & 0xFF;
-
-                if (red == 0 && green == 0 && blue == 0) {
-                    Color newColor = new Color(254, 254, 254);
-                    int newRGB = newColor.getRGB();
-                    image.setRGB(x, y, newRGB);
-                }
-            }
-        }
     }
 
     private void exportCombinedImage(BufferedImage image) {

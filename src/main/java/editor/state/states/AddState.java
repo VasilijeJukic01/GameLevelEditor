@@ -34,7 +34,8 @@ public class AddState implements State<TabView> {
         else if (set.equals("Objects")) newTile = getObjectTile(tabView, tiles, index, tileX, tileY);
         else if (set.equals("Enemies")) newTile = getEnemyTile(tabView, tiles, index, tileX, tileY);
         else if (set.equals("Player")) newTile = getPlayerTile(tabView, tiles, tileX, tileY);
-        else if (set.equals("Triggers")) newTile = getTriggerTile(tabView, tiles, index, tileX, tileY); // <-- Add this
+        else if (set.equals("Triggers")) newTile = getTriggerTile(tabView, tiles, index, tileX, tileY);
+        else if (set.equals("NPCs")) newTile = getNpcTile(tabView, tiles, index, tileX, tileY);
         else newTile = getDecoTile(tabView, tiles, index, layer, tileX, tileY);
 
         if (newTile != null) addTile(newTile, layer, tabView);
@@ -59,6 +60,8 @@ public class AddState implements State<TabView> {
             return List.of(Framework.getInstance().getStorage().getPlayerTile());
         else if ("Triggers".equals(name))
             return Framework.getInstance().getStorage().getTileMap().get("Triggers");
+        else if ("NPCs".equals(name))
+            return Framework.getInstance().getStorage().getTileMap().get("NPCs");
        return null;
     }
 
@@ -127,6 +130,16 @@ public class AddState implements State<TabView> {
             if (tile.getBlue() == index) {
                 if (!isFree(tileX, tileY, tabView.getLevel(), List.of(TileType.TRIGGER))) return null;
                 return new Tile("", tabView.getLevel(), TileType.TRIGGER, tileX, tileY, 254, 254, index);
+            }
+        }
+        return null;
+    }
+
+    private Tile getNpcTile(TabView tabView, List<Tile> tiles, int index, int tileX, int tileY) {
+        for (Tile tile : tiles) {
+            if (tile.getBlue() == index) {
+                if (!isFree(tileX, tileY, tabView.getLevel(), List.of(TileType.NPC, TileType.SOLID, TileType.ENEMY, TileType.OBJECT, TileType.PLAYER))) return null;
+                return new Tile("", tabView.getLevel(), TileType.NPC, tileX, tileY, 0, 0, index);
             }
         }
         return null;

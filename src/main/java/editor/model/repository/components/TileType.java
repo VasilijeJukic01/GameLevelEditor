@@ -1,10 +1,14 @@
 package editor.model.repository.components;
 
 public enum TileType {
+    // First Image
     SOLID,
-    DECO,
     OBJECT,
     ENEMY,
     PLAYER,
-    TRIGGER
+    // Second Image
+    DECO,
+    // Third Image
+    TRIGGER,
+    NPC
 }

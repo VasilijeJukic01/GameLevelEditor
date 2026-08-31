@@ -23,7 +23,7 @@ public class LevelRenderer implements Renderer {
     private final Level level;
     private final TabView tabView;
 
-    private RenderStrategy<Tile> terrainRenderer, objectRenderer, enemyRenderer, decoRenderer, triggerRenderer;
+    private RenderStrategy<Tile> terrainRenderer, objectRenderer, enemyRenderer, decoRenderer, triggerRenderer, npcRenderer;
     private String lastLoadedSet = "";
 
     public LevelRenderer(TabView tabView) {
@@ -41,6 +41,7 @@ public class LevelRenderer implements Renderer {
         this.enemyRenderer = new EnemyRenderer(Framework.getInstance().getStorage().getImageMap().get("Enemies"));
         this.decoRenderer = new DecoRenderer(Framework.getInstance().getStorage().getImageMap().get(set+"Deco"), metadata);
         this.triggerRenderer = new TriggerRenderer();
+        this.npcRenderer = new NpcRenderer();
         this.lastLoadedSet = set;
     }
 
@@ -77,6 +78,7 @@ public class LevelRenderer implements Renderer {
             decoRenderer.render(g, tile, layer);
             enemyRenderer.render(g, tile, layer);
             triggerRenderer.render(g, tile, layer);
+            npcRenderer.render(g, tile, layer);
             if (tile.getTileType() == TileType.PLAYER) renderPlayer(g, tile);
         }
     }

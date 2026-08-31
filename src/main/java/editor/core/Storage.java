@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import editor.logger.LogType;
 import editor.model.loader.LvlEnemyType;
+import editor.model.loader.LvlNpcType;
 import editor.model.loader.LvlObjType;
 import editor.model.loader.LvlTriggerType;
 import editor.model.metadata.DecoMetadata;
@@ -39,12 +40,11 @@ public final class Storage {
 
     private void init() {
         loadSolidTilesets();
-        loadDecoTiles("Forest");
-        loadDecoTiles("Interior");
         loadObjects();
         loadEnemies();
         loadPlayer();
         loadTriggers();
+        loadNpcs();
         Framework.getInstance().log("Storage initialized.", LogType.INFORMATION);
     }
 
@@ -62,6 +62,7 @@ public final class Storage {
                 if (spriteSheet != null) {
                     loadTiles(spriteSheet, metadata.getRows(), metadata.getColumns(), metadata.getTileSizeInSprite(), metadata.getTileCount(), metadata.getName());
                     Framework.getInstance().log("Loaded solid tiles for tileset: " + metadata.getName(), LogType.INFORMATION);
+                    loadDecoTiles(metadata.getName());
                 }
                 else Framework.getInstance().log("Failed to load sprite sheet for tileset: " + metadata.getName(), LogType.ERROR);
             }
@@ -188,6 +189,40 @@ public final class Storage {
         }
         imageMap.put("Triggers", triggerIcons);
         tileMap.put("Triggers", triggerTiles);
+    }
+
+    private void loadNpcs() {
+        BufferedImage[] npcIcons = new BufferedImage[LvlNpcType.values().length - 1];
+        List<Tile> npcTiles = new ArrayList<>();
+
+        for (int i = 0; i < npcIcons.length; i++) {
+            LvlNpcType type = LvlNpcType.values()[i];
+
+            BufferedImage img = new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB);
+            Graphics2D g = img.createGraphics();
+            g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+            int p = 8, s = 64 - (p * 2);
+            g.setColor(new Color(40, 40, 40));
+            g.fillRoundRect(p, p, s, s, 10, 10);
+            g.setColor(Color.WHITE);
+            g.setStroke(new BasicStroke(2f));
+            g.drawRoundRect(p, p, s, s, 10, 10);
+
+            // Circle
+            int cS = s / 2;
+            int o = (s - cS) / 2;
+            g.setColor(type.getColor());
+            g.fillOval(p + o, p + o, cS, cS);
+
+            g.dispose();
+            npcIcons[i] = img;
+
+            Tile t = new Tile("", null, TileType.NPC, 0, 0, 0, 0, i);
+            npcTiles.add(t);
+        }
+        imageMap.put("NPCs", npcIcons);
+        tileMap.put("NPCs", npcTiles);
     }
 
     // Getters

@@ -64,5 +64,6 @@
   { "id": "PLANT12", "wid": 64, "hei": 64, "xOffset": 2, "yOffset": 8 },
   { "id": "PLANT13", "wid": 64, "hei": 64, "xOffset": 2, "yOffset": 8 },
   { "id": "CRYSTAL1", "wid": 64, "hei": 64, "xOffset": 2, "yOffset": 8 },
-  { "id": "CRYSTAL2", "wid": 64, "hei": 64, "xOffset": 2, "yOffset": 8 }
+  { "id": "CRYSTAL2", "wid": 64, "hei": 64, "xOffset": 2, "yOffset": 8 },
+  { "id": "TAVERN_BUILDING", "wid": 384, "hei": 256, "xOffset": 0, "yOffset": 8 }
 ]

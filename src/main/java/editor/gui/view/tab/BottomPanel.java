@@ -17,7 +17,7 @@ public class BottomPanel extends JPanel {
 
     private final TabView tabView;
 
-    private BufferedImage[] tiles, decorations, objects, enemies, triggers;
+    private BufferedImage[] tiles, decorations, objects, enemies, triggers, npcs;
 
     private final BufferedImage[] player;
 
@@ -42,6 +42,7 @@ public class BottomPanel extends JPanel {
         this.objects = Framework.getInstance().getStorage().getImageMap().get("Objects");
         this.enemies = Framework.getInstance().getStorage().getImageMap().get("Enemies");
         this.triggers = Framework.getInstance().getStorage().getImageMap().get("Triggers");
+        this.npcs = Framework.getInstance().getStorage().getImageMap().get("NPCs");
     }
 
     private void init() {
@@ -85,7 +86,7 @@ public class BottomPanel extends JPanel {
     private void initTopPanel() {
         JPanel topPanel = new JPanel();
         JLabel lbSelect = new JLabel("Select:");
-        String[] cbTypeNames = {"Solid Tiles", "Decorations", "Objects", "Enemies", "Player", "Triggers"};
+        String[] cbTypeNames = {"Solid Tiles", "Decorations", "Objects", "Enemies", "Player", "Triggers", "NPCs"};
         this.cbTypes = new JComboBox<>(cbTypeNames);
         cbTypes.addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
@@ -167,6 +168,11 @@ public class BottomPanel extends JPanel {
             selectedSet = "Triggers";
             layerOptions = new Integer[]{5};
             selectedImages = triggers;
+        }
+        else if (selectedItem.equals("NPCs")) {
+            selectedSet = "NPCs";
+            layerOptions = new Integer[]{5};
+            selectedImages = npcs;
         }
 
         if (selectedImages != null) {
